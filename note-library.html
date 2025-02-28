@@ -24,11 +24,8 @@
 <div class="content">
     <div class="left-panel">
         <h3>Workspaces</h3>
-        <ul>
-            <li><a href="#" onclick="loadWorkspace('workspace1')">Workspace 1</a></li>
-            <li><a href="#" onclick="loadWorkspace('workspace2')">Workspace 2</a></li>
-            <li><a href="#" onclick="loadWorkspace('workspace3')">Workspace 3</a></li>
-            <!-- Add more workspaces as needed -->
+        <ul id="workspace-list">
+            <!-- Workspaces will be dynamically loaded here -->
         </ul>
     </div>
 
@@ -45,35 +42,60 @@
 </footer>
 
 <script>
-    function loadWorkspace(workspace) {
-        const noteList = document.getElementById("note-list");
-        noteList.innerHTML = ''; // Clear previous list
+    document.addEventListener('DOMContentLoaded', () => {
+        loadWorkspaces();
+    });
 
-        // Here we manually define the notes for each workspace, but this could be dynamically generated later.
-        let notes = [];
+    function loadWorkspaces() {
+        fetch('https://api.github.com/repos/DnfJeff/DnfJeff.github.io/contents/notes')
+            .then(response => response.json())
+            .then(workspaces => {
+                const workspaceList = document.getElementById('workspace-list');
+                workspaceList.innerHTML = ''; // Clear previous list
 
-        if (workspace === 'workspace1') {
-            notes = ['note1.md', 'note2.md', 'note3.md']; // Add the note filenames for workspace 1
-        } else if (workspace === 'workspace2') {
-            notes = ['note4.md', 'note5.md', 'note6.md']; // Add notes for workspace 2
-        } else if (workspace === 'workspace3') {
-            notes = ['note7.md', 'note8.md', 'note9.md']; // Add notes for workspace 3
-        }
+                workspaces.forEach(workspace => {
+                    if (workspace.type === 'dir') {
+                        const workspaceLink = document.createElement('a');
+                        workspaceLink.href = '#';
+                        workspaceLink.textContent = workspace.name;
+                        workspaceLink.onclick = () => loadWorkspace(workspace.name);
 
-        // Generate the note links
-        notes.forEach(note => {
-            const noteLink = document.createElement('a');
-            noteLink.href = `notes/${workspace}/${note}`;
-            noteLink.target = "_blank";
-            noteLink.textContent = note.replace('.md', '').replace(/_/g, ' '); // Clean up filename for display
-            const listItem = document.createElement('li');
-            listItem.appendChild(noteLink);
-            noteList.appendChild(listItem);
-        });
+                        const listItem = document.createElement('li');
+                        listItem.appendChild(workspaceLink);
+                        workspaceList.appendChild(listItem);
+                    }
+                });
+
+                // Load the first workspace by default if exists
+                if (workspaces.length > 0 && workspaces[0].type === 'dir') {
+                    loadWorkspace(workspaces[0].name);
+                }
+            })
+            .catch(error => console.error('Error loading workspaces:', error));
     }
 
-    // Load the first workspace by default
-    loadWorkspace('workspace1');
+    function loadWorkspace(workspace) {
+        fetch(`https://api.github.com/repos/DnfJeff/DnfJeff.github.io/contents/notes/${workspace}`)
+            .then(response => response.json())
+            .then(notes => {
+                const noteList = document.getElementById('note-list');
+                noteList.innerHTML = ''; // Clear previous list
+
+                notes.forEach(note => {
+                    if (note.type === 'file') {
+                        const noteLink = document.createElement('a');
+                        noteLink.href = `notes/${workspace}/${note.name}`;
+                        noteLink.target = "_blank";
+                        noteLink.textContent = note.name.replace('.md', '').replace(/_/g, ' '); // Clean up filename for display
+
+                        const listItem = document.createElement('li');
+                        listItem.appendChild(noteLink);
+                        noteList.appendChild(listItem);
+                    }
+                });
+            })
+            .catch(error => console.error('Error loading notes:', error));
+    }
 </script>
 
 </body>
