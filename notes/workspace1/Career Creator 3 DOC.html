@@ -1,192 +1,263 @@
-<h1 id="-ultimate-guide-to-career-creator-3-for-the-sims-1-"><strong>Ultimate Guide to Career Creator 3 for The Sims 1</strong></h1>
-<h2 id="-overview-"><strong>Overview</strong></h2>
-<p>Career Creator 3 is a tool designed for modifying and creating careers in <em>The Sims 1</em>. It allows users to edit existing jobs, create custom careers, adjust work schedules, modify salary progression, and implement chance cards. Due to limitations in <em>The Sims 1</em>, new careers must replace existing ones using a modified <code>Work.iff</code> file.</p>
-<h2 id="-key-features-capabilities-"><strong>Key Features &amp; Capabilities</strong></h2>
-<ul>
-<li>Modify job hours, salaries, and promotion requirements.</li>
-<li>Create entirely new careers by replacing existing ones.</li>
-<li>Customize job descriptions, required skills, and work moods.</li>
-<li>Adjust chance card probabilities and effects.</li>
-<li>Change carpool vehicles for specific jobs.</li>
-<li>Import and export career files for backup and sharing.</li>
-<li>Modify in-game UI elements such as career icons.</li>
-</ul>
-<hr>
-<h2 id="-1-file-structure-how-careers-work-in-the-sims-1-"><strong>1. File Structure &amp; How Careers Work in The Sims 1</strong></h2>
-<ul>
-<li><strong><code>Work.iff</code> (ExpansionShared Folder):</strong> Stores all career-related data.</li>
-<li><strong><code>CarPortal.iff</code> (GameData\Objects Folder):</strong> Controls job-related carpool behavior.</li>
-<li><strong><code>cpanel</code> (UIGraphics Folder):</strong> Stores career UI elements like job icons.</li>
-<li><strong>Textures (<code>.bmp</code> in GameData\Textures):</strong> Used for career-specific uniforms.</li>
-</ul>
-<blockquote>
-<p><strong>Important Note:</strong> Career Creator 3 modifies careers by swapping <code>Work.iff</code>, meaning multiple custom careers cannot exist simultaneously unless manually swapped.</p>
-</blockquote>
-<hr>
-<h2 id="-2-user-interface-functional-breakdown-"><strong>2. User Interface &amp; Functional Breakdown</strong></h2>
-<h3 id="-menu-bar-"><strong>Menu Bar</strong></h3>
-<ul>
-<li><strong>File:</strong> Reload, Save, Global Options, Global Texts, Exit.</li>
-<li><strong>Career:</strong> Import, Export, Backup.</li>
-<li><strong>Language:</strong> Multiple language support (list available via screenshot).</li>
-<li><strong>Help:</strong> About.</li>
-</ul>
-<h3 id="-main-window-layout-"><strong>Main Window Layout</strong></h3>
-<ul>
-<li><strong>Career List (Top Left)</strong>  <ul>
-<li>Displays available careers with two columns: <code>ID</code> and <code>Internal Career Name</code>.</li>
-<li>Legacy editions list 21 jobs.</li>
-</ul>
-</li>
-<li><strong>Job List (Bottom Left)</strong>  <ul>
-<li>Displays individual jobs within a career, each having an <code>Internal Job Name</code>.</li>
-<li>Jobs always contain 10 levels, starting from <code>ID 0</code>.</li>
-</ul>
-</li>
-<li><strong>Career Information Panel (Top Right)</strong>  <ul>
-<li>Editable fields:<ul>
-<li><strong>Internal Career Name</strong></li>
-<li><strong>Career Name</strong></li>
-<li><strong>Male Offer Dialog Text</strong></li>
-<li><strong>Female Offer Dialog Text</strong></li>
-</ul>
-</li>
-<li>Career Icon display with a <strong>Modify Icons</strong> button (allows import/export of both popup and button icons).</li>
-</ul>
-</li>
-<li><strong>Job Information Panel (Bottom Right)</strong>  <ul>
-<li>Editable fields:<ul>
-<li><strong>Male Job Name</strong></li>
-<li><strong>Female Job Name</strong></li>
-<li><strong>Job Description</strong> (supports <code>\</code> for new lines)</li>
-</ul>
-</li>
-<li>Buttons:<ul>
-<li><strong>Job Details:</strong> Opens a detailed job editing window.</li>
-<li><strong>Chance Cards:</strong> Opens the chance card editor.</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h2 id="-3-editing-jobs-work-schedules-"><strong>3. Editing Jobs &amp; Work Schedules</strong></h2>
-<h3 id="-job-details-window-"><strong>Job Details Window</strong></h3>
-<ul>
-<li><strong>Text Fields:</strong><ul>
-<li>Internal Name, Male Mesh, Female Mesh, Skin/Texture.</li>
-</ul>
-</li>
-<li><strong>Study Points &amp; Friends Needed:</strong><ul>
-<li>Adjustable values for required <strong>skills</strong> (Cooking, Mechanical, Charisma, Body, Logic, Creativity) and <strong>friends</strong> for promotion.</li>
-</ul>
-</li>
-<li><strong>Mood Changes per Hour:</strong><ul>
-<li>Allows fine-tuning of job impact on needs (Hunger, Comfort, Hygiene, Bladder, Energy, Fun, Social).</li>
-</ul>
-</li>
-<li><strong>General Job Information:</strong><ul>
-<li><strong>Salary</strong> (editable numeric field).</li>
-<li><strong>Begin Time / End Time</strong> (24-hour format).</li>
-<li><strong>Car Selection</strong> (drop-down list of carpool options including Jeep, Limo, SUV, Squad Car, etc.).</li>
-</ul>
-</li>
-<li><strong>Buttons:</strong> Load Previous, OK, Cancel.</li>
-</ul>
-<h3 id="-modifying-job-hours-"><strong>Modifying Job Hours</strong></h3>
-<ul>
-<li><strong>Why Adjust Job Hours?</strong>  <ul>
-<li>Many default careers have rigid schedules that limit gameplay.</li>
-<li>Shorter shifts allow for more skill-building and social time.</li>
-<li>Overnight shifts enable unique storytelling opportunities.</li>
-</ul>
-</li>
-<li><strong>How to Modify Hours in Career Creator 3:</strong>  <ul>
-<li>Adjust <strong>Begin Time</strong> and <strong>End Time</strong> in the Job Details Window.</li>
-<li>Ensure the <strong>End Time</strong> does not overlap with another job if using multiple careers.</li>
-<li>Test schedules in-game to avoid unintended behavior.</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h2 id="-4-customizing-chance-cards-"><strong>4. Customizing Chance Cards</strong></h2>
-<h3 id="-chance-cards-window-"><strong>Chance Cards Window</strong></h3>
-<ul>
-<li><strong>Text Displayed:</strong>  <ul>
-<li>Large scrollable text box where you define the event description.</li>
-</ul>
-</li>
-<li><strong>Item Panel:</strong>  <ul>
-<li>Add/Edit/Delete options for modifying rewards, penalties, or skill boosts.</li>
-</ul>
-</li>
-<li><strong>Implementation:</strong>  <ul>
-<li>Career Creator 3 allows setting custom probability rates for chance cards.</li>
-<li>By default, most careers feature few chance cards—custom careers can add depth by making them a core mechanic.</li>
-</ul>
-</li>
-</ul>
-<h3 id="-best-practices-for-chance-cards-"><strong>Best Practices for Chance Cards</strong></h3>
-<ul>
-<li><strong>Use Skill Rewards:</strong>  <ul>
-<li>Allow chance cards to grant small bonuses toward promotion requirements.</li>
-</ul>
-</li>
-<li><strong>Balance Risk &amp; Reward:</strong>  <ul>
-<li>Mix beneficial and negative outcomes for more engaging gameplay.</li>
-</ul>
-</li>
-<li><strong>Narrative Integration:</strong>  <ul>
-<li>Tie cards to career themes (e.g., a Science Career may have &quot;Experiment Failure&quot; or &quot;Breakthrough Discovery&quot; events).</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h2 id="-5-best-practices-troubleshooting-"><strong>5. Best Practices &amp; Troubleshooting</strong></h2>
-<h3 id="-common-issues-fixes-"><strong>Common Issues &amp; Fixes</strong></h3>
-<ul>
-<li><strong>Changes Not Saving?</strong>  <ul>
-<li>Run Career Creator 3 as Administrator.</li>
-<li>Set Compatibility Mode to Windows XP (SP2 or SP3).</li>
-</ul>
-</li>
-<li><strong>Game Not Recognizing Custom Career?</strong>  <ul>
-<li>Ensure <code>Work.iff</code> is in <strong>ExpansionShared</strong>, not the Downloads folder.</li>
-<li>If using custom uniforms, verify <code>.bmp</code> files are placed directly in <strong>GameData\Textures</strong> (not in subfolders).</li>
-</ul>
-</li>
-<li><strong>Multiple Custom Careers?</strong>  <ul>
-<li>Due to <code>Work.iff</code> limitations, careers must be swapped manually unless using a mod manager.</li>
-</ul>
-</li>
-</ul>
-<h3 id="-tips-for-career-modders-"><strong>Tips for Career Modders</strong></h3>
-<ul>
-<li><strong>Backup Work.iff</strong> before making changes.</li>
-<li><strong>Use a Spreadsheet</strong> to organize job progression, salaries, and required skills.</li>
-<li><strong>Test Career Progression</strong> in-game before sharing mods.</li>
-<li><strong>Document Changes</strong> for community sharing.</li>
-</ul>
-<hr>
-<h2 id="-6-community-impact-future-modding-"><strong>6. Community Impact &amp; Future Modding</strong></h2>
-<ul>
-<li><strong>Expanding Career Mods:</strong>  <ul>
-<li>Encouraging more role-based jobs (e.g., Medieval, Sci-Fi, Fantasy).</li>
-<li>Using chance cards for deeper storytelling.</li>
-<li>Tweaking job hours for better pacing.</li>
-</ul>
-</li>
-<li><strong>Future Tools &amp; Compatibility:</strong>  <ul>
-<li>Potential integration with other modding tools.</li>
-<li>Compatibility research for mods alongside Career Creator 3.</li>
-</ul>
-</li>
-<li><strong>Encouraging Collaboration:</strong>  <ul>
-<li>Share findings with the community (ModTheSims, Reddit, forums).</li>
-<li>Create YouTube tutorials to demonstrate advanced techniques.</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h2 id="-conclusion-"><strong>Conclusion</strong></h2>
-<p>Career Creator 3 remains one of the most powerful tools for <em>The Sims 1</em> career modding. By mastering job customization, modifying schedules, and utilizing chance cards, players can expand gameplay in meaningful ways. Whether adjusting existing jobs or designing entirely new career paths, this guide serves as a reference for unlocking <em>The Sims 1’s</em> full potential.</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Guide to Career Creator 3 for The Sims 1</title>
+    <link rel="stylesheet" href="../../css/main.css">
+</head>
+<body>
+
+<header>
+    <a href="../../index.html">Analog Atlas</a> | <span>Guide</span>
+</header>
+
+<nav>
+    <ul>
+        <li><a href="../../home.html">Home Page</a></li>
+        <li><a href="../../note-library.html">Note Library</a></li>
+        <li><a href="../../programs.html">Programs</a></li>
+        <li><a href="../../about.html">About</a></li>
+        <li><a href="../../contact.html">Contact</a></li>
+    </ul>
+</nav>
+
+<div class="content">
+    <div class="main-content">
+        <h1 id="-ultimate-guide-to-career-creator-3-for-the-sims-1-"><strong>Ultimate Guide to Career Creator 3 for The Sims 1</strong></h1>
+        <h2 id="-overview-"><strong>Overview</strong></h2>
+        <p>Career Creator 3 is a tool designed for modifying and creating careers in <em>The Sims 1</em>. It allows users to edit existing jobs, create custom careers, adjust work schedules, modify salary progression, ...</p>
+        <h2 id="-key-features-capabilities-"><strong>Key Features &amp; Capabilities</strong></h2>
+        <ul>
+            <li>Modify job hours, salaries, and promotion requirements.</li>
+            <li>Create entirely new careers by replacing existing ones.</li>
+            <li>Customize job descriptions, required skills, and work moods.</li>
+            <li>Adjust chance card probabilities and effects.</li>
+            <li>Change carpool vehicles for specific jobs.</li>
+            <li>Import and export career files for backup and sharing.</li>
+            <li>Modify in-game UI elements such as career icons.</li>
+        </ul>
+        <hr>
+        <h2 id="-1-file-structure-how-careers-work-in-the-sims-1-"><strong>1. File Structure &amp; How Careers Work in The Sims 1</strong></h2>
+        <ul>
+            <li><strong><code>Work.iff</code> (ExpansionShared Folder):</strong> Stores all career-related data.</li>
+            <li><strong><code>CarPortal.iff</code> (GameData\Objects Folder):</strong> Controls job-related carpool behavior.</li>
+            <li><strong><code>cpanel</code> (UIGraphics Folder):</strong> Stores career UI elements like job icons.</li>
+            <li><strong>Textures (<code>.bmp</code> in GameData\Textures):</strong> Used for career-specific uniforms.</li>
+        </ul>
+        <blockquote>
+            <p><strong>Important Note:</strong> Career Creator 3 modifies careers by swapping <code>Work.iff</code>, meaning multiple custom careers cannot exist simultaneously unless manually swapped.</p>
+        </blockquote>
+        <hr>
+        <h2 id="-2-user-interface-functional-breakdown-"><strong>2. User Interface &amp; Functional Breakdown</strong></h2>
+        <h3 id="-menu-bar-"><strong>Menu Bar</strong></h3>
+        <ul>
+            <li><strong>File:</strong> Reload, Save, Global Options, Global Texts, Exit.</li>
+            <li><strong>Career:</strong> Import, Export, Backup.</li>
+            <li><strong>Language:</strong> Multiple language support (list available via screenshot).</li>
+            <li><strong>Help:</strong> About.</li>
+        </ul>
+        <h3 id="-main-window-layout-"><strong>Main Window Layout</strong></h3>
+        <ul>
+            <li><strong>Career List (Top Left)</strong>  
+                <ul>
+                    <li>Displays available careers with two columns: <code>ID</code> and <code>Internal Career Name</code>.</li>
+                    <li>Legacy editions list 21 jobs.</li>
+                </ul>
+            </li>
+            <li><strong>Job List (Bottom Left)</strong>  
+                <ul>
+                    <li>Displays individual jobs within a career, each having an <code>Internal Job Name</code>.</li>
+                    <li>Jobs always contain 10 levels, starting from <code>ID 0</code>.</li>
+                </ul>
+            </li>
+            <li><strong>Career Information Panel (Top Right)</strong>  
+                <ul>
+                    <li>Editable fields:
+                        <ul>
+                            <li><strong>Internal Career Name</strong></li>
+                            <li><strong>Career Name</strong></li>
+                            <li><strong>Male Offer Dialog Text</strong></li>
+                            <li><strong>Female Offer Dialog Text</strong></li>
+                        </ul>
+                    </li>
+                    <li>Career Icon display with a <strong>Modify Icons</strong> button (allows import/export of both popup and button icons).</li>
+                </ul>
+            </li>
+            <li><strong>Job Information Panel (Bottom Right)</strong>  
+                <ul>
+                    <li>Editable fields:
+                        <ul>
+                            <li><strong>Male Job Name</strong></li>
+                            <li><strong>Female Job Name</strong></li>
+                            <li><strong>Job Description</strong> (supports <code>\</code> for new lines)</li>
+                        </ul>
+                    </li>
+                    <li>Buttons:
+                        <ul>
+                            <li><strong>Job Details:</strong> Opens a detailed job editing window.</li>
+                            <li><strong>Chance Cards:</strong> Opens the chance card editor.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <hr>
+        <h2 id="-3-editing-jobs-work-schedules-"><strong>3. Editing Jobs &amp; Work Schedules</strong></h2>
+        <h3 id="-job-details-window-"><strong>Job Details Window</strong></h3>
+        <ul>
+            <li><strong>Text Fields:</strong>
+                <ul>
+                    <li>Internal Name, Male Mesh, Female Mesh, Skin/Texture.</li>
+                </ul>
+            </li>
+            <li><strong>Study Points &amp; Friends Needed:</strong>
+                <ul>
+                    <li>Adjustable values for required <strong>skills</strong> (Cooking, Mechanical, Charisma, Body, Logic, Creativity) and <strong>friends</strong> for promotion.</li>
+                </ul>
+            </li>
+            <li><strong>Mood Changes per Hour:</strong>
+                <ul>
+                    <li>Allows fine-tuning of job impact on needs (Hunger, Comfort, Hygiene, Bladder, Energy, Fun, Social).</li>
+                </ul>
+            </li>
+            <li><strong>General Job Information:</strong>
+                <ul>
+                    <li><strong>Salary</strong> (editable numeric field).</li>
+                    <li><strong>Begin Time / End Time</strong> (24-hour format).</li>
+                    <li><strong>Car Selection</strong> (drop-down list of carpool options including Jeep, Limo, SUV, Squad Car, etc.).</li>
+                </ul>
+            </li>
+            <li><strong>Buttons:</strong> Load Previous, OK, Cancel.</li>
+        </ul>
+        <h3 id="-modifying-job-hours-"><strong>Modifying Job Hours</strong></h3>
+        <ul>
+            <li><strong>Why Adjust Job Hours?</strong>  
+                <ul>
+                    <li>Many default careers have rigid schedules that limit gameplay.</li>
+                    <li>Shorter shifts allow for more skill-building and social time.</li>
+                    <li>Overnight shifts enable unique storytelling opportunities.</li>
+                </ul>
+            </li>
+            <li><strong>How to Modify Hours in Career Creator 3:</strong>  
+                <ul>
+                    <li>Adjust <strong>Begin Time</strong> and <strong>End Time</strong> in the Job Details Window.</li>
+                    <li>Ensure the <strong>End Time</strong> does not overlap with another job if using multiple careers.</li>
+                    <li>Test schedules in-game to avoid unintended behavior.</li>
+                </ul>
+            </li>
+        </ul>
+        <hr>
+        <h2 id="-4-customizing-chance-cards-"><strong>4. Customizing Chance Cards</strong></h2>
+        <h3 id="-chance-cards-window-"><strong>Chance Cards Window</strong></h3>
+        <ul>
+            <li><strong>Text Displayed:</strong>  
+                <ul>
+                    <li>Large scrollable text box where you define the event description.</li>
+                </ul>
+            </li>
+            <li><strong>Item Panel:</strong>  
+                <ul>
+                    <li>Add/Edit/Delete options for modifying rewards, penalties, or skill boosts.</li>
+                </ul>
+            </li>
+            <li><strong>Implementation:</strong>  
+                <ul>
+                    <li>Career Creator 3 allows setting custom probability rates for chance cards.</li>
+                    <li>By default, most careers feature few chance cards—custom careers can add depth by making them a core mechanic.</li>
+                </ul>
+            </li>
+        </ul>
+        <h3 id="-best-practices-for-chance-cards-"><strong>Best Practices for Chance Cards</strong></h3>
+        <ul>
+            <li><strong>Use Skill Rewards:</strong>  
+                <ul>
+                    <li>Allow chance cards to grant small bonuses toward promotion requirements.</li>
+                </ul>
+            </li>
+            <li><strong>Balance Risk &amp; Reward:</strong>  
+                <ul>
+                    <li>Mix beneficial and negative outcomes for more engaging gameplay.</li>
+                </ul>
+            </li>
+            <li><strong>Narrative Integration:</strong>  
+                <ul>
+                    <li>Tie cards to career themes (e.g., a Science Career may have &quot;Experiment Failure&quot; or &quot;Breakthrough Discovery&quot; events).</li>
+                </ul>
+            </li>
+        </ul>
+        <hr>
+        <h2 id="-5-best-practices-troubleshooting-"><strong>5. Best Practices &amp; Troubleshooting</strong></h2>
+        <h3 id="-common-issues-fixes-"><strong>Common Issues &amp; Fixes</strong></h3>
+        <ul>
+            <li><strong>Changes Not Saving?</strong>  
+                <ul>
+                    <li>Run Career Creator 3 as Administrator.</li>
+                    <li>Set Compatibility Mode to Windows XP (SP2 or SP3).</li>
+                </ul>
+            </li>
+            <li><strong>Game Not Recognizing Custom Career?</strong>  
+                <ul>
+                    <li>Ensure <code>Work.iff</code> is in <strong>ExpansionShared</strong>, not the Downloads folder.</li>
+                    <li>If using custom uniforms, verify <code>.bmp</code> files are placed directly in <strong>GameData\Textures</strong> (not in subfolders).</li>
+                </ul>
+            </li>
+            <li><strong>Multiple Custom Careers?</strong>  
+                <ul>
+                    <li>Due to <code>Work.iff</code> limitations, careers must be swapped manually unless using a mod manager.</li>
+                </ul>
+            </li>
+        </ul>
+        <h3 id="-tips-for-career-modders-"><strong>Tips for Career Modders</strong></h3>
+        <ul>
+            <li><strong>Backup Work.iff</strong> before making changes.</li>
+            <li><strong>Use a Spreadsheet</strong> to organize job progression, salaries, and required skills.</li>
+            <li><strong>Test Career Progression</strong> in-game before sharing mods.</li>
+            <li><strong>Document Changes</strong> for community sharing.</li>
+        </ul>
+        <hr>
+        <h2 id="-6-community-impact-future-modding-"><strong>6. Community Impact &amp; Future Modding</strong></h2>
+        <ul>
+            <li><strong>Expanding Career Mods:</strong>  
+                <ul>
+                    <li>Encouraging more role-based jobs (e.g., Medieval, Sci-Fi, Fantasy).</li>
+                    <li>Using chance cards for deeper storytelling.</li>
+                    <li>Tweaking job hours for better pacing.</li>
+                </ul>
+            </li>
+            <li><strong>Future Tools &amp; Compatibility:</strong>  
+                <ul>
+                    <li>Potential integration with other modding tools.</li>
+                    <li>Compatibility research for mods alongside Career Creator 3.</li>
+                </ul>
+            </li>
+            <li><strong>Encouraging Collaboration:</strong>  
+                <ul>
+                    <li>Share findings with the community (ModTheSims, Reddit, forums).</li>
+                    <li>Create YouTube tutorials to demonstrate advanced techniques.</li>
+                </ul>
+            </li>
+        </ul>
+        <hr>
+        <h2 id="-conclusion-"><strong>Conclusion</strong></h2>
+        <p>Career Creator 3 remains one of the most powerful tools for <em>The Sims 1</em> career modding. By mastering job customization, modifying schedules, and utilizing chance cards, players can expand gameplay in...</p>
+    </div>
+
+    <div class="right-panel">
+        <h3>Quick Links</h3>
+        <ul>
+            <li><a href="../../note-library.html">Note Library</a></li>
+            <li><a href="../../programs.html">Programs</a></li>
+            <li><a href="../../documentation.html">Documentation</a></li>
+            <li><a href="https://github.com/DnfJeff">GitHub</a></li>
+        </ul>
+    </div>
+</div>
+
+<footer>
+    &copy; 2025 Analog Atlas | All Rights Reserved | Site by Dnf_Jeff
+</footer>
+
+<script src="../../js/main.js"></script>
+</body>
+</html>
