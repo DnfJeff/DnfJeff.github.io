@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Note Library</title>
+    <link rel="stylesheet" href="css/main.css"> <!-- Link to your main CSS file -->
+    <style>
+        /* Add workspace and note panel styles */
+        .workspace-panel {
+            margin-top: 20px;
+        }
+
+        .workspace-button {
+            background-color: #2a3d66;
+            color: white;
+            border: none;
+            padding: 10px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+
+        .workspace-button:hover {
+            background-color: #1d2a46;
+        }
+
+        .note-list {
+            margin-top: 20px;
+            padding: 10px;
+        }
+
+        .note-list a {
+            text-decoration: none;
+            color: #333;
+            font-size: 18px;
+            display: block;
+            margin: 5px 0;
+        }
+
+        .note-list a:hover {
+            text-decoration: underline;
+        }
+
+        .content {
+            margin-left: 220px;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="#">My Site</a> | <span>Note Library</span>
+</header>
+
+<nav>
+    <ul>
+        <li><a href="index.html">Home Page</a></li>
+        <li><a href="note-library.html">Note Library</a></li>
+        <li><a href="programs.html">Programs</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+    </ul>
+</nav>
+
+<div class="content">
+    <h2>Note Library</h2>
+    <p>Explore the available workspaces and notes below:</p>
+
+    <!-- Workspace Panel -->
+    <div class="workspace-panel">
+        <h3>Select a Workspace</h3>
+        <div id="workspace-buttons"></div>
+    </div>
+
+    <!-- Note List Panel -->
+    <div id="note-list" class="note-list">
+        <h3>Available Notes</h3>
+        <!-- Notes will appear here -->
+    </div>
+</div>
+
+<footer>
+    &copy; 2025 My Site | All Rights Reserved
+</footer>
+
+<script>
+    // Function to load workspaces and their notes dynamically
+    document.addEventListener('DOMContentLoaded', function() {
+        const workspaceButtons = document.getElementById('workspace-buttons');
+        const noteList = document.getElementById('note-list');
+        
+        // Placeholder data: list of workspaces (workspace1, workspace2, etc.)
+        const workspaces = ['workspace1', 'workspace2', 'workspace3']; // Update this array as new workspaces are added.
+
+        // Function to create workspace buttons dynamically
+        workspaces.forEach(function(workspace) {
+            const button = document.createElement('button');
+            button.className = 'workspace-button';
+            button.innerText = workspace.charAt(0).toUpperCase() + workspace.slice(1);
+            button.onclick = function() {
+                loadNotes(workspace);
+            };
+            workspaceButtons.appendChild(button);
+        });
+
+        // Function to load notes based on the selected workspace
+        function loadNotes(workspace) {
+            noteList.innerHTML = ''; // Clear existing note links
+
+            // Placeholder: Simulating reading files from a folder structure
+            const notes = ['note1.html', 'note2.html', 'note3.html']; // Example notes for each workspace.
+
+            // For now, let's simulate different notes based on workspace.
+            if (workspace === 'workspace1') {
+                notes.push('note4.html', 'note5.html');
+            } else if (workspace === 'workspace2') {
+                notes.push('note6.html', 'note7.html');
+            }
+
+            // Create links for the notes in the selected workspace
+            notes.forEach(function(note) {
+                const noteLink = document.createElement('a');
+                noteLink.href = `notes/${workspace}/${note}`;
+                noteLink.innerText = note.replace('.html', '').replace(/([A-Z])/g, ' $1').trim(); // Clean up note name
+                noteList.appendChild(noteLink);
+            });
+        }
+
+        // Load the first workspace (optional)
+        loadNotes(workspaces[0]);
+    });
+</script>
+
+</body>
+</html>
