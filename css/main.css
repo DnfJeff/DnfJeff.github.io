@@ -60,6 +60,7 @@ nav ul li a:hover {
 
 /* Main Content Area */
 .content {
+    display: flex;
     margin-left: 220px;
     padding: 20px;
 }
@@ -81,12 +82,21 @@ nav ul li a:hover {
     margin-top: 0;
 }
 
-/* Right Panel */
-.right-panel {
+/* Panels */
+.left-panel, .right-panel {
     background-color: #fff;
     padding: 15px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.left-panel {
+    width: 200px;
+    margin-right: 20px;
+}
+
+.right-panel {
+    flex-grow: 1;
 }
 
 .right-panel h3 {
