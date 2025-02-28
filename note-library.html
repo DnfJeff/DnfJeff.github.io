@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Note Library</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+<header>
+    <a href="index.html">My Site</a> | <span>Note Library</span>
+</header>
+
+<nav>
+    <ul>
+        <li><a href="index.html">Home Page</a></li>
+        <li><a href="programs.html">Programs</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+    </ul>
+</nav>
+
+<div class="content">
+    <div class="left-panel">
+        <h3>Workspaces</h3>
+        <ul>
+            <li><a href="#" onclick="loadWorkspace('workspace1')">Workspace 1</a></li>
+            <li><a href="#" onclick="loadWorkspace('workspace2')">Workspace 2</a></li>
+            <li><a href="#" onclick="loadWorkspace('workspace3')">Workspace 3</a></li>
+            <!-- Add more workspaces as needed -->
+        </ul>
+    </div>
+
+    <div class="right-panel">
+        <h3>Available Notes</h3>
+        <div id="note-list">
+            <!-- Notes for the selected workspace will appear here -->
+        </div>
+    </div>
+</div>
+
+<footer>
+    &copy; 2025 My Site | All Rights Reserved
+</footer>
+
+<script>
+    function loadWorkspace(workspace) {
+        const noteList = document.getElementById("note-list");
+        noteList.innerHTML = ''; // Clear previous list
+
+        // Here we manually define the notes for each workspace, but this could be dynamically generated later.
+        let notes = [];
+
+        if (workspace === 'workspace1') {
+            notes = ['note1.md', 'note2.md', 'note3.md']; // Add the note filenames for workspace 1
+        } else if (workspace === 'workspace2') {
+            notes = ['note4.md', 'note5.md', 'note6.md']; // Add notes for workspace 2
+        } else if (workspace === 'workspace3') {
+            notes = ['note7.md', 'note8.md', 'note9.md']; // Add notes for workspace 3
+        }
+
+        // Generate the note links
+        notes.forEach(note => {
+            const noteLink = document.createElement('a');
+            noteLink.href = `notes/${workspace}/${note}`;
+            noteLink.target = "_blank";
+            noteLink.textContent = note.replace('.md', '').replace(/_/g, ' '); // Clean up filename for display
+            const listItem = document.createElement('li');
+            listItem.appendChild(noteLink);
+            noteList.appendChild(listItem);
+        });
+    }
+
+    // Load the first workspace by default
+    loadWorkspace('workspace1');
+</script>
+
+</body>
+</html>
