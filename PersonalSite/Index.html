@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="/PersonalSite/styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bangers&family=Black+Ops+One&family=Creepster&family=La+Belle+Aurore&family=MedievalSharp&family=Orbitron&family=Rye&display=swap"
+      rel="stylesheet"
+    />
+    <script src="/PersonalSite/index.js"></script>
+  </head>
+  <body>
+    <!-- 
+        Challenge 1:
+        Write the HTML for your personal website.
+        -->
+    <img src="/PersonalSite/John.jpg" />
+    <h1>Hi, my name is Pork, John</h1>
+    <!-- Button to trigger audio play -->
+    <button id="playButton">Play Audio</button>
+    <h2>Fun facts about me:</h2>
+    <ul>
+      <li>36 years old</li>
+      <li>Live in Norway</li>
+      <li>Sing in a choir</li>
+    </ul>
+    <p>
+      Please connect with me on
+      <a href="https://www.linkedin.com/in/per-harald-borgen/" taget="_blank"
+        >LinkedIn here.</a
+      >
+    </p>
+    <input type="text" placeholder="Enter email..." />
+    <button>Join newsletter</button>
+
+    <!-- Audio element -->
+    <audio id="audioPlayer" src="/PersonalSite/niggachain.mp3"></audio>
+
+    <script>
+      // Get references to the button and audio element
+      const button = document.getElementById("playButton");
+      const audio = document.getElementById("audioPlayer");
+
+      // Add event listener to play audio when button is clicked
+      button.addEventListener("click", function () {
+        audio.play();
+      });
+    </script>
+  </body>
+</html>
