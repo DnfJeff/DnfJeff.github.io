@@ -1,117 +1,162 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Programs — Analog Atlas</title>
-  <meta name="description" content="Tools and software by Dnf_Jeff — free utilities for file management and automation.">
-  <link rel="stylesheet" href="css/main.css?v=2">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Programs — Analog Atlas</title>
+    <meta
+      name="description"
+      content="Tools and software by Dnf_Jeff — free utilities for file management and automation."
+    />
+    <link rel="stylesheet" href="css/main.css?v=2" />
+  </head>
+  <body>
+    <!-- ====== HEADER ====== -->
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href="index.html" class="brand">
+          <span class="brand-icon">AA</span>
+          Analog Atlas
+        </a>
+        <span class="page-label">Programs</span>
 
-  <!-- ====== HEADER ====== -->
-  <header class="site-header">
-    <div class="container header-inner">
-      <a href="index.html" class="brand">
-        <span class="brand-icon">AA</span>
-        Analog Atlas
-      </a>
-      <span class="page-label">Programs</span>
-
-      <nav class="main-nav" aria-label="Primary">
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="programs.html" class="active">Programs</a></li>
-          <li><a href="note-library.html">Notes</a></li>
-          <li><a href="contact.html">Contact</a></li>
-        </ul>
-      </nav>
-
-      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-
-  </header>
-
-  <nav class="mobile-nav" aria-label="Mobile navigation" hidden>
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="programs.html" class="active">Programs</a></li>
-      <li><a href="note-library.html">Notes</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
-  </nav>
-
-  <!-- ====== PROGRAMS ====== -->
-  <section class="section">
-    <div class="container">
-      <div class="section-header">
-        <h2>Programs &amp; Tools</h2>
-        <p>Free utilities I've built to solve real problems. All available for download.</p>
-      </div>
-
-      <!-- CSVmaker -->
-      <div class="card program-card" style="margin-bottom:1.5rem;">
-        <div>
-          <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;margin-bottom:.75rem;">
-            <h3 style="margin:0;">CSVmaker</h3>
-            <span class="tag tag-primary">v1.0.0</span>
-          </div>
-          <p>A lightweight Python tool for generating CSV files from your local directory structure. Point it at any folder and it recursively scans sub-directories, capturing full file paths into a clean CSV. Great for managing large collections of files — pictures, videos, documents, game assets — you name it.</p>
-        </div>
-
-        <dl class="meta">
-          <dt>Creator</dt>
-          <dd>Dnf_Jeff</dd>
-          <dt>Language</dt>
-          <dd>Python</dd>
-          <dt>Last Updated</dt>
-          <dd>February 2025</dd>
-          <dt>Platform</dt>
-          <dd>Windows (.exe)</dd>
-        </dl>
-
-        <div style="display:flex;gap:.75rem;flex-wrap:wrap;">
-          <a href="https://github.com/DnfJeff/PublicGitWorkspace/raw/main/CSVmaker/dist/Csvmaker.exe" class="btn btn-primary" download>
-            Download CSVmaker
-          </a>
-          <a href="https://github.com/DnfJeff/PublicGitWorkspace" class="btn btn-outline" target="_blank" rel="noopener">
-            View Source
-          </a>
-        </div>
-      </div>
-
-      <!-- Placeholder for future programs -->
-      <div class="card" style="border-style:dashed;">
-        <h3 style="color:var(--clr-text-muted);">More Coming Soon</h3>
-        <p>Additional tools and utilities are in the works. Check back later or follow on <a href="https://github.com/DnfJeff" target="_blank" rel="noopener">GitHub</a> for the latest releases.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ====== FOOTER ====== -->
-  <footer class="site-footer">
-    <div class="container">
-      <div class="footer-inner">
-        <div>
-          <div class="footer-brand">Analog Atlas</div>
-          <ul class="footer-links">
+        <nav class="main-nav" aria-label="Primary">
+          <ul>
             <li><a href="index.html">Home</a></li>
             <li><a href="about.html">About</a></li>
-            <li><a href="programs.html">Programs</a></li>
+            <li><a href="programs.html" class="active">Programs</a></li>
             <li><a href="note-library.html">Notes</a></li>
             <li><a href="contact.html">Contact</a></li>
-            <li><a href="https://github.com/DnfJeff" target="_blank" rel="noopener">GitHub</a></li>
           </ul>
+        </nav>
+
+        <button
+          class="nav-toggle"
+          aria-label="Toggle navigation"
+          aria-expanded="false"
+        >
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </header>
+
+    <nav class="mobile-nav" aria-label="Mobile navigation" hidden>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="programs.html" class="active">Programs</a></li>
+        <li><a href="note-library.html">Notes</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+
+    <!-- ====== PROGRAMS ====== -->
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Programs &amp; Tools</h2>
+          <p>
+            Free utilities I've built to solve real problems. All available for
+            download.
+          </p>
+        </div>
+
+        <!-- CSVmaker -->
+        <div class="card program-card" style="margin-bottom: 1.5rem">
+          <div>
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                flex-wrap: wrap;
+                margin-bottom: 0.75rem;
+              "
+            >
+              <h3 style="margin: 0">CSVmaker</h3>
+              <span class="tag tag-primary">v1.0.0</span>
+            </div>
+            <p>
+              A lightweight Python tool for generating CSV files from your local
+              directory structure. Point it at any folder and it recursively
+              scans sub-directories, capturing full file paths into a clean CSV.
+              Great for managing large collections of files — pictures, videos,
+              documents, game assets — you name it.
+            </p>
+          </div>
+
+          <dl class="meta">
+            <dt>Creator</dt>
+            <dd>Dnf_Jeff</dd>
+            <dt>Language</dt>
+            <dd>Python</dd>
+            <dt>Last Updated</dt>
+            <dd>February 2025</dd>
+            <dt>Platform</dt>
+            <dd>Windows (.exe)</dd>
+          </dl>
+
+          <div style="display: flex; gap: 0.75rem; flex-wrap: wrap">
+            <a
+              href="https://github.com/DnfJeff/PublicGitWorkspace/raw/main/CSVmaker/dist/Csvmaker.exe"
+              class="btn btn-primary"
+              download
+            >
+              Download CSVmaker
+            </a>
+            <a
+              href="https://github.com/DnfJeff/PublicGitWorkspace"
+              class="btn btn-outline"
+              target="_blank"
+              rel="noopener"
+            >
+              View Source
+            </a>
+          </div>
+        </div>
+
+        <!-- Placeholder for future programs -->
+        <div class="card" style="border-style: dashed">
+          <h3 style="color: var(--clr-text-muted)">More Coming Soon</h3>
+          <p>
+            Additional tools and utilities are in the works. Check back later or
+            follow on
+            <a href="https://github.com/DnfJeff" target="_blank" rel="noopener"
+              >GitHub</a
+            >
+            for the latest releases.
+          </p>
         </div>
       </div>
-      <p class="footer-copy">&copy; 2025 Analog Atlas. Built by Dnf_Jeff.</p>
-    </div>
-  </footer>
+    </section>
 
-  <script src="js/main.js?v=2"></script>
-</body>
+    <!-- ====== FOOTER ====== -->
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-inner">
+          <div>
+            <div class="footer-brand">Analog Atlas</div>
+            <ul class="footer-links">
+              <li><a href="index.html">Home</a></li>
+              <li><a href="about.html">About</a></li>
+              <li><a href="programs.html">Programs</a></li>
+              <li><a href="note-library.html">Notes</a></li>
+              <li><a href="contact.html">Contact</a></li>
+              <li>
+                <a
+                  href="https://github.com/DnfJeff"
+                  target="_blank"
+                  rel="noopener"
+                  >GitHub</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+        <p class="footer-copy">&copy; 2025 Analog Atlas. Built by Dnf_Jeff.</p>
+      </div>
+    </footer>
+
+    <script src="js/main.js?v=2"></script>
+  </body>
 </html>
