@@ -61,6 +61,27 @@
   const workspaceListEl = document.getElementById("workspace-list");
   const noteListEl = document.getElementById("note-list");
 
+  // Workspace metadata — descriptions shown in sidebar & note area header.
+  // To add a new workspace, just create the folder under notes/.
+  // Optionally add a description here for a nicer UX.
+  const WORKSPACE_META = {
+    "sims-guides": {
+      label: "Sims Guides",
+      desc: "Installation guides and full checklists for The Sims series.",
+      icon: "🎮",
+    },
+    "tools": {
+      label: "Tools & Docs",
+      desc: "Documentation and readmes for released tools and utilities.",
+      icon: "🔧",
+    },
+    "projects": {
+      label: "Project Plans",
+      desc: "Design docs, plans, and roadmaps for ongoing projects.",
+      icon: "📋",
+    },
+  };
+
   if (workspaceListEl && noteListEl) {
     loadWorkspaces();
   }
@@ -75,8 +96,6 @@
         throw new Error(`HTTP ${res.status}`);
       }
       const items = await res.json();
-
-      // Handle case where response is not an array (e.g. API error object)
       if (!Array.isArray(items)) throw new Error("Unexpected API response");
 
       const dirs = items.filter((i) => i.type === "dir");
@@ -90,11 +109,36 @@
         return;
       }
 
+      // Sort: known workspaces first (by WORKSPACE_META order), unknown last
+      const knownOrder = Object.keys(WORKSPACE_META);
+      dirs.sort((a, b) => {
+        const ai = knownOrder.indexOf(a.name);
+        const bi = knownOrder.indexOf(b.name);
+        if (ai === -1 && bi === -1) return a.name.localeCompare(b.name);
+        if (ai === -1) return 1;
+        if (bi === -1) return -1;
+        return ai - bi;
+      });
+
+      // Check URL for a pre-selected workspace
+      const urlParams = new URLSearchParams(window.location.search);
+      const preselected = urlParams.get("ws");
+      let initialIdx = 0;
+      if (preselected) {
+        const found = dirs.findIndex((d) => d.name === preselected);
+        if (found !== -1) initialIdx = found;
+      }
+
       dirs.forEach((dir, idx) => {
+        const meta = WORKSPACE_META[dir.name];
         const btn = document.createElement("button");
-        btn.textContent = formatName(dir.name);
         btn.dataset.workspace = dir.name;
-        if (idx === 0) btn.classList.add("active");
+
+        const icon = meta ? meta.icon + " " : "";
+        const label = meta ? meta.label : formatName(dir.name);
+        btn.innerHTML = `<span class="ws-icon">${icon}</span>${label}`;
+
+        if (idx === initialIdx) btn.classList.add("active");
         btn.addEventListener("click", () => selectWorkspace(dir.name, btn));
 
         const li = document.createElement("li");
@@ -102,25 +146,38 @@
         workspaceListEl.appendChild(li);
       });
 
-      // Auto-load the first workspace
-      loadNotes(dirs[0].name);
+      // Auto-load
+      loadNotes(dirs[initialIdx].name);
     } catch (err) {
       console.error("Failed to load workspaces:", err);
       workspaceListEl.innerHTML = `<li style="color:var(--clr-text-muted);font-size:.9rem;">${err.message || "Could not load workspaces."}</li>`;
       noteListEl.innerHTML =
-        '<div class="empty-state"><p>Could not connect to the note library. Please try refreshing the page.</p></div>';
+        '<div class="empty-state"><p>Could not connect to the note library. Please try refreshing.</p></div>';
     }
   }
 
   function selectWorkspace(name, btn) {
-    workspaceListEl
-      .querySelectorAll("button")
-      .forEach((b) => b.classList.remove("active"));
+    workspaceListEl.querySelectorAll("button").forEach((b) => b.classList.remove("active"));
     btn.classList.add("active");
+    // Update URL without reload for bookmarking
+    const url = new URL(window.location);
+    url.searchParams.set("ws", name);
+    history.replaceState(null, "", url);
     loadNotes(name);
   }
 
   async function loadNotes(workspace) {
+    const toolbar = document.getElementById("notes-toolbar");
+    const titleEl = document.getElementById("workspace-title");
+    const countEl = document.getElementById("note-count");
+
+    // Show toolbar with workspace info
+    const meta = WORKSPACE_META[workspace];
+    if (toolbar && titleEl) {
+      toolbar.style.display = "flex";
+      titleEl.textContent = meta ? meta.label : formatName(workspace);
+    }
+
     noteListEl.innerHTML = `
       <div class="skeleton" style="height:5rem;"></div>
       <div class="skeleton" style="height:5rem;"></div>
@@ -135,6 +192,8 @@
       const files = items.filter((i) => i.type === "file");
       noteListEl.innerHTML = "";
 
+      if (countEl) countEl.textContent = `${files.length} note${files.length !== 1 ? "s" : ""}`;
+
       if (files.length === 0) {
         noteListEl.innerHTML =
           '<div class="empty-state"><p>No notes in this workspace yet.</p></div>';
@@ -143,18 +202,23 @@
 
       files.forEach((file) => {
         const ext = file.name.split(".").pop().toLowerCase();
+        const displayName = formatName(file.name.replace(/\.[^.]+$/, ""));
         const card = document.createElement("a");
         card.className = "note-card";
         card.href = `note-viewer.html?workspace=${encodeURIComponent(workspace)}&note=${encodeURIComponent(file.name)}`;
 
         card.innerHTML = `
-          <span class="note-type">${ext.toUpperCase()}</span>
-          <h4>${formatName(file.name.replace(/\.[^.]+$/, ""))}</h4>
+          <div class="note-card-header">
+            <span class="note-type">${ext.toUpperCase()}</span>
+          </div>
+          <h4>${displayName}</h4>
+          <span class="note-card-arrow">&rarr;</span>
         `;
         noteListEl.appendChild(card);
       });
     } catch (err) {
-      console.error("Failed to load notes", err);
+      console.error("Failed to load notes:", err);
+      if (countEl) countEl.textContent = "";
       noteListEl.innerHTML =
         '<div class="empty-state"><p>Could not load notes for this workspace.</p></div>';
     }

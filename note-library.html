@@ -8,7 +8,7 @@
       name="description"
       content="Browse guides, checklists, and project documentation organized by workspace."
     />
-    <link rel="stylesheet" href="css/main.css?v=2" />
+    <link rel="stylesheet" href="css/main.css?v=3" />
   </head>
   <body>
     <!-- ====== HEADER ====== -->
@@ -55,10 +55,7 @@
       <div class="container">
         <div class="section-header">
           <h2>Note Library</h2>
-          <p>
-            Guides, checklists, documentation, and project plans — organized by
-            workspace.
-          </p>
+          <p>Guides, checklists, project docs, and reference material — organized by workspace.</p>
         </div>
 
         <div class="notes-layout">
@@ -68,15 +65,44 @@
             <ul id="workspace-list">
               <li><span class="skeleton" style="width: 80%"></span></li>
               <li><span class="skeleton" style="width: 60%"></span></li>
+              <li><span class="skeleton" style="width: 70%"></span></li>
             </ul>
+            <div class="sidebar-meta" id="workspace-meta"></div>
           </aside>
 
-          <!-- Notes grid -->
-          <div id="note-list" class="note-grid">
-            <div class="empty-state">
-              <p>Select a workspace to see its notes.</p>
+          <!-- Notes area -->
+          <div class="notes-main">
+            <div class="notes-toolbar" id="notes-toolbar" style="display:none;">
+              <h3 id="workspace-title"></h3>
+              <span class="tag" id="note-count"></span>
+            </div>
+            <div id="note-list" class="note-grid">
+              <div class="empty-state">
+                <p>Select a workspace to browse its notes.</p>
+              </div>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== HOW TO ADD NOTES ====== -->
+    <section class="section" id="how-to-add">
+      <div class="container">
+        <div class="card" style="max-width:720px;">
+          <h3 style="margin-bottom:.75rem;">Adding Notes — Quick Reference</h3>
+          <p style="color:var(--clr-text-muted);margin-bottom:1rem;">Drop files into a workspace folder and push. That's it — the library auto-discovers everything.</p>
+          <ol style="margin-left:1.5rem;margin-bottom:1rem;line-height:2;">
+            <li>Create your note as <strong>.html</strong> or <strong>.md</strong> (Markdown).</li>
+            <li>Place it in the appropriate workspace folder under <code>notes/</code>:<br>
+              <code>notes/sims-guides/</code> &middot;
+              <code>notes/tools/</code> &middot;
+              <code>notes/projects/</code>
+            </li>
+            <li>To create a <strong>new workspace</strong>, just add a new folder inside <code>notes/</code>.</li>
+            <li>Commit and push — the Note Library reads from GitHub automatically.</li>
+          </ol>
+          <p style="font-size:.88rem;color:var(--clr-text-muted);">Filenames become display titles: hyphens &amp; underscores are replaced with spaces, and each word is capitalized. Use descriptive filenames like <code>Sims1-install-guide.html</code>.</p>
         </div>
       </div>
     </section>
@@ -108,6 +134,6 @@
       </div>
     </footer>
 
-    <script src="js/main.js?v=2"></script>
+    <script src="js/main.js?v=3"></script>
   </body>
 </html>

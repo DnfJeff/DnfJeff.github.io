@@ -475,10 +475,12 @@ h4 {
 }
 .workspace-sidebar a,
 .workspace-sidebar button {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
   width: 100%;
   text-align: left;
-  padding: 0.55rem 0.75rem;
+  padding: 0.6rem 0.85rem;
   border-radius: var(--radius);
   font-size: 0.92rem;
   background: none;
@@ -486,20 +488,56 @@ h4 {
   cursor: pointer;
   color: var(--clr-text);
   font-family: var(--ff-body);
-  transition: background var(--dur) var(--ease);
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.workspace-sidebar .ws-icon {
+  font-size: 1.05rem;
+  flex-shrink: 0;
+  width: 1.4rem;
+  text-align: center;
 }
 .workspace-sidebar a:hover,
-.workspace-sidebar button:hover,
-.workspace-sidebar button.active {
+.workspace-sidebar button:hover {
   background: var(--clr-surface-alt);
   color: var(--clr-primary);
+}
+.workspace-sidebar button.active {
+  background: var(--clr-primary);
+  color: #fff;
+}
+.workspace-sidebar button.active .ws-icon {
+  filter: grayscale(0);
+}
+.sidebar-meta {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--clr-border);
+  font-size: 0.82rem;
+  color: var(--clr-text-muted);
+}
+
+/* Notes main area */
+.notes-main {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Toolbar above note grid */
+.notes-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+.notes-toolbar h3 {
+  font-size: 1.2rem;
+  margin: 0;
 }
 
 .note-grid {
   display: grid;
   gap: 1rem;
-  flex: 1;
-  min-width: 0;
 }
 
 .note-card {
@@ -512,24 +550,49 @@ h4 {
     border-color var(--dur) var(--ease);
   text-decoration: none;
   color: inherit;
-  display: block;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  position: relative;
 }
 .note-card:hover {
   border-color: var(--clr-accent);
   box-shadow: 0 4px 16px rgba(62, 41, 30, 0.07);
   color: inherit;
 }
+.note-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
 .note-card h4 {
   font-size: 1rem;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0;
 }
 .note-card .note-type {
-  font-size: 0.78rem;
+  font-size: 0.7rem;
   color: var(--clr-text-muted);
   text-transform: uppercase;
   letter-spacing: 0.04em;
+  background: var(--clr-tag);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 600;
 }
-
+.note-card-arrow {
+  position: absolute;
+  right: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.1rem;
+  color: var(--clr-border);
+  transition: color var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.note-card:hover .note-card-arrow {
+  color: var(--clr-primary);
+  transform: translateY(-50%) translateX(3px);
+}
+}
 /* Note viewer */
 .note-viewer-content {
   background: var(--clr-surface);
@@ -817,6 +880,10 @@ h4 {
     position: sticky;
     top: 80px;
     align-self: flex-start;
+  }
+  .notes-main {
+    flex: 1;
+    min-width: 0;
   }
   .note-grid {
     grid-template-columns: repeat(2, 1fr);
