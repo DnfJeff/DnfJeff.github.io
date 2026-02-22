@@ -16,31 +16,41 @@
   const navToggle = document.querySelector('.nav-toggle');
   const mobileNav = document.querySelector('.mobile-nav');
 
+  // Always reset body overflow on fresh page load (prevents stuck state from prev page)
+  document.body.style.overflow = '';
+
   if (navToggle && mobileNav) {
+    // Remove the HTML hidden attribute so CSS takes over, but keep it closed
+    mobileNav.removeAttribute('hidden');
+    mobileNav.classList.remove('open');
+
+    function openMobileNav() {
+      mobileNav.classList.add('open');
+      navToggle.classList.add('open');
+      navToggle.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMobileNav() {
+      mobileNav.classList.remove('open');
+      navToggle.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+
     navToggle.addEventListener('click', () => {
-      const isOpen = mobileNav.classList.toggle('open');
-      navToggle.classList.toggle('open', isOpen);
-      navToggle.setAttribute('aria-expanded', String(isOpen));
-      document.body.style.overflow = isOpen ? 'hidden' : '';
+      mobileNav.classList.contains('open') ? closeMobileNav() : openMobileNav();
     });
 
     // Close on link click
     mobileNav.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        mobileNav.classList.remove('open');
-        navToggle.classList.remove('open');
-        navToggle.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
-      });
+      link.addEventListener('click', closeMobileNav);
     });
 
     // Close on Escape
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && mobileNav.classList.contains('open')) {
-        mobileNav.classList.remove('open');
-        navToggle.classList.remove('open');
-        navToggle.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
+        closeMobileNav();
       }
     });
   }
@@ -58,14 +68,22 @@
   async function loadWorkspaces() {
     try {
       const res = await fetch(`${API_BASE}/notes`);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      if (!res.ok) {
+        if (res.status === 403) throw new Error('GitHub API rate limit reached. Try again later.');
+        if (res.status === 404) throw new Error('Notes directory not found.');
+        throw new Error(`HTTP ${res.status}`);
+      }
       const items = await res.json();
+
+      // Handle case where response is not an array (e.g. API error object)
+      if (!Array.isArray(items)) throw new Error('Unexpected API response');
 
       const dirs = items.filter(i => i.type === 'dir');
       workspaceListEl.innerHTML = '';
 
       if (dirs.length === 0) {
         workspaceListEl.innerHTML = '<li style="color:var(--clr-text-muted);font-size:.9rem;">No workspaces found.</li>';
+        noteListEl.innerHTML = '<div class="empty-state"><p>No workspaces available yet.</p></div>';
         return;
       }
 
@@ -81,11 +99,12 @@
         workspaceListEl.appendChild(li);
       });
 
-      // Auto‑load the first workspace
+      // Auto-load the first workspace
       loadNotes(dirs[0].name);
     } catch (err) {
-      console.error('Failed to load workspaces', err);
-      workspaceListEl.innerHTML = '<li style="color:var(--clr-text-muted);font-size:.9rem;">Could not load workspaces.</li>';
+      console.error('Failed to load workspaces:', err);
+      workspaceListEl.innerHTML = `<li style="color:var(--clr-text-muted);font-size:.9rem;">${err.message || 'Could not load workspaces.'}</li>`;
+      noteListEl.innerHTML = '<div class="empty-state"><p>Could not connect to the note library. Please try refreshing the page.</p></div>';
     }
   }
 

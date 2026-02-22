@@ -186,6 +186,7 @@ h1, h2, h3, h4 {
   overflow-y: auto;
   border-top: 1px solid var(--clr-border);
 }
+.mobile-nav[hidden] { display: none !important; }
 .mobile-nav.open { display: block; animation: fadeSlideDown .25s var(--ease); }
 .mobile-nav ul   { list-style: none; }
 .mobile-nav li + li { margin-top: .25rem; }
@@ -402,6 +403,8 @@ h1, h2, h3, h4 {
 .note-grid {
   display: grid;
   gap: 1rem;
+  flex: 1;
+  min-width: 0;
 }
 
 .note-card {
@@ -653,7 +656,7 @@ h1, h2, h3, h4 {
     top: 80px;
     align-self: flex-start;
   }
-  .note-grid      { flex: 1; grid-template-columns: repeat(2, 1fr); }
+  .note-grid      { grid-template-columns: repeat(2, 1fr); }
 
   .about-grid     { grid-template-columns: 280px 1fr; }
   .about-profile  { text-align: left; }
