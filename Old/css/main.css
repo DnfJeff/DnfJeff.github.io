@@ -1,0 +1,145 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #F8EDE3; /* Warm Beige */
+    color: #5C4033; /* Chestnut Brown */
+    font-size: 18px; /* Increase font size */
+    line-height: 1.6; /* Improve readability */
+}
+
+/* Header */
+header {
+    background-color: #A0522D; /* Sienna */
+    color: #FFFFFF; /* White */
+    padding: 20px;
+    text-align: center;
+}
+
+header a {
+    color: #FFFFFF; /* White */
+    text-decoration: none;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+header span {
+    font-size: 18px;
+}
+
+/* Navigation */
+nav {
+    background-color: #8B4513; /* Saddle Brown */
+    color: #FFFFFF; /* White */
+    padding: 15px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 200px;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul li {
+    margin-bottom: 20px;
+}
+
+nav ul li a {
+    color: #FFFFFF; /* White */
+    text-decoration: none;
+    font-size: 18px;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+    color: #FF6347; /* Tomato */
+}
+
+/* Main Content Area */
+.content {
+    display: flex;
+    margin-left: 220px;
+    padding: 20px;
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.main-content h1 {
+    font-size: 2.5em; /* Larger font size for headings */
+}
+
+.main-content p {
+    font-size: 1.2em; /* Larger font size for paragraphs */
+}
+
+.feed {
+    background-color: #FFFFFF; /* White */
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.feed h2 {
+    margin-top: 0;
+}
+
+/* Panels */
+.left-panel, .right-panel {
+    background-color: #FFFFFF; /* White */
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.left-panel {
+    width: 200px;
+    margin-right: 20px;
+}
+
+.right-panel {
+    flex-grow: 1;
+}
+
+.right-panel h3 {
+    margin-top: 0;
+}
+
+.right-panel ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.right-panel ul li {
+    margin-bottom: 10px;
+}
+
+.right-panel ul li a {
+    color: #5C4033; /* Chestnut Brown */
+    text-decoration: none;
+}
+
+.right-panel ul li a:hover {
+    text-decoration: underline;
+    color: #FF6347; /* Tomato */
+}
+
+/* Footer */
+footer {
+    background-color: #A0522D; /* Sienna */
+    color: #FFFFFF; /* White */
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}

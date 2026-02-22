@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Note Library</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+<header>
+    <a href="index.html">Analog Atlas</a> | <span>Note Library</span>
+</header>
+
+<nav>
+    <ul>
+        <li><a href="home.html">Home Page</a></li>
+        <li><a href="note-library.html">Note Library</a></li>
+        <li><a href="programs.html">Programs</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+    </ul>
+</nav>
+
+<div class="content">
+    <div class="left-panel">
+        <h3>Workspaces</h3>
+        <ul id="workspace-list">
+            <!-- Workspaces will be dynamically loaded here -->
+        </ul>
+    </div>
+
+    <div class="right-panel">
+        <h3>Available Notes</h3>
+        <div id="note-list">
+            <!-- Notes for the selected workspace will appear here -->
+        </div>
+    </div>
+</div>
+
+<footer>
+    &copy; 2025 Analog Atlas | All Rights Reserved | Site by Dnf_Jeff
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        loadWorkspaces();
+    });
+
+    function loadWorkspaces() {
+        fetch('https://api.github.com/repos/DnfJeff/DnfJeff.github.io/contents/notes')
+            .then(response => response.json())
+            .then(workspaces => {
+                const workspaceList = document.getElementById('workspace-list');
+                workspaceList.innerHTML = ''; // Clear previous list
+
+                workspaces.forEach(workspace => {
+                    if (workspace.type === 'dir') {
+                        const workspaceLink = document.createElement('a');
+                        workspaceLink.href = '#';
+                        workspaceLink.textContent = workspace.name;
+                        workspaceLink.onclick = () => loadWorkspace(workspace.name);
+
+                        const listItem = document.createElement('li');
+                        listItem.appendChild(workspaceLink);
+                        workspaceList.appendChild(listItem);
+                    }
+                });
+
+                // Load the first workspace by default if exists
+                if (workspaces.length > 0 && workspaces[0].type === 'dir') {
+                    loadWorkspace(workspaces[0].name);
+                }
+            })
+            .catch(error => console.error('Error loading workspaces:', error));
+    }
+
+    function loadWorkspace(workspace) {
+        fetch(`https://api.github.com/repos/DnfJeff/DnfJeff.github.io/contents/notes/${workspace}`)
+            .then(response => response.json())
+            .then(notes => {
+                const noteList = document.getElementById('note-list');
+                noteList.innerHTML = ''; // Clear previous list
+
+                notes.forEach(note => {
+                    if (note.type === 'file') {
+                        const noteLink = document.createElement('a');
+                        noteLink.href = `notes/${workspace}/${note.name}`;
+                        noteLink.target = "_blank";
+                        noteLink.textContent = note.name.replace('.md', '').replace(/_/g, ' '); // Clean up filename for display
+
+                        const listItem = document.createElement('li');
+                        listItem.appendChild(noteLink);
+                        noteList.appendChild(listItem);
+                    }
+                });
+            })
+            .catch(error => console.error('Error loading notes:', error));
+    }
+</script>
+
+</body>
+</html>

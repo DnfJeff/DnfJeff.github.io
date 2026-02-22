@@ -3,52 +3,149 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About Me</title>
+  <title>About — Analog Atlas</title>
+  <meta name="description" content="About Dnf_Jeff — creative technologist, digital preservationist, and toolmaker.">
   <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
 
-<header>
-  <a href="index.html">Analog Atlas</a> | <span>About Page</span>
-</header>
+  <!-- ====== HEADER ====== -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="brand">
+        <span class="brand-icon">AA</span>
+        Analog Atlas
+      </a>
+      <span class="page-label">About</span>
 
-<nav>
-  <ul>
-    <li><a href="home.html">Home Page</a></li>
-    <li><a href="note-library.html">Note Library</a></li>
-    <li><a href="programs.html">Programs</a></li>
-    <li><a href="about.html">About</a></li>
-    <li><a href="contact.html">Contact</a></li>
-  </ul>
-</nav>
+      <nav class="main-nav" aria-label="Primary">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html" class="active">About</a></li>
+          <li><a href="programs.html">Programs</a></li>
+          <li><a href="note-library.html">Notes</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
 
-<div class="content">
-  <div class="main-content">
-    <h1>About Me</h1>
-    <p>Welcome to my portfolio—a space where creative exploration, digital preservation, and community-driven innovation converge.</p>
-    <p>I’m a creative technologist dedicated to transforming ideas into dynamic experiences using tools like Blender, Unreal Engine, and Python. My journey began with CSVmaker, my first software release.</p>
-    <p>For example, at <a href="https://www.youtube.com/@OfficalComicBookNews">OfficialComicBookNews</a>, I built a reusable system that dynamically loads comic images and descriptions from CSV files.</p>
-    <p>Alongside these projects, I’m deeply involved in archival and preservation efforts. Some of my archival and video tests can be found on <a href="https://www.youtube.com/@Dnf_Jeff">Dnf_Jeff</a>.</p>
-    <p>My work is also informed by a long-standing habit of systematic note planning and writing, ensuring that every project is as thoughtfully curated as it is innovative.</p>
-    <p>This site is not a “let’s talk” message but rather a celebration of projects that push the boundaries of digital expression and community collaboration. It’s about preserving creative outputs.</p>
-    <p>Thank you for exploring my world of ideas and digital craftsmanship.</p>
-  </div>
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
 
-  <div class="right-panel">
-    <h3>Quick Links</h3>
-    <ul>
-      <li><a href="note-library.html">Note Library</a></li>
-      <li><a href="programs.html">Programs</a></li>
-      <li><a href="documentation.html">Documentation</a></li>
-      <li><a href="https://github.com/DnfJeff">GitHub</a></li>
-    </ul>
-  </div>
-</div>
+    <nav class="mobile-nav" aria-label="Mobile navigation">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html" class="active">About</a></li>
+        <li><a href="programs.html">Programs</a></li>
+        <li><a href="note-library.html">Notes</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
 
-<footer>
-  &copy; 2025 Analog Atlas | All Rights Reserved | Site by Dnf_Jeff
-</footer>
+  <!-- ====== ABOUT ====== -->
+  <section class="section">
+    <div class="container">
+      <div class="about-grid">
 
-<script src="js/main.js"></script>
+        <!-- Profile sidebar -->
+        <div class="about-profile">
+          <div class="avatar-placeholder">J</div>
+          <h1>Dnf_Jeff</h1>
+          <p class="subtitle">Creative Technologist &amp; Digital Preservationist</p>
+        </div>
+
+        <!-- Bio content -->
+        <div class="about-content">
+          <div class="card" style="margin-bottom:1.5rem;">
+            <h2 style="margin-bottom:.75rem;">Who I Am</h2>
+            <p>Welcome to my corner of the internet — a space where creative exploration, digital preservation, and community-driven innovation converge.</p>
+            <p>I'm a creative technologist dedicated to transforming ideas into dynamic experiences using tools like <strong>Blender</strong>, <strong>Unreal Engine</strong>, and <strong>Python</strong>. My journey began with <strong>CSVmaker</strong>, my first software release — a lightweight utility for organizing file structures into clean CSV data.</p>
+          </div>
+
+          <div class="card" style="margin-bottom:1.5rem;">
+            <h2 style="margin-bottom:.75rem;">What I Do</h2>
+            <p>At <a href="https://www.youtube.com/@OfficalComicBookNews" target="_blank" rel="noopener">OfficialComicBookNews</a>, I built a reusable system that dynamically loads comic images and descriptions from CSV files — blending automation with creative presentation.</p>
+            <p>I'm deeply involved in archival and preservation efforts. Some of my archival and video work can be found on <a href="https://www.youtube.com/@Dnf_Jeff" target="_blank" rel="noopener">my YouTube channel</a>.</p>
+            <p>My work is informed by a long-standing habit of systematic note-taking and project planning, ensuring every project is as thoughtfully curated as it is innovative.</p>
+          </div>
+
+          <div class="card">
+            <h2 style="margin-bottom:.75rem;">Philosophy</h2>
+            <p>This site isn't a "let's talk" pitch — it's a celebration of projects that push the boundaries of digital expression and community collaboration. It's about preserving creative outputs for the long haul and sharing the tools and knowledge that make it possible.</p>
+            <p>Thank you for exploring my world of ideas and digital craftsmanship.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== SKILLS ====== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Tools &amp; Skills</h2>
+        <p>Technologies and tools I work with regularly.</p>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-tag">Python</div>
+        <div class="skill-tag">Blender</div>
+        <div class="skill-tag">Unreal Engine</div>
+        <div class="skill-tag">HTML / CSS</div>
+        <div class="skill-tag">JavaScript</div>
+        <div class="skill-tag">Git / GitHub</div>
+        <div class="skill-tag">CSV Automation</div>
+        <div class="skill-tag">Digital Archival</div>
+        <div class="skill-tag">Video Production</div>
+        <div class="skill-tag">Game Modding</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== LINKS ====== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Find Me Online</h2>
+      </div>
+      <div class="card-grid" style="max-width:640px;">
+        <a href="https://github.com/DnfJeff" target="_blank" rel="noopener" class="card" style="text-decoration:none;">
+          <h3>GitHub</h3>
+          <p>Source code, releases, and open-source projects.</p>
+        </a>
+        <a href="https://www.youtube.com/@Dnf_Jeff" target="_blank" rel="noopener" class="card" style="text-decoration:none;">
+          <h3>YouTube</h3>
+          <p>Archive videos, tests, and preservations.</p>
+        </a>
+        <a href="https://www.youtube.com/@OfficalComicBookNews" target="_blank" rel="noopener" class="card" style="text-decoration:none;">
+          <h3>OfficialComicBookNews</h3>
+          <p>Comic book content with dynamic CSV-driven displays.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== FOOTER ====== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <div class="footer-brand">Analog Atlas</div>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="programs.html">Programs</a></li>
+            <li><a href="note-library.html">Notes</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="https://github.com/DnfJeff" target="_blank" rel="noopener">GitHub</a></li>
+          </ul>
+        </div>
+      </div>
+      <p class="footer-copy">&copy; 2025 Analog Atlas. Built by Dnf_Jeff.</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
 </body>
 </html>
