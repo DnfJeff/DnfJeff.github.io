@@ -1,0 +1,147 @@
+{
+ "name": "Hod",
+ "tagline": "Tools for building Sims 1 worlds.",
+ "blurb": "One storage system that keeps every Sims 1 file byte-perfect forever, and the tools that read and write it: a browser you can open anything in, a save editor that can't lose your game, and eventually a community exchange. A hod carries bricks so you can build; hodós is Greek for path. Both fit.",
+ "snapshot": "2026-08-16",
+ "status": "Early development — private build",
+ "stats": [
+  { "value": "33", "label": "file formats read and rewritten byte-for-byte" },
+  { "value": "1,142", "label": "Sims across ten real neighborhoods" },
+  { "value": "243,299", "label": "references mapped across the whole store" },
+  { "value": "248", "label": "lots, every one with its own house picture" },
+  { "value": "6,257", "label": "skin entities · 2,152 texture previews" },
+  { "value": "58", "label": "work packets accepted and verified" }
+ ],
+ "pillars": [
+  {
+   "eyebrow": "Explore",
+   "body": "Open anything. Every file inspectable down to the byte — structure, references, where it came from."
+  },
+  {
+   "eyebrow": "Build",
+   "body": "Edit safely. Every change is a new version; undo is the storage model, not a prayer."
+  },
+  {
+   "eyebrow": "Share",
+   "body": "Lists like playlists, packs built in the browser, content scoped to your people."
+  }
+ ],
+ "track": [
+  {
+   "phase": "Foundation",
+   "state": "done",
+   "done": 7,
+   "total": 7,
+   "note": "Repo, test corpus, spec system, container readers, storage core, archive layer, the CLI."
+  },
+  {
+   "phase": "Research",
+   "state": "here",
+   "done": 17,
+   "total": 22,
+   "note": "Hex-level detective work on real game files. Code only ever gets written from these."
+  },
+  {
+   "phase": "Codecs",
+   "state": "here",
+   "done": 28,
+   "total": 33,
+   "note": "One per format — read a chunk into clean objects, write it back byte-identical."
+  },
+  {
+   "phase": "Entities",
+   "state": "done",
+   "done": 15,
+   "total": 15,
+   "note": "Decoded chunks become things a person recognises: objects, sims, lots, families."
+  },
+  {
+   "phase": "Web surface",
+   "state": "here",
+   "done": 30,
+   "total": 37,
+   "note": "The platform's face, backed by the real store — browse, cards, thumbnails, the viewer."
+  },
+  {
+   "phase": "Save editor",
+   "state": "here",
+   "done": 4,
+   "total": 8,
+   "note": "Money, names, bios, skills and personality — all editable, all reversible."
+  },
+  {
+   "phase": "Mod manager",
+   "state": "ahead",
+   "done": 2,
+   "total": 9,
+   "note": "Scan what you point it at, triage conflicts, enable and disable safely."
+  },
+  {
+   "phase": "3D viewer",
+   "state": "ahead",
+   "done": 0,
+   "total": 12,
+   "note": "A WebGPU renderer — lots, walls, objects, animated Sims, in the browser."
+  },
+  {
+   "phase": "Blender tools",
+   "state": "shelf",
+   "done": 1,
+   "total": 6,
+   "note": "The top of the pyramid. Groundwork committed; parked until the rest matures."
+  }
+ ],
+ "recent": [
+  "The save editor writes: money, names, bios, object identity, skills and personality — one mutation flow, every commit byte-verified against a kept snapshot.",
+  "Cooking 0 → 300 → 0 on a real save reproduced the byte-exact original hash. Provably reversible.",
+  "Every one of the 248 lots now shows the house picture the game itself last drew.",
+  "A house join that took 15.2 seconds now takes 157 milliseconds."
+ ],
+ "gallery": [
+  {
+   "file": "browse",
+   "title": "Browse",
+   "caption": "The faceted catalogue over the active store — 13,102 things, filtered the way the game organises them."
+  },
+  {
+   "file": "characters",
+   "title": "Character Studio",
+   "caption": "The game's own hierarchy: neighbourhoods, their families, their Sims. Never a file dump."
+  },
+  {
+   "file": "household",
+   "title": "Households",
+   "caption": "Twenty-seven family resources in one save, rendered as the game's own family-select face strips."
+  },
+  {
+   "file": "sim",
+   "title": "One Sim",
+   "caption": "Bio, name, body parts — every field carrying a note about which byte it came from."
+  },
+  {
+   "file": "sim-stats",
+   "title": "Skills & personality",
+   "caption": "The seven skills and five traits, raw values beside the bars the game shows. Zodiac is derived, so it stays read-only."
+  },
+  {
+   "file": "object",
+   "title": "Object Studio",
+   "caption": "A generated editor, read-first: identity, all thirty catalogue strings, graphics, tuning constants."
+  },
+  {
+   "file": "graph",
+   "title": "Behavior Graph",
+   "caption": "SimAntics readable in a browser — entry points, decoded instructions, clickable jump targets."
+  },
+  {
+   "file": "lot",
+   "title": "Lot",
+   "caption": "A save-derived page: contents, dependency status, and the house as the game last saw it."
+  },
+  {
+   "file": "inspect",
+   "title": "Inspect",
+   "caption": "The bottom of the stack. Every chunk, offset, size and hash in a file — nothing guessed."
+  }
+ ]
+}

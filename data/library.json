@@ -1,0 +1,148 @@
+{
+ "generated": "2026-08-16",
+ "count": 8,
+ "words": 4839,
+ "sections": [
+  {
+   "name": "Sims",
+   "blurb": "Completionist checklists and install guides.",
+   "count": 5
+  },
+  {
+   "name": "Tools",
+   "blurb": "Readmes and documentation for things I've released.",
+   "count": 1
+  },
+  {
+   "name": "Projects",
+   "blurb": "Plans, design docs and research notes.",
+   "count": 2
+  }
+ ],
+ "entries": [
+  {
+   "id": "notes__sims-guides__Sims4BaseFullChecklist",
+   "path": "notes/sims-guides/Sims4BaseFullChecklist.html",
+   "kind": "html",
+   "title": "The Sims 4 (Base Game) — Completionist Checklist",
+   "section": "Sims",
+   "tags": [
+    "Sims",
+    "Sims 4",
+    "Checklist"
+   ],
+   "summary": "Base-game-only completion for The Sims 4 — no packs, no shortcuts. Aspirations, careers, skills and collectibles as the vanilla game ships them.",
+   "words": 478,
+   "updated": "2026-02-22"
+  },
+  {
+   "id": "notes__sims-guides__Sims2CastawayPS2FullChecklist",
+   "path": "notes/sims-guides/Sims2CastawayPS2FullChecklist.html",
+   "kind": "html",
+   "title": "The Sims 2: Castaway (PS2) — Completionist Checklist",
+   "section": "Sims",
+   "tags": [
+    "Sims",
+    "Sims 2",
+    "Console",
+    "Checklist"
+   ],
+   "summary": "The console cousin, tracked properly: resources, recipes, resort building and the story beats that gate the island",
+   "words": 505,
+   "updated": "2026-02-22"
+  },
+  {
+   "id": "notes__sims-guides__Sims2FullChecklist",
+   "path": "notes/sims-guides/Sims2FullChecklist.html",
+   "kind": "html",
+   "title": "The Sims 2 — Completionist Checklist",
+   "section": "Sims",
+   "tags": [
+    "Sims",
+    "Sims 2",
+    "Checklist"
+   ],
+   "summary": "A full-series run sheet for The Sims 2 — aspirations, career tracks, collections, university, hobbies and the odd corners the game never tells you about.",
+   "words": 1003,
+   "updated": "2026-02-22"
+  },
+  {
+   "id": "notes__sims-guides__Sims1-install guide",
+   "path": "notes/sims-guides/Sims1-install guide.html",
+   "kind": "html",
+   "title": "The Sims 1 — Install Order & Setup",
+   "section": "Sims",
+   "tags": [
+    "Sims",
+    "Sims 1",
+    "Install",
+    "Guide"
+   ],
+   "summary": "The order to install The Sims 1 and every expansion so the game actually runs on modern Windows, plus the patches and fixes that have to follow.",
+   "words": 587,
+   "updated": "2026-02-22"
+  },
+  {
+   "id": "notes__sims-guides__Sims1FullChecklist",
+   "path": "notes/sims-guides/Sims1FullChecklist.html",
+   "kind": "html",
+   "title": "The Sims 1 — Completionist Checklist",
+   "section": "Sims",
+   "tags": [
+    "Sims",
+    "Sims 1",
+    "Checklist"
+   ],
+   "summary": "Everything The Sims 1 and its seven expansions can ask of you: careers topped out, skills maxed, every rare event and secret lot ticked off.",
+   "words": 709,
+   "updated": "2026-02-22"
+  },
+  {
+   "id": "notes__projects__SaveEditorPlans",
+   "path": "notes/projects/SaveEditorPlans.md",
+   "kind": "md",
+   "title": "Save Editor — Legacy vs. Original File Structures",
+   "section": "Projects",
+   "tags": [
+    "Projects",
+    "Sims 1",
+    "Reverse engineering",
+    "Research"
+   ],
+   "summary": "The research plan behind a save editor that works on both the 2000-era files and the Legacy Collection re-release — sampling, diffing structures, and proving where the two builds diverge byte for byte.",
+   "words": 600,
+   "updated": "2026-02-22"
+  },
+  {
+   "id": "notes__projects__Career Creator 3 DOC",
+   "path": "notes/projects/Career Creator 3 DOC.html",
+   "kind": "html",
+   "title": "Career Creator 3 — A Working Guide",
+   "section": "Projects",
+   "tags": [
+    "Projects",
+    "Sims 1",
+    "Modding",
+    "Reverse engineering"
+   ],
+   "summary": "How Career Creator 3 builds and edits Sims 1 careers: the file it writes, the fields that matter, and the traps that quietly corrupt a career track.",
+   "words": 798,
+   "updated": "2026-02-22"
+  },
+  {
+   "id": "notes__tools__CSVmakerReadMe",
+   "path": "notes/tools/CSVmakerReadMe.html",
+   "kind": "html",
+   "title": "CSVmaker — Read Me",
+   "section": "Tools",
+   "tags": [
+    "Tools",
+    "Reference",
+    "Python"
+   ],
+   "summary": "Point it at a folder and it walks every sub-directory, writing full file paths into a clean CSV. Built for wrangling large collections — media, game assets, archives.",
+   "words": 159,
+   "updated": "2026-02-22"
+  }
+ ]
+}

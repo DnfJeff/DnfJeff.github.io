@@ -1,177 +1,291 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Analog Atlas — Home</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DNF — Jeff Adkins</title>
     <meta
       name="description"
-      content="Personal site of Dnf_Jeff — creative technologist, digital preservationist, and toolmaker."
+      content="I take old things apart and write down what's inside. Sims 1 file formats, Attack of the Show episode notes, tools and guides."
     />
-    <link rel="stylesheet" href="css/main.css?v=3" />
+    <meta name="theme-color" content="#e8551d" />
+    <link rel="icon" href="favicon.ico" sizes="32x32" />
+    <link rel="icon" href="assets/web/icon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="assets/web/icon.png" />
+    <link rel="stylesheet" href="css/site.css?v=1" />
+    <meta property="og:title" content="DNF — Jeff Adkins" />
+    <meta
+      property="og:description"
+      content="I take old things apart and write down what's inside."
+    />
+    <meta property="og:image" content="assets/web/canvas-wide-sm.webp" />
+    <meta property="og:type" content="website" />
+    <script>
+      // Before first paint: mark JS on, and restore the saved theme so the
+      // page never flashes the wrong one.
+      document.documentElement.classList.add("js");
+      try {
+        var t = localStorage.getItem("dnf-theme");
+        if (t) document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
   </head>
-  <body>
-    <!-- ====== HEADER ====== -->
-    <header class="site-header">
-      <div class="container header-inner">
-        <a href="index.html" class="brand">
-          <img class="brand-icon" src="assets/AnalogAtlas_Icon.png" alt="Analog Atlas" />
-          Analog Atlas
-        </a>
-        <span class="page-label">Home</span>
 
-        <nav class="main-nav" aria-label="Primary">
-          <ul>
-            <li><a href="index.html" class="active">Home</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="programs.html">Programs</a></li>
-            <li><a href="note-library.html">Notes</a></li>
-            <li><a href="contact.html">Contact</a></li>
-          </ul>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+
+    <!-- ============================================================ bar -->
+    <header class="topbar">
+      <div class="wrap topbar-in">
+        <a class="brand" href="index.html">
+          <img src="assets/web/logo-sm.png" alt="" width="30" height="30" />
+          <b>DNF</b>
+        </a>
+
+        <nav class="nav" id="nav" aria-label="Primary">
+          <a href="index.html" aria-current="page">Home</a>
+          <a href="hod.html">Hod</a>
+          <a href="aots.html">Attack of the Show</a>
+          <a href="library.html">Writing</a>
+          <a href="about.html">About</a>
         </nav>
 
-        <button
-          class="nav-toggle"
-          aria-label="Toggle navigation"
-          aria-expanded="false"
-        >
-          <span></span><span></span><span></span>
-        </button>
+        <div class="bar-tools">
+          <button class="iconbtn" data-palette-open aria-label="Search the site">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="6.4" /><path d="m16 16 4.2 4.2" />
+            </svg>
+            <span class="kbd-hint" aria-hidden="true">⌘K</span>
+          </button>
+          <button class="iconbtn" data-theme-toggle aria-label="Switch theme"></button>
+          <button class="iconbtn menubtn" data-menu aria-expanded="false" aria-controls="nav" aria-label="Menu">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 7h16M4 12h16M4 17h16" />
+            </svg>
+          </button>
+        </div>
       </div>
     </header>
 
-    <nav class="mobile-nav" aria-label="Mobile navigation" hidden>
-      <ul>
-        <li><a href="index.html" class="active">Home</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="programs.html">Programs</a></li>
-        <li><a href="note-library.html">Notes</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-    </nav>
-
-    <!-- ====== HERO ====== -->
-    <section class="hero">
-      <div class="container">
-        <h1>Creative Tech &amp; Digital Craft</h1>
-        <p class="tagline">
-          Building tools, preserving digital history, and documenting the
-          journey — one project at a time.
-        </p>
-        <div class="hero-actions">
-          <a href="programs.html" class="btn btn-primary">View Programs</a>
-          <a href="note-library.html" class="btn btn-outline">Browse Notes</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- ====== LATEST UPDATES ====== -->
-    <section class="section">
-      <div class="container">
-        <div class="section-header">
-          <h2>Latest Updates</h2>
-          <p>What's happening around the Atlas.</p>
-        </div>
-
-        <div class="card">
-          <div class="update-item">
-            <span class="update-date">February 2025</span>
-            <h4>New tool: CSVmaker v1.0</h4>
-            <p>
-              A lightweight tool to generate CSV files from your local directory
-              structure. Grab it on the
-              <a href="programs.html">Programs</a> page.
+    <main id="main">
+      <!-- ======================================================== hub -->
+      <section class="wrap" style="padding-top: var(--s6)">
+        <div class="hub">
+          <img
+            class="hub-art"
+            src="assets/web/canvas-wide.webp"
+            alt=""
+            width="2400"
+            height="1065"
+            fetchpriority="high"
+          />
+          <div class="hub-in">
+            <p class="hub-mark">
+              <img src="assets/web/logo.png" alt="" width="46" height="46" />
+              <span>Jeff Adkins · dnf</span>
             </p>
-          </div>
-          <div class="update-item">
-            <span class="update-date">January 2025</span>
-            <h4>Note Library Launched</h4>
-            <p>
-              The <a href="note-library.html">Note Library</a> section is live —
-              browse workspaces full of guides, checklists, and project plans.
+            <h1>I take old things apart, and write down what's inside.</h1>
+            <p class="hub-sub">
+              Sims 1 down to the byte. Nine years of a cancelled TV show, one
+              episode at a time. Everything I find ends up here.
             </p>
-          </div>
-          <div class="update-item">
-            <span class="update-date">January 2025</span>
-            <h4>Site Redesign In Progress</h4>
-            <p>
-              Analog Atlas is getting a facelift with improved mobile support,
-              cleaner layout, and better navigation.
-            </p>
+            <div class="hub-actions">
+              <a class="btn btn-solid" href="hod.html">See what I'm building</a>
+              <a class="btn btn-ghost" href="library.html">Read the notes</a>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- ====== FEATURED SECTIONS ====== -->
-    <section class="section">
-      <div class="container">
-        <div class="section-header">
-          <h2>Explore</h2>
-          <p>Quick access to the main areas of this site.</p>
-        </div>
-
-        <div class="card-grid">
-          <a href="programs.html" class="card" style="text-decoration: none">
-            <h3>Programs</h3>
-            <p>Tools and utilities I've built — free to download and use.</p>
-            <span class="tag tag-primary" style="margin-top: 0.75rem"
-              >CSVmaker</span
-            >
-          </a>
-
-          <a
-            href="note-library.html"
-            class="card"
-            style="text-decoration: none"
-          >
-            <h3>Note Library</h3>
-            <p>
-              Guides, checklists, documentation, and project plans organized by
-              workspace.
-            </p>
-            <span class="tag" style="margin-top: 0.75rem">6+ notes</span>
-          </a>
-
-          <a href="about.html" class="card" style="text-decoration: none">
-            <h3>About Me</h3>
-            <p>
-              The story behind the Atlas — creative tech, preservation, and
-              community projects.
-            </p>
-            <span class="tag" style="margin-top: 0.75rem">Portfolio</span>
-          </a>
+      <!-- ===================================================== ticker -->
+      <div class="ticker" style="margin-top: var(--s6)" aria-label="Project counters">
+        <div class="ticker-track" id="ticker">
+          <span>loading the counters…</span>
         </div>
       </div>
-    </section>
 
-    <!-- ====== FOOTER ====== -->
-    <footer class="site-footer">
-      <div class="container">
-        <div class="footer-inner">
+      <!-- =================================================== projects -->
+      <section class="band wrap" style="padding-top: var(--s8)" id="projects">
+        <div class="lede" data-rise>
           <div>
-            <div class="footer-brand">Analog Atlas</div>
-            <ul class="footer-links">
-              <li><a href="index.html">Home</a></li>
-              <li><a href="about.html">About</a></li>
-              <li><a href="programs.html">Programs</a></li>
-              <li><a href="note-library.html">Notes</a></li>
-              <li><a href="contact.html">Contact</a></li>
-              <li>
-                <a
-                  href="https://github.com/DnfJeff"
-                  target="_blank"
-                  rel="noopener"
-                  >GitHub</a
-                >
-              </li>
-            </ul>
+            <p class="eyebrow">Currently</p>
+            <h2>Two things, in the open</h2>
           </div>
+          <p>
+            Both are long jobs with a lot of counting involved. These panels read
+            straight from the project files, so they're as current as the last
+            time I pushed.
+          </p>
         </div>
-        <p class="footer-copy">&copy; 2025 Analog Atlas. Built by Dnf_Jeff.</p>
+
+        <div class="grid grid-2">
+          <article class="card project" data-rise id="panel-hod">
+            <div class="project-head">
+              <div>
+                <p class="eyebrow">Sims 1 · tooling</p>
+                <h3>Hod</h3>
+              </div>
+              <span class="pill here">in motion</span>
+            </div>
+            <p class="soft" style="margin: 0">
+              One storage system that keeps every Sims 1 file byte-perfect
+              forever, and the tools that read and write it — an inspector, a
+              save editor that can't lose your game, a mod manager.
+            </p>
+            <div class="meter-row">
+              <span class="stamp" data-hod-label>—</span>
+              <span class="stamp" data-hod-pct>—</span>
+              <span class="meter" style="--p: 0"><i></i></span>
+            </div>
+            <div class="project-facts" data-hod-facts></div>
+            <a class="tile-go" href="hod.html">Open the panel</a>
+          </article>
+
+          <article class="card project" data-rise id="panel-aots">
+            <div class="project-head">
+              <div>
+                <p class="eyebrow">Television · archival</p>
+                <h3>Attack of the Show</h3>
+              </div>
+              <span class="pill here">in motion</span>
+            </div>
+            <p class="soft" style="margin: 0">
+              G4's daily show ran from 2005 to 2013 and was never properly
+              indexed. I'm watching it and writing down what happened: who
+              turned up, what they talked about, and when.
+            </p>
+            <div class="meter-row">
+              <span class="stamp" data-aots-label>—</span>
+              <span class="stamp" data-aots-pct>—</span>
+              <span class="meter" style="--p: 0"><i></i></span>
+            </div>
+            <div class="project-facts" data-aots-facts></div>
+            <a class="tile-go" href="aots.html">Open the panel</a>
+          </article>
+        </div>
+      </section>
+
+      <!-- ==================================================== writing -->
+      <section class="band wrap">
+        <div class="lede" data-rise>
+          <div>
+            <p class="eyebrow">Writing</p>
+            <h2>Notes, guides, plans</h2>
+          </div>
+          <p>
+            Things I worked out once and wrote down so I'd never have to work
+            them out again. Filed loosely, on purpose.
+          </p>
+        </div>
+        <div class="grid grid-3" id="latest-notes">
+          <div class="empty"><p>Loading…</p></div>
+        </div>
+        <p style="margin-top: var(--s5)">
+          <a class="btn btn-quiet" href="library.html">Everything in the library →</a>
+        </p>
+      </section>
+
+      <!-- ====================================================== about -->
+      <section class="band wrap">
+        <div
+          class="card"
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+            gap: var(--s6);
+            align-items: center;
+            padding: var(--s6);
+          "
+          data-rise
+        >
+          <div>
+            <p class="eyebrow">Who's doing all this</p>
+            <h2 style="margin-bottom: var(--s4)">Jeff — DNF</h2>
+            <p class="soft">
+              I make tools, keep archives, and take a lot of notes. Blender,
+              Python, Unreal, and an unreasonable amount of time in hex editors.
+              Most of what I do starts as "how does this actually work?" and ends
+              as a document somebody else can use.
+            </p>
+            <div class="chiprow" style="margin-bottom: var(--s5)">
+              <span class="tag">Python</span><span class="tag">Blender</span>
+              <span class="tag">Unreal</span><span class="tag">Reverse engineering</span>
+              <span class="tag">Archival</span><span class="tag">Video</span>
+            </div>
+            <a class="btn btn-quiet" href="about.html">More about me →</a>
+          </div>
+          <figure style="margin: 0">
+            <img
+              src="assets/web/sims-loading.webp"
+              alt="A Sims 2 loading screen reading: Loading The DNF Family"
+              width="1000"
+              height="749"
+              loading="lazy"
+              style="border-radius: var(--r-card); border: 1px solid var(--line)"
+            />
+            <figcaption class="stamp" style="margin-top: var(--s3); display: block">
+              Still loading, honestly.
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+    </main>
+
+    <!-- ========================================================= foot -->
+    <footer class="foot">
+      <div class="wrap foot-in">
+        <div class="foot-mark">
+          <img src="assets/web/logo-sm.png" alt="" width="40" height="40" />
+          <p>Tools, archives and notes. Built and broken by Jeff.</p>
+        </div>
+        <div>
+          <h4>Projects</h4>
+          <ul>
+            <li><a href="hod.html">Hod — Sims 1 tools</a></li>
+            <li><a href="aots.html">Attack of the Show notes</a></li>
+            <li><a href="library.html">Writing &amp; notes</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Elsewhere</h4>
+          <ul>
+            <li><a href="https://github.com/DnfJeff" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="https://www.youtube.com/@Dnf_Jeff" target="_blank" rel="noopener">YouTube</a></li>
+            <li>
+              <a href="https://www.youtube.com/@OfficalComicBookNews" target="_blank" rel="noopener">
+                Comic Book News
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h4>Site</h4>
+          <ul>
+            <li><a href="about.html">About &amp; contact</a></li>
+            <li><a href="about.html#tools">Tools I've released</a></li>
+            <li><a href="https://github.com/DnfJeff/DnfJeff.github.io" target="_blank" rel="noopener">Source</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="wrap foot-base">
+        <p>© <span id="year">2026</span> Jeff Adkins</p>
+        <p class="mono">Press ⌘K or / to jump anywhere</p>
       </div>
     </footer>
 
-    <script src="js/main.js?v=3"></script>
+    <!-- ====================================================== palette -->
+    <div class="palette" id="palette" hidden role="dialog" aria-modal="true" aria-label="Jump to">
+      <div class="palette-box">
+        <input type="text" placeholder="Jump to a page, a note, an episode…" aria-label="Search" autocomplete="off" />
+        <ul role="listbox"></ul>
+        <p class="palette-none" hidden>Nothing matches that.</p>
+      </div>
+    </div>
+
+    <script src="js/site.js?v=1"></script>
+    <script src="js/home.js?v=1"></script>
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
   </body>
 </html>

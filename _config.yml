@@ -1,6 +1,20 @@
 markdown: kramdown
 kramdown:
   input: GFM
+
+# The site is hand-written HTML — Jekyll only needs to copy it. Everything
+# below stays in the repo but is not published:
+#   Old/, PersonalSite/  archived versions of the previous site
+#   tools/               the build + sync scripts
+#   assets/*.png|jpg     full-size source art; the site loads assets/web/*
 exclude:
   - Old/
   - PersonalSite/
+  - tools/
+  - "assets/Big 16-9 nologo.png"
+  - assets/MegaNOlogo.png
+  - assets/ultrawideNoLogo45.png
+  - assets/DNFLogoTransparent.png
+  - assets/AnalogAtlas_Icon.png
+  - assets/3314070_312.jpg
+  - assets/IMG_9551.jpg

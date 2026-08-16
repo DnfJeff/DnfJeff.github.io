@@ -1,4 +1,6 @@
-**Project Plan: Analyzing Legacy vs. Old File Structures**
+<!-- summary: The research plan behind a save editor that works on both the 2000-era files and the Legacy Collection re-release — sampling, diffing structures, and proving where the two builds diverge byte for byte. -->
+<!-- tags: Sims 1, Reverse engineering, Research -->
+# Save Editor — Legacy vs. Original File Structures
 
 **Objective**  
 The goal is to identify and document subtle differences in file structures, checksums, offsets, and metadata between the old and legacy versions of the game files. This will enable us to develop a unified solution that works for both old and legacy versions.

@@ -1,0 +1,1971 @@
+{
+ "generated": "2026-08-16",
+ "source": "local episode notes + reconstructed G4 schedule",
+ "totals": {
+  "episodes": 1240,
+  "undated": 64,
+  "noted": 27,
+  "people": 109
+ },
+ "years": [
+  {
+   "year": "2005",
+   "total": 112,
+   "noted": 26
+  },
+  {
+   "year": "2006",
+   "total": 0,
+   "noted": 1
+  },
+  {
+   "year": "2007",
+   "total": 0,
+   "noted": 0
+  },
+  {
+   "year": "2008",
+   "total": 206,
+   "noted": 0
+  },
+  {
+   "year": "2009",
+   "total": 225,
+   "noted": 0
+  },
+  {
+   "year": "2010",
+   "total": 229,
+   "noted": 0
+  },
+  {
+   "year": "2011",
+   "total": 225,
+   "noted": 0
+  },
+  {
+   "year": "2012",
+   "total": 234,
+   "noted": 0
+  },
+  {
+   "year": "2013",
+   "total": 9,
+   "noted": 0
+  }
+ ],
+ "notes": [
+  {
+   "date": "2005-03-28",
+   "year": "2005",
+   "title": "John Dykstra, Giant NES Gamepad, Reel Big Fish",
+   "epNo": "5048",
+   "hosts": [
+    "Kevin Pereira",
+    "Sarah Lane",
+    "Kevin Rose",
+    "Chris Hardwick"
+   ],
+   "summary": "The episode covers a mix of pop culture topics, starting with the hype surrounding the newly launched PlayStation Portable (PSP). A major segment features an interview with VFX pioneer John Dykstra, who discusses his work on classics like Star Wars and Spider-Man 2. Later, the hosts review the Lego Star Wars video game, praising its blend of nostalgia and gameplay. The show also includes a news roundup covering legal battles involving Sony's PS2 technology and concludes with a live performance by Real Big Fish.",
+   "notable": "The segment discussing the discovery of soft tissue in a 70 million year old Tyrannosaurus Rex fossil, which challenged previous scientific assumptions about preservation time. Additionally, the hosts built and demonstrated the world's largest Nintendo controller.",
+   "appearances": [
+    {
+     "name": "John Dykstra",
+     "type": "interview",
+     "role": "Visual Effects Pioneer and Academy Award winner",
+     "topic": "The evolution of visual effects, from Star Wars to Spider-Man 2 and Caddyshack.",
+     "at": "00:08:38"
+    },
+    {
+     "name": "Britney Spears",
+     "type": "mention",
+     "role": "Pop star",
+     "topic": "The song 'Hit Me, Baby' and alleged satanic messages when played backwards.",
+     "at": "00:03:41"
+    },
+    {
+     "name": "Real Big Fish",
+     "type": "performance",
+     "role": "Punk Ska band",
+     "topic": "Live performance of their latest album tracks.",
+     "at": "00:36:40"
+    }
+   ],
+   "segments": [
+    "Opening Jokes & Skits",
+    "Satanic Messages in Songs",
+    "PSP Launch Hype",
+    "Interview with John Dykstra (VFX)",
+    "DIY Giant Nintendo Controller Build",
+    "Star Wars Lego Game Review",
+    "Tech News and Legal Battles",
+    "Dark Deals & Gems of the Internet",
+    "Real Big Fish Performance"
+   ],
+   "topics": [
+    "PlayStation Portable (PSP) launch",
+    "Visual Effects history",
+    "Star Wars Lego game review",
+    "Urban legends in music",
+    "Dark Deals/Web Hosting",
+    "T-Rex fossil discovery"
+   ],
+   "media": [
+    "PlayStation Portable (PSP)",
+    "Nintendo/NES controllers",
+    "Star Wars (movies, games)",
+    "Spider-Man 2",
+    "Caddyshack",
+    "Lego Star Wars video game"
+   ],
+   "reviewed": false
+  },
+  {
+   "date": "2005-03-29",
+   "year": "2005",
+   "title": "Tom Green, South by Southwest, Chris Gore",
+   "epNo": "5049",
+   "hosts": [
+    "Kevin Pereira",
+    "Sarah Lane",
+    "Chris Gore",
+    "Tom Green",
+    "Dr. Steven Pat",
+    "Kevin Rose"
+   ],
+   "summary": "This episode features a mix of pop culture coverage, including Chris Gore's deep dive into the South by Southwest Film Festival and DVD reviews. Tom Green dominates much of the broadcast with segments on his blogging life, doghouses, and culminated in a highly memorable live stunt involving inserting a web server into a participant's colon. The show also covered major legal news regarding digital rights, featuring Ren Buchholz discussing the implications of the Grokster lawsuit.",
+   "notable": "The segment featuring Dr. Steven Pat performing the 'web server' insertion stunt was a notable and extreme piece of live comedy/stunt work. Tom Green's promotion of his personal blog (www.tomgreen.com) and its associated merchandise was also highlighted.",
+   "appearances": [
+    {
+     "name": "Tom Green",
+     "type": "interview",
+     "role": "Comedian, Blogger",
+     "topic": "Blogging life, doghouses, and web servers",
+     "at": "00:00:26"
+    },
+    {
+     "name": "Chris Gore",
+     "type": "interview",
+     "role": "Film Critic/Trivia Host",
+     "topic": "South by Southwest Film Festival and DVD reviews",
+     "at": "00:00:56"
+    },
+    {
+     "name": "Sarah Lane",
+     "type": "interview",
+     "role": "Host",
+     "topic": "News segment wrap-up",
+     "at": "00:25:27"
+    },
+    {
+     "name": "Ren Buchholz",
+     "type": "interview",
+     "role": "Activism Coordinator, Electronic Frontier Foundation",
+     "topic": "Digital rights and the Grokster lawsuit",
+     "at": "00:27:18"
+    },
+    {
+     "name": "Dr. Steven Pat",
+     "type": "interview",
+     "role": "Doctor/Medical Professional",
+     "topic": "Web server insertion into the colon (stunt)",
+     "at": "00:13:34"
+    }
+   ],
+   "segments": [],
+   "topics": [
+    "South by Southwest Film Festival",
+    "DVD reviews",
+    "Blogging",
+    "Digital rights",
+    "Grokster lawsuit",
+    "Web server technology",
+    "Apollo 13",
+    "The Clone Wars"
+   ],
+   "media": [
+    "Apollo 13 (film)",
+    "The Clone Wars (Star Wars cartoon)",
+    "My Big Fat Independent Movie (film)",
+    "Half-Life Expansion Pack (game/concept)",
+    "USB web server (gadget)"
+   ],
+   "reviewed": false
+  },
+  {
+   "date": "2005-03-30",
+   "year": "2005",
+   "title": "New Half-Life 2 Level, Modder Paul Capello, Sin City",
+   "epNo": "5050",
+   "hosts": [
+    "Kevin Pereira",
+    "Kevin Rose",
+    "Sarah Lane",
+    "Brendan Moran"
+   ],
+   "summary": "Kevin Pereira, Kevin Rose, and Sarah Lane host, with case modder Paul Capello demonstrating a backpack LAN-party PC and a scratch-built home theater PC before taking viewer calls. Valve's Doug Lombardi gives an exclusive first look at Half-Life 2: Lost Coast and explains the new HDR lighting technology coming free to Half-Life 2 owners via Steam. Sarah presents a behind-the-scenes preview of Sin City ahead of its Friday opening, featuring Frank Miller and Robert Rodriguez. Kevin Rose's Dark Tips covers Gmail plus-addressing, disposable email via Dodgeit, and encrypted Hushmail, while Brendan Moran recaps the SXSW Interactive Web Awards. The Feed covers Blockbuster's late-fee settlement, ATM skimming scams, the CherryOS/PearPC code dispute, and Ashton Kutcher's digitally removed Kabbalah bracelet.",
+   "notable": "Exclusive early reveal of Half-Life 2: Lost Coast and Valve's HDR lighting tech, with Doug Lombardi coyly answering 'soon' on Team Fortress 2's release date (it shipped in 2007). Follow-up on the previous day's viral 'Your Ass Got Served' web-server-in-a-man's-ass stunt.",
+   "appearances": [
+    {
+     "name": "Paul Capello",
+     "type": "interview",
+     "role": "PC case modder, author of 'Maximum PC Guide to Extreme PC Mods'",
+     "topic": "showing off case mods (backpack LAN party rig, scratch-built home theater PC) and taking viewer modding calls",
+     "at": "00:08:00"
+    },
+    {
+     "name": "Doug Lombardi",
+     "type": "interview",
+     "role": "Valve Software director of marketing",
+     "topic": "exclusive first look at Half-Life 2: Lost Coast and HDR lighting in the Source engine",
+     "at": "00:28:31"
+    },
+    {
+     "name": "Frank Miller",
+     "type": "mention",
+     "role": "comic book writer/artist, co-director of Sin City",
+     "topic": "interviewed in Sarah's Sin City behind-the-scenes package; G4 Icons special on him plugged",
+     "at": "00:12:16"
+    },
+    {
+     "name": "Robert Rodriguez",
+     "type": "mention",
+     "role": "director of Sin City",
+     "topic": "clips in the Sin City behind-the-scenes package",
+     "at": "00:12:59"
+    }
+   ],
+   "segments": [
+    "Cold open (Darth Vader speed dating gag)",
+    "Around the Net (Star Wars fan film finalists, Toddlerpedes, Toy Lab, UK talking lampposts)",
+    "Paul Capello case mod demo",
+    "Sin City behind-the-scenes preview",
+    "Dark Tips (email spam tricks with Kevin Rose)",
+    "SXSW Interactive Web Awards (Brendan Moran)",
+    "The Feed",
+    "Half-Life 2 Lost Coast reveal with Doug Lombardi",
+    "User Created (30 terrible flash cartoons in 30 seconds)",
+    "Viewer calls with Paul Capello",
+    "IRC chat questions"
+   ],
+   "topics": [
+    "Half-Life 2 Lost Coast",
+    "HDR lighting",
+    "Valve Source engine",
+    "PC case modding",
+    "Sin City movie",
+    "Frank Miller",
+    "Star Wars fan film festival",
+    "Gmail plus-addressing spam trick",
+    "talking lampposts UK",
+    "Blockbuster no late fees settlement"
+   ],
+   "media": [
+    "Half-Life 2: Lost Coast",
+    "Sin City (film)",
+    "Team Fortress 2",
+    "Unreal Tournament 2004",
+    "The Meatrix",
+    "Style Wars",
+    "Billy Harvey Music (website)",
+    "Made in Montreal (website)",
+    "Dodgeit.com",
+    "Hushmail",
+    "Gmail",
+    "Cherry OS / PearPC",
+    "Guess Who? (film)",
+    "Maximum PC Guide to Extreme PC Mods (book)"
+   ],
+   "reviewed": false
+  },
+  {
+   "date": "2005-03-31",
+   "year": "2005",
+   "title": "Cardstacking, Lebowski Fest, LAN Party",
+   "epNo": "5051",
+   "hosts": [
+    "Kevin Pereira",
+    "Kevin Rose",
+    "Sarah Lane",
+    "Brendan Moran"
+   ],
+   "summary": "Kevin Pereira, Kevin Rose, and Sarah Lane host, with the crew building and firing their own solar death ray to burn foam core, VHS tapes, and a Paris Hilton book. World champion card stacker Brian Berg demonstrates that unglued playing-card structures can support 80 pounds of concrete blocks, previewing a larger sculpture for the next day. Brendan Moran files a report from Lebowski Fest West, the Big Lebowski fan convention of bowling, white Russians, and costumes. G4TV.com's Laura Foy joins the Thursday LAN party playing Unreal Tournament 2004 and posts the high score, while Sarah's Damn Good Website features the Airport Monitor real-time flight tracker. The Feed covers Google prefetching for Firefox, .us domain privacy rules, the Doctor Who relaunch's troubles, and Malaysian carjackers cutting off an owner's fingertip to defeat a Mercedes fingerprint scanner.",
+   "notable": "First LAN party in the show's brand-new set space. Off-hand reference to recent G4 layoffs after the merger-era restructuring. Brian Berg's two-day card-stacking build culminates in the April 1 episode.",
+   "appearances": [
+    {
+     "name": "Brian Berg",
+     "type": "interview",
+     "role": "world champion card stacker",
+     "topic": "demonstrating card-stacking strength by supporting 80 pounds of concrete blocks on unglued playing cards; building a large sculpture for the next day's show",
+     "at": "00:15:50"
+    },
+    {
+     "name": "Laura Foy",
+     "type": "correspondent",
+     "role": "host of G4TV.com (G4 show)",
+     "topic": "guest player in the Attack of the Show LAN party playing Unreal Tournament 2004",
+     "at": "00:07:52"
+    },
+    {
+     "name": "Christopher Walken",
+     "type": "mention",
+     "role": "actor",
+     "topic": "hosts wish him a happy birthday",
+     "at": "00:01:37"
+    }
+   ],
+   "segments": [
+    "Cold open / show intro",
+    "Gadget demos (CameraBright LED light, camera phone lens attachments)",
+    "Around the Net (GIMP hacked to look like Photoshop, cardboard arcade cabinet)",
+    "LAN party check-in with Laura Foy",
+    "Solar death ray demonstration",
+    "Sarah's Damn Good Website (Airport Monitor)",
+    "Brian Berg card stacking demo",
+    "Lebowski Fest report (Brendan Moran)",
+    "The Feed",
+    "LAN party check-in with Laura Foy",
+    "ThinkGeek toys with Brendan",
+    "Viewer tech calls",
+    "IRC chat questions"
+   ],
+   "topics": [
+    "card stacking",
+    "Brian Berg",
+    "Lebowski Fest",
+    "The Big Lebowski",
+    "solar death ray",
+    "airport monitor flight tracking",
+    "GIMP Photoshop hack GIMPshop",
+    "ThinkGeek gadgets",
+    "Unreal Tournament 2004 LAN party",
+    "Google Firefox prefetching"
+   ],
+   "media": [
+    "The Big Lebowski",
+    "Unreal Tournament 2004",
+    "GIMP (GIMPshop Photoshop hack, plasticbugs.com)",
+    "Airport Monitor (passur.com)",
+    "solardeathray.com",
+    "CameraBright LED camera light",
+    "ThinkGeek (cubicle playsets, Tiki USB drive, retro LED watch, Mega Zooka, energy gel)",
+    "Flickr",
+    "TypePad",
+    "Firefox / Google prefetching",
+    "Doctor Who (2005 relaunch)",
+    "Grand Theft Auto",
+    "Dishwalla (plugged for next show)"
+   ],
+   "reviewed": false
+  },
+  {
+   "date": "2005-04-01",
+   "year": "2005",
+   "title": "SuicideGirls.com, PC HD PVR, Dishwalla",
+   "epNo": "5052",
+   "hosts": [
+    "Kevin Pereira",
+    "Kevin Rose",
+    "Sarah Lane",
+    "Brendan Moran"
+   ],
+   "summary": "April Fools' Day episode hosted by Kevin Pereira, Kevin Rose, and Sarah Lane, opening with a roundup of internet pranks including ThinkGeek's iCopulate, Slashdot naming Paris Hilton the new Linux mascot, and NASA's 'water on Mars' gag. SuicideGirls founder Missy Suicide and model Bea discuss their punk-rock pin-up site and its million weekly visitors. Card stacker Brian Berg unveils a New York City skyline built from about 190 decks of cards, promptly demolished by a leaf-blower-wielding King Kong (Kevin Pereira in costume). The crew installs a hidden upskirt camera in a DDR machine as a recurring prank bit, Kevin Rose's Dark Tips shows how to build an HD PVR with the ATI HDTV Wonder or MythTV, and Dishwalla closes the show with a live performance.",
+   "notable": "April Fools' Day 2005 episode capturing the era's internet prank culture. The Feed reports Gmail's first birthday (storage doubled to 2GB), Sony planning an 'iTunes for movies', Steven Spielberg assisting on Revenge of the Sith, and PSP launch sales of roughly 475,000 units trailing the Nintendo DS.",
+   "appearances": [
+    {
+     "name": "Missy Suicide",
+     "type": "interview",
+     "role": "founder of SuicideGirls",
+     "topic": "the SuicideGirls punk-rock pin-up website, community, burlesque live show, book, and upcoming DVD",
+     "at": "00:12:59"
+    },
+    {
+     "name": "Bea",
+     "type": "interview",
+     "role": "SuicideGirls model",
+     "topic": "joining Missy Suicide for the SuicideGirls interview",
+     "at": "00:12:59"
+    },
+    {
+     "name": "Brian Berg",
+     "type": "interview",
+     "role": "world champion card stacker",
+     "topic": "unveiling his New York City skyline card sculpture (~190 decks), destroyed by a King Kong-costumed prankster with a leaf blower",
+     "at": "00:18:13"
+    },
+    {
+     "name": "Dishwalla",
+     "type": "performance",
+     "role": "rock band",
+     "topic": "live Boost Mobile Live Music Friday performance of a song from their self-titled album",
+     "at": "00:32:39"
+    }
+   ],
+   "segments": [
+    "Cold open (Star Wars pickup lines gag)",
+    "April Fools' roundup (fake baby sale, ThinkGeek iCopulate, Slashdot Paris Hilton Linux mascot, NASA water on Mars gag)",
+    "'Your Ass Got Served' comment recap",
+    "DDR upskirt camera mod",
+    "EvTen Top 10 games",
+    "SuicideGirls interview (Missy Suicide and Bea)",
+    "Brian Berg card sculpture unveiling / King Kong destruction",
+    "DDR machine arcade check-ins",
+    "Replay: TrackMania Sunrise",
+    "The Feed",
+    "Dark Tips: build your own HD PVR (ATI HDTV Wonder, MythTV)",
+    "Dishwalla live performance",
+    "IRC chat questions"
+   ],
+   "topics": [
+    "April Fools' Day internet pranks",
+    "SuicideGirls",
+    "card stacking",
+    "Brian Berg",
+    "Dishwalla live performance",
+    "DDR upskirt camera prank",
+    "TrackMania Sunrise",
+    "build your own HDTV PVR",
+    "MythTV",
+    "PSP launch sales",
+    "Gmail first birthday"
+   ],
+   "media": [
+    "SuicideGirls.com",
+    "Dishwalla (self-titled album)",
+    "TrackMania Sunrise",
+    "Dance Dance Revolution",
+    "ATI HDTV Wonder",
+    "pcHDTV HD-3000",
+    "MythTV",
+    "Gmail",
+    "PSP",
+    "Nintendo DS",
+    "God of War",
+    "Gran Turismo 4",
+    "Fight Night Round 2",
+    "MVP Baseball 2005",
+    "The Matrix Online",
+    "Star Wars: Revenge of the Sith",
+    "ThinkGeek iCopulate (April Fools gag)"
+   ],
+   "reviewed": false
+  },
+  {
+   "date": "2005-04-04",
+   "year": "2005",
+   "title": "VJ Azariah, Winter Music Conference, Dark Deals",
+   "epNo": "5053",
+   "hosts": [
+    "Sarah Lane",
+    "Kevin Rose"
+   ],
+   "summary": "This episode covers a wide range of topics, including an in-depth interview with VJ Azariah on the technical side of visual DJing. The hosts review various 'Gems of the Internet,' from strange dolls to open-source search engines like Mozdex. They also feature field reports, such as documenting the massive line for Star Wars tickets and covering the vibrant culture of Miami's Winter Music Festival. Finally, the show concludes with tech product reviews (like a traffic gauge) and gaming showcases, notably featuring a demo of SWAT 4.",
+   "notable": "The segment on Azariah details the technical process of VJing, explaining that it involves mixing video sources in real-time using proprietary software and archives like the Prelinger Archives. The episode also features an early look at the tactical shooter genre with the demonstration of SWAT 4.",
+   "appearances": [
+    {
+     "name": "Azariah of Mechanix",
+     "type": "interview",
+     "role": "Video Jockey (VJ)",
+     "topic": "The art and technology of visual DJing, including proprietary software and live effects.",
+     "at": "00:10:13"
+    }
+   ],
+   "segments": [
+    "Opening Skits and Intro",
+    "Tech Deep Dive: Mozdex Search Engine",
+    "Gems of the Internet (Product Reviews)",
+    "Field Report: Star Wars Line Stunt",
+    "VJ Interview with Azariah",
+    "Gems of the Internet (Strange Dolls & Beard Culture)",
+    "Field Report: Miami Music Festival Coverage",
+    "News Segment: Tech and Politics Updates",
+    "Tech Product Review: Traffic Gauge & Thermal Camera",
+    "Gaming Showcase: SWAT 4 Demo",
+    "Dark Deals/Consumer Electronics Reviews",
+    "Phone Call Q&A: PSP vs MP3 Player"
+   ],
+   "topics": [
+    "Video Jockeying (VJ)",
+    "Mozdex search engine",
+    "PSP vs MP3 players",
+    "Tactical first-person shooters",
+    "Consumer electronics deals",
+    "Miami Winter Music Conference"
+   ],
+   "media": [
+    "PSP (PlayStation Portable)",
+    "SWAT 4",
+    "Mozdex (Open Source Search Engine)",
+    "Logitech MX510 gaming mouse",
+    "Wireless routers",
+    "Philips HDTV",
+    "Call of Duty: United Offensive",
+    "iRiver MP3 players"
+   ],
+   "reviewed": false
+  },
+  {
+   "date": "2005-04-05",
+   "year": "2005",
+   "title": "Flickr Pools, Winter Music Conference, Chris Gore",
+   "epNo": "5054",
+   "hosts": [
+    "Sarah Lane",
+    "Kevin Pereira",
+    "Chris Gore",
+    "Jimmy the Geek"
+   ],
+   "summary": "The episode features a deep dive into bad superhero cinema during DVD Tuesday, where Chris Gore critiques films like 'Electra' and recommends independent titles such as 'Super Guy.' The segment continues with 'The Feed,' covering tech topics like the utility of MaxiVista software for dual monitors and discussing Flickr's photo-sharing community. Later, Jimmy the Geek provides betting advice on the NCAA Basketball Tournament and Super Bowl predictions, while the episode concludes with a bizarre auction from eBay.",
+   "notable": "The segment 'It Came From eBay' featured an auction for a lucky toenail and a life-size headless horseman prop, showcasing the show's commitment to absurd finds. The discussion on Flickr also highlighted the concept of 'peeing into pools' (uploading yellow photos) as a community joke.",
+   "appearances": [
+    {
+     "name": "Chris Gore",
+     "type": "interview",
+     "role": "Film critic/DVD expert",
+     "topic": "Reviewing superhero films and bad cinema (Electra, Super Guy)",
+     "at": "00:07:10"
+    },
+    {
+     "name": "Jimmy the Geek",
+     "type": "interview",
+     "role": "Sports bet enthusiast",
+     "topic": "Super Bowl and NCAA Basketball betting predictions",
+     "at": "00:18:31"
+    },
+    {
+     "name": "Steve Oderkirk",
+     "type": "mention",
+     "role": "Filmmaker of 'Bat Thumb'",
+     "topic": "Bizarre superhero films (Thumb Wars, Bat Thumb)",
+     "at": "00:09:52"
+    },
+    {
+     "name": "Jennifer Garner",
+     "type": "mention",
+     "role": "Actress",
+     "topic": "Superhero film Electra",
+     "at": "00:07:31"
+    },
+    {
+     "name": "Rob Bowman",
+     "type": "mention",
+     "role": "Film director",
+     "topic": "Superheroes/Post-apocalyptic films (Rain of Fire)",
+     "at": "00:07:40"
+    },
+    {
+     "name": "Thomas Hayden Church",
+     "type": "mention",
+     "role": "Actor (Oscar nominee for Sideways)",
+     "topic": "Superhero movie The Specials",
+     "at": "00:11:09"
+    }
+   ],
+   "segments": [],
+   "topics": [
+    "Superheroes",
+    "DVD reviews",
+    "NCAA Basketball betting",
+    "Flickr photo sharing",
+    "Tech gadgets",
+    "eBay finds"
+   ],
+   "media": [
+    "Electra (film)",
+    "Super Guy (film)",
+    "Bat Thumb (film)",
+    "The Specials (film)",
+    "Fantastic Four (unreleased film)",
+    "DDR (Dance Dance Revolution) game",
+    "PSP vs DS (handheld consoles)",
+    "MaxiVista software",
+    "Flickr (photo sharing site)"
+   ],
+   "reviewed": false
+  },
+  {
+   "date": "2005-04-06",
+   "year": "2005",
+   "title": "Eric Moro, SporTVision, Prison Hacks",
+   "epNo": "5055",
+   "hosts": [
+    "Kevin Pereira",
+    "Sarah Lane"
+   ],
+   "summary": "The episode covered a wide range of tech and pop culture topics. The segment on PSP hacking detailed how users could extend the device's functionality using IRC and web portals. A deep dive into sports broadcasting showcased Sport Vision's Yellow Line and Tazon technologies. Later, Eric Morrow promoted 'Now Playing Magazine,' discussing trends like anime adaptations, while Justin Keeling highlighted killer apps for the Nintendo DS from Japan, including a unique Pac-Man title and Touch Kirby.",
+   "notable": "The episode featured multiple tech deep dives: PSP hacking methods (IRC/DNS spoofing), Sport Vision's broadcast technology (yellow line, Tazon), and the review of the Dell Inspiron XPS laptop. The 'User Created' segment revealed fan art for various movie posters, including a tribute to Sarah Lane.",
+   "appearances": [
+    {
+     "name": "Eric Morrow",
+     "type": "interview",
+     "role": "Editor-in-Chief of Now Playing Magazine",
+     "topic": "Pop culture trends, video game adaptations, and the magazine's mission",
+     "at": "00:08:26"
+    },
+    {
+     "name": "The Convict (Unnamed)",
+     "type": "interview",
+     "role": "Prison tech expert/hacker",
+     "topic": "Making hacks and tools in prison, including making a lighter and tattoo equipment",
+     "at": "00:15:21"
+    },
+    {
+     "name": "Justin Keeling",
+     "type": "interview",
+     "role": "Globe-trotting game expert",
+     "topic": "Japanese Nintendo DS imports and killer apps like Pac-Man and Touch Kirby",
+     "at": "00:30:35"
+    }
+   ],
+   "segments": [],
+   "topics": [
+    "PSP hacking",
+    "Sport Vision yellow line technology",
+    "Nintendo DS games Japan",
+    "Pop culture magazines",
+    "Prison hacks and ingenuity",
+    "Sin City movie posters",
+    "Dell Inspiron XPS review"
+   ],
+   "media": [
+    "PSP (PlayStation Portable)",
+    "Nintendo DS",
+    "Dell Inspiron XPS laptop",
+    "Sin City movie posters",
+    "Video games to film adaptations",
+    "Sport Vision yellow line technology"
+   ],
+   "reviewed": false
+  },
+  {
+   "date": "2005-04-07",
+   "year": "2005",
+   "title": "deviantART.com, Tomb Raider Fan Film, Dennis \"Thresh\" Fong",
+   "epNo": "5056",
+   "hosts": [
+    "Kevin Pereira",
+    "Sarah Lane"
+   ],
+   "summary": "This episode covers a wide range of digital culture topics. The hosts dive into the world of Alternate Reality Games (ARGs), discussing titles like I Love Bees and the teaser for 'Our Colony.' They also review online platforms, dedicating significant time to DeviantArt's role as a massive art community and the Internet Archive's function in preserving media using Creative Commons licensing. A major segment features a DIY gas mask demonstration, contrasting cheap homemade solutions with expensive commercial models.",
+   "notable": "The detailed discussion of DeviantArt (featuring Angelo Satira) highlights its structure as an 'online society of artists,' and the deep dive into the Internet Archive's use of Creative Commons licensing was highly notable for digital rights discussions at the time.",
+   "appearances": [
+    {
+     "name": "Angelo Satira",
+     "type": "interview",
+     "role": "CEO of DeviantArt, online artist community expert",
+     "topic": "DeviantArt's function and history as an art platform",
+     "at": "00:46:23"
+    },
+    {
+     "name": "Mike Cassidy",
+     "type": "interview",
+     "role": "Co-founder of XFire, gaming software expert",
+     "topic": "XFire's functionality for connecting gamers and file distribution",
+     "at": "00:06:39"
+    },
+    {
+     "name": "Dennis Thresh Fong",
+     "type": "interview",
+     "role": "Professional gamer, eSports celebrity",
+     "topic": "The state of competitive gaming and LAN parties",
+     "at": "00:06:39"
+    },
+    {
+     "name": "Kevin Rose",
+     "type": "mention",
+     "role": "Recurring host/personality",
+     "topic": "Show promotion and segment commentary",
+     "at": "00:24:08"
+    }
+   ],
+   "segments": [],
+   "topics": [
+    "Alternate Reality Games (ARGs)",
+    "DeviantArt",
+    "Online Art Communities",
+    "XFire gaming software",
+    "Internet Archive / Our Media",
+    "DIY gas masks",
+    "Digital media preservation",
+    "Gaming technology"
+   ],
+   "media": [
+    "I Love Bees (Xbox ARG)",
+    "Our Colony (ARG/Next Xbox teaser)",
+    "shakescin.com (Website trend)",
+    "XFire (Gaming software)",
+    "Directway (Satellite internet service)",
+    "DeviantArt (Online art community)",
+    "Internet Archive / Our Media (Digital media hosting)"
+   ],
+   "reviewed": false
+  },
+  {
+   "date": "2005-04-08",
+   "year": "2005",
+   "title": "Darkon, ROBOlympics, emaneht",
+   "epNo": "5057",
+   "hosts": [
+    "Kevin Pereira",
+    "Sarah Lane"
+   ],
+   "summary": "The episode covered a wide range of tech and pop culture topics. The segment began with a review of various digital cameras, including models from Casio, Sony, and Fujifilm, comparing their features like boot time and zoom. Later, the hosts explored Google Maps' advanced satellite imaging capabilities using data acquired by Keyhole. Major interviews included Andrew Neil discussing the intense world of Live-Action Role-Playing Games (LARP) and David detailing the technical aspects of competitive robotics at Robo Games.",
+   "notable": "The segment on LARP featured a detailed discussion about how the game is a full-contact sport, contrasting it with online gaming. The episode also showcased an impressive DIY project: creating a camera using a flatbed scanner (Canon Lid 30).",
+   "appearances": [
+    {
+     "name": "Andrew Neil",
+     "type": "interview",
+     "role": "Documentary expert on LARP",
+     "topic": "Live-Action Role-Playing Games (Darkon)",
+     "at": "00:08:51"
+    },
+    {
+     "name": "David",
+     "type": "interview",
+     "role": "Founder of Robo Games",
+     "topic": "Robotics competitions and engineering",
+     "at": "00:23:30"
+    },
+    {
+     "name": "Eminent",
+     "type": "performance",
+     "role": "Indie rock outfit",
+     "topic": "Live music performance of 'I'll Wait'",
+     "at": "00:32:03"
+    }
+   ],
+   "segments": [],
+   "topics": [
+    "Digital cameras review",
+    "Google Maps satellite imagery",
+    "Live-Action Role-Playing Games (LARP)",
+    "Robotics competitions",
+    "Scanner camera modification",
+    "Carnival Cruise Line Tycoon 2005"
+   ],
+   "media": [
+    "Casio Exilim Z57 (Digital Camera)",
+    "Sony Cybershot DSC-T33 (Digital Camera)",
+    "Fujifilm fine-pix Z1 (Digital Camera)",
+    "Google Maps",
+    "Carnival Cruise Line Tycoon 2005 (Video Game)",
+    "Doom 3 (Video Game)"
+   ],
+   "reviewed": false
+  },
+  {
+   "date": "2005-04-11",
+   "year": "2005",
+   "title": "8-Bit Weapon, PodShanking, Dark Deals",
+   "epNo": "5058",
+   "hosts": [
+    "Kevin Pereira",
+    "Sarah Lane"
+   ],
+   "summary": "The episode covers a wide range of internet and tech topics, starting with the reveal of rumored Xbox controller prototypes. A major segment features 8-Bit Weapon performing live music, followed by an in-depth interview discussing their unique hardware setup (Commodore 64/128) for creating retro sounds. The show also explores web hacks like combining Craigslist listings with Google Maps and reviews the RPG game Jade Empire, praising its real-time combat system.",
+   "notable": "The segment detailing the rumored white, pearlescent Xbox controller prototype was a major news scoop of the day. Additionally, the detailed demonstration of 8-bit music creation using vintage hardware (Commodore 64/128) provided deep technical insight into retro gaming culture.",
+   "appearances": [
+    {
+     "name": "God of War",
+     "type": "mention",
+     "role": "Video Game",
+     "topic": "PlayStation 2 game recommendation",
+     "at": "00:01:30"
+    },
+    {
+     "name": "Sarah Lane",
+     "type": "interview",
+     "role": "Host/Presenter",
+     "topic": "Gems of the Internet segment introduction",
+     "at": "00:01:53"
+    },
+    {
+     "name": "8-Bit Weapon (Stacey and Seth)",
+     "type": "performance",
+     "role": "Duo, musicians",
+     "topic": "Live 8-bit music performance",
+     "at": "00:08:04"
+    },
+    {
+     "name": "Stacey and Seth (8-Bit Weapon)",
+     "type": "interview",
+     "role": "Duo, musicians",
+     "topic": "The 8-bit music scene and hardware setup",
+     "at": "00:12:35"
+    },
+    {
+     "name": "Kevin Rose",
+     "type": "mention",
+     "role": "Example name for web testing",
+     "topic": "Google vs Yahoo comparison hack demonstration",
+     "at": "00:06:37"
+    },
+    {
+     "name": "Paul Slocum",
+     "type": "mention",
+     "role": "Cartridge creator/Synth pioneer",
+     "topic": "8-bit hardware and sound cartridges",
+     "at": "00:14:07"
+    }
+   ],
+   "segments": [],
+   "topics": [
+    "Xbox controller leak",
+    "Gems of the Internet hacks",
+    "Pod Shanking",
+    "8-bit music",
+    "Jade Empire RPG review",
+    "Kill-A-Watt controller"
+   ],
+   "media": [
+    "Xbox controller (prototype/rumors)",
+    "PlayStation 2",
+    "Game Boy",
+    "Commodore 64",
+    "iPod",
+    "Craigslist listings hack",
+    "Google Maps hack",
+    "Jade Empire (RPG)",
+    "Kill-A-Watt controller"
+   ],
+   "reviewed": false
+  },
+  {
+   "date": "2005-04-12",
+   "year": "2005",
+   "title": "Experimental Games, PSP Hacks, Mortal Kombat",
+   "epNo": "5059",
+   "hosts": [
+    "Kevin Pereira",
+    "Sarah Lane",
+    "Chris Gore"
+   ],
+   "summary": "The episode covered a wide range of pop culture topics, starting with tech hacks and online monetization strategies like Google AdSense. A major segment featured students from Carnegie Mellon discussing their 'Experimental Gameplay Project,' showcasing rapid prototyping games built in OpenGL and Flash. The show also reviewed recent media, including the new Superman logo, and dedicated time to 'DVDuesday' for reviews of Space Ghost and Harvey Birdman. Finally, Kevin Rose demonstrated several clever PSP hacks.",
+   "notable": "The segment on GIMP Shop highlighted how open-source software can replicate expensive professional tools like Photoshop, providing a major tech tip for viewers.",
+   "appearances": [
+    {
+     "name": "Chris Gore",
+     "type": "mention",
+     "role": "Segment Host (FilmThread.com)",
+     "topic": "Hosting DVD Tuesday segment",
+     "at": "00:00:17"
+    },
+    {
+     "name": "Sarah Lane",
+     "type": "interview",
+     "role": "Tech/Software Expert",
+     "topic": "GIMP Shop (Photoshop alternative)",
+     "at": "00:01:14"
+    },
+    {
+     "name": "Shalynn Schoden",
+     "type": "interview",
+     "role": "Student/Developer (Carnegie Mellon)",
+     "topic": "Experimental Gameplay Project and rapid prototyping games",
+     "at": "00:07:25"
+    },
+    {
+     "name": "Kyle Gray",
+     "type": "interview",
+     "role": "Student/Developer (Carnegie Mellon)",
+     "topic": "Experimental Gameplay Project and rapid prototyping games",
+     "at": "00:07:25"
+    },
+    {
+     "name": "Kevin Rose",
+     "type": "interview",
+     "role": "Tech/Hacks Expert",
+     "topic": "PSP hacks (e-book reader, web browser)",
+     "at": "00:12:52"
+    }
+   ],
+   "segments": [],
+   "topics": [
+    "GIMP Shop",
+    "Experimental Gameplay Project",
+    "PSP Hacks",
+    "Google AdSense revenue",
+    "Comic book movie news (Ghost Rider, Superman)",
+    "The Feed tech news",
+    "DVD Tuesday reviews"
+   ],
+   "media": [
+    "GIMP Shop (Software)",
+    "PSP (Handheld Gaming Device)",
+    "Ghost Rider (Comic/Film)",
+    "Superman logo (Merchandise/Branding)",
+    "Google AdSense (Website Monetization)",
+    "Crowding Show (Video Game)",
+    "Tarot Goo (Video Game)",
+    "Space Ghost Volume 3 (DVD)",
+    "Harvey Birdman Volume 1 (DVD)",
+    "Star Wars: Revenge of the Sith (Film/Merchandise)"
+   ],
+   "reviewed": false
+  },
+  {
+   "date": "2005-04-13",
+   "year": "2005",
+   "title": "John Milius, Geek Prom 2005, Dark Tip",
+   "epNo": "5060",
+   "hosts": [
+    "Kevin Pereira",
+    "Sarah Lane",
+    "Kevin Rose"
+   ],
+   "summary": "This episode features a deep dive into technology and pop culture. A major segment is the interview with film legend John Milius, who discusses his work on WWII films like Red Dawn and how video games are evolving to incorporate complex, novel-length stories. The show also reviews several gadgets, including an e-paper watch and a Humax PVR for burning home movies to DVD. Recurring segments include 'Pope or Nope,' where viewers rate potential Popes, and 'The Feed,' which covered user submissions (like the Attack of the Show subway cars) and tech news.",
+   "notable": "John Milius's detailed discussion on the shift from film storytelling to interactive, long-form video game narratives was a notable feature. The segment also highlighted the emerging use of e-paper technology in consumer electronics.",
+   "appearances": [
+    {
+     "name": "John Milius",
+     "type": "interview",
+     "role": "Film Director/Consultant (Apocalypse Now, Red Dawn)",
+     "topic": "World War II films and video game development",
+     "at": "00:07:13"
+    },
+    {
+     "name": "Seiko Watch",
+     "type": "mention",
+     "role": "Brand/Product",
+     "topic": "E-paper display technology in watches and e-readers",
+     "at": "00:02:23"
+    },
+    {
+     "name": "MIT Students",
+     "type": "correspondent",
+     "role": "Creators/Engineers",
+     "topic": "Interactive LED dance floor and programmable electronics",
+     "at": "00:03:29"
+    },
+    {
+     "name": "Pope or Nope",
+     "type": "performance",
+     "role": "",
+     "topic": "Rating potential Popes from user submissions",
+     "at": "00:04:51"
+    },
+    {
+     "name": "Window Washer (Software)",
+     "type": "correspondent",
+     "role": "Utility Software",
+     "topic": "Cleaning digital footprints and deleting stored computer history/cookies",
+     "at": "00:15:50"
+    },
+    {
+     "name": "Humax PVR (DRT 800)",
+     "type": "correspondent",
+     "role": "Electronics Manufacturer",
+     "topic": "Digital Video Recorder (PVR) with DVD burning capability",
+     "at": "00:29:11"
+    }
+   ],
+   "segments": [],
+   "topics": [
+    "World War II films",
+    "E-paper technology",
+    "Video game development",
+    "Digital forensics",
+    "PVR/DVD burning",
+    "Geek Prom",
+    "Pope or Nope",
+    "The Feed"
+   ],
+   "media": [
+    "Seiko e-paper watch",
+    "Sony e-book (e-paper)",
+    "MIT LED dance floor",
+    "Humax PVR/DVD recorder",
+    "JoinOps Escalation (Video Game)"
+   ],
+   "reviewed": false
+  },
+  {
+   "date": "2005-04-14",
+   "year": "2005",
+   "title": "CollegeHumor.com, The Matrix Online, LAN Party",
+   "epNo": "5061",
+   "hosts": [
+    "Kevin Pereira",
+    "Kevin Rose",
+    "Sarah Lane"
+   ],
+   "summary": "This episode covers a wide range of internet culture topics, including an in-depth look at the potential for Google to disrupt traditional television networks by allowing users to host and monetize their own digital video content. The hosts also review the Sonos Digital Music System, demonstrating its ability to provide synchronized audio across multiple rooms. Furthermore, they interview Jason Hall about the development and future of 'The Matrix Online,' while Ricky Van Veen and Joshua Abramson discuss the successful business model of CollegeHumor.com.",
+   "notable": "The discussion regarding Google's capacity for user-generated video hosting (precursor to YouTube) was highly notable, suggesting that streaming content could render traditional TV networks obsolete by allowing anyone to be a producer.",
+   "appearances": [
+    {
+     "name": "Jason Hall",
+     "type": "interview",
+     "role": "Senior Vice President of Warner Bros. Interactive Entertainment, Game Developer",
+     "topic": "The Matrix Online and the video game industry's future",
+     "at": "00:00:08"
+    },
+    {
+     "name": "Ricky Van Veen",
+     "type": "interview",
+     "role": "Co-founder of CollegeHumor.com",
+     "topic": "Running and monetizing a massive internet content site",
+     "at": "00:07:40"
+    },
+    {
+     "name": "Joshua Abramson",
+     "type": "interview",
+     "role": "Co-founder of CollegeHumor.com",
+     "topic": "Running and monetizing a massive internet content site",
+     "at": "00:07:40"
+    },
+    {
+     "name": "Damien",
+     "type": "phone/remote",
+     "role": "Caller from Miami, Florida",
+     "topic": "Converting monitors to TVs and vice versa",
+     "at": "00:38:33"
+    }
+   ],
+   "segments": [],
+   "topics": [
+    "The Matrix Online",
+    "Google video hosting",
+    "IPTV vs streaming",
+    "CollegeHumor.com business model",
+    "Sonos Digital Music System review",
+    "Video game to movie adaptations",
+    "Quality Standard in gaming"
+   ],
+   "media": [
+    "The Matrix Online (MMO)",
+    "Sonos Digital Music System",
+    "Google Video Hosting/YouTube concept",
+    "CollegeHumor.com content (user-generated videos)",
+    "DVDs and TV show collections"
+   ],
+   "reviewed": false
+  },
+  {
+   "date": "2005-04-15",
+   "year": "2005",
+   "title": "Hamster-Powered MIDI, DIY T-shirts, 4th Ave. Jones",
+   "epNo": "5062",
+   "hosts": [
+    "Kevin Pereira",
+    "Adam Sessler"
+   ],
+   "summary": "This episode covered a wide range of tech and gaming topics, starting with rumors about the next generation Xbox console, including potential RAM upgrades and physics chips. A major segment featured Levy Lorenzo demonstrating his unique MIDI device that uses hamsters to create music. The show also reviewed the game Psychonauts, praising its art style and innovative gameplay mechanics. Finally, the hosts interviewed Idaho representatives regarding a bill commemorating the cult film Napoleon Dynamite.",
+   "notable": "The discussion of Moore's Law reaching a fundamental barrier (00:23:42) was a notable tech segment. The appearance of Max Black and Larry Bradford discussing the 'Napoleon Dynamite' commemorative resolution provided unique political/pop culture commentary.",
+   "appearances": [
+    {
+     "name": "Sarah Lane",
+     "type": "interview",
+     "role": "Co-host/Segment Contributor",
+     "topic": "GIMP Photoshop hack and general tech news",
+     "at": "00:05:52"
+    },
+    {
+     "name": "Levy Lorenzo",
+     "type": "interview",
+     "role": "Musician/Engineer",
+     "topic": "Hamster-controlled MIDI music device",
+     "at": "00:09:27"
+    },
+    {
+     "name": "Trevor",
+     "type": "phone/remote",
+     "role": "Caller",
+     "topic": "Doom 3 comparison (Xbox vs PC)",
+     "at": "00:20:41"
+    },
+    {
+     "name": "Andre",
+     "type": "phone/remote",
+     "role": "Caller",
+     "topic": "Zelda GameCube rumors and console wars",
+     "at": "00:21:55"
+    },
+    {
+     "name": "Max Black",
+     "type": "interview",
+     "role": "Idaho State Representative",
+     "topic": "Napoleon Dynamite commemorative bill",
+     "at": "00:27:05"
+    },
+    {
+     "name": "Larry Bradford",
+     "type": "interview",
+     "role": "Idaho State Representative",
+     "topic": "Napoleon Dynamite commemorative bill",
+     "at": "00:27:18"
+    },
+    {
+     "name": "4th Avenue Jones",
+     "type": "performance",
+     "role": "Musician/Band Member",
+     "topic": "Live music performance (new album)",
+     "at": "00:20:23"
+    }
+   ],
+   "segments": [],
+   "topics": [
+    "Xbox rumors",
+    "PS2 vs Xbox",
+    "Psychonauts review",
+    "Hamster MIDI device",
+    "Napoleon Dynamite bill",
+    "GIMP Photoshop hack",
+    "Video game console wars"
+   ],
+   "media": [
+    "Xbox (console)",
+    "PS3 (console)",
+    "PSP (console)",
+    "GameCube (console)",
+    "Psychonauts (game)",
+    "Doom 3 (game)",
+    "Napoleon Dynamite (film)"
+   ],
+   "reviewed": false
+  },
+  {
+   "date": "2005-04-19",
+   "year": "2005",
+   "title": "Lloyd Kaufman, Cool Paper Toys, Chris Gore",
+   "epNo": "5063",
+   "hosts": [
+    "Kevin Rose",
+    "Sarah Lane"
+   ],
+   "summary": "The episode features a return of Troma Studios' Lloyd Kaufman, who discusses the 21st Anniversary DVD set for Toxic Avenger. The segment 'DVD Tuesday' reviews various films, including the documentary 'Dig, Dig!' and the sci-fi film 'What the Bleep Do We Know?'. Later segments cover tech history (PDAs), a deep dive into bizarre eBay finds, and 'The Feed,' which reports on corporate acquisitions like Adobe buying Macromedia. The show concludes with callers discussing everything from Google AdSense to classic Nintendo DS games.",
+   "notable": "Lloyd Kaufman's return and the promotion of Troma's 21st Anniversary Toxic Avenger DVD set was a major highlight. The segment 'The Feed' provided timely news on tech mergers (Adobe/Macromedia) and corporate acquisitions (GameStop), while the eBay segment featured highly bizarre items like a hairdryer fountain and an Elvis hairball.",
+   "appearances": [
+    {
+     "name": "Lloyd Kaufman",
+     "type": "interview",
+     "role": "Filmmaker, founder of Troma Studios",
+     "topic": "Troma's history and upcoming projects (Toxic Avenger)",
+     "at": "00:00:04"
+    },
+    {
+     "name": "Chris Gore",
+     "type": "interview",
+     "role": "Film critic/expert",
+     "topic": "DVD reviews, film news, and pop culture commentary",
+     "at": "00:00:10"
+    },
+    {
+     "name": "The Hitchhiker's Guide to the Galaxy movie",
+     "type": "mention",
+     "role": "Film adaptation",
+     "topic": "Review of the 2005 film",
+     "at": "00:01:42"
+    },
+    {
+     "name": "Palm One E2 PDA",
+     "type": "mention",
+     "role": "Gadget/PDA manufacturer",
+     "topic": "Review of early 2000s portable digital assistants",
+     "at": "00:02:28"
+    },
+    {
+     "name": "Revelations (Star Wars fan film)",
+     "type": "mention",
+     "role": "Fan-made movie",
+     "topic": "Review of a Star Wars prequel/fan film",
+     "at": "00:03:54"
+    },
+    {
+     "name": "President Bush's iPod playlist",
+     "type": "mention",
+     "role": "Pop culture topic",
+     "topic": "Discussion of leaked celebrity music playlists",
+     "at": "00:05:13"
+    },
+    {
+     "name": "Andi Timmener",
+     "type": "interview",
+     "role": "Documentary filmmaker/Director of Dig, Dig!",
+     "topic": "The rivalry between the Brian Jonestown Massacre and The Dandy Warhols",
+     "at": "00:09:14"
+    },
+    {
+     "name": "Bob Odenkirk",
+     "type": "interview",
+     "role": "Actor (Mr. Show)",
+     "topic": "The film 'Melvin Goes to Dinner'",
+     "at": "00:10:47"
+    },
+    {
+     "name": "Michael Herrs",
+     "type": "interview",
+     "role": "Founder of Troma Entertainment",
+     "topic": "The 21st Anniversary DVD set for Toxic Avenger",
+     "at": "00:19:46"
+    },
+    {
+     "name": "David",
+     "type": "phone/remote",
+     "role": "Caller (Spokane, Washington)",
+     "topic": "Question about Google AdSense requirements for personal websites",
+     "at": "00:37:01"
+    },
+    {
+     "name": "Francisco",
+     "type": "phone/remote",
+     "role": "Caller (Dallas, Texas)",
+     "topic": "Question about the best DS game and gaming history",
+     "at": "00:38:20"
+    },
+    {
+     "name": "Nathan",
+     "type": "phone/remote",
+     "role": "Caller",
+     "topic": "Question about BASIC programming language electives",
+     "at": "00:39:52"
+    }
+   ],
+   "segments": [],
+   "topics": [
+    "Troma Studios",
+    "DVD Tuesday",
+    "Indie Film",
+    "Gadgets",
+    "Pop Culture News",
+    "Internet History",
+    "Sci-Fi Cinema",
+    "eBay Finds"
+   ],
+   "media": [
+    "Triple X (Film)",
+    "What the Bleep Do We Know? (Documentary)",
+    "Dig, Dig! (Documentary)",
+    "Melvin Goes to Dinner (Film)",
+    "Sin City (Film)",
+    "Star Wars Trivial Pursuit Saga Edition (Game/DVD Set)",
+    "Palm One E2 PDA (Gadget)",
+    "Paper Craft Kits (DIY craft)",
+    "Joint Operations Escalation (Video Game)"
+   ],
+   "reviewed": false
+  },
+  {
+   "date": "2005-04-20",
+   "year": "2005",
+   "title": "Digital Filmmaking, Lorne Lanning, MAD*L Show",
+   "epNo": "5064",
+   "hosts": [
+    "Kevin Rose",
+    "Sarah Lane"
+   ],
+   "summary": "This episode covers a wide range of topics, starting with an exploration of early internet sites like cartoon-fridge.com and art galleries featuring cell phone components. A major segment focuses on Maverick Lauren Lanning discussing the future of the Oddworld franchise, emphasizing a shift from internal game production to multimedia property development (film/TV). The show also features experts Pete Schayner and Gerald Everett Jones advising aspiring filmmakers that expensive film school is no longer necessary due to accessible digital tools. Finally, Kevin Rose demonstrates advanced data encryption using PGP and showcases user-submitted console designs.",
+   "notable": "The discussion about the shift in game development from internal production facilities to multimedia property development was a key industry insight for Oddworld creator Maverick Lauren Lanning. The segment on digital filmmaking provided practical advice that democratized film creation, suggesting professional quality is now accessible with affordable tools and knowledge.",
+   "appearances": [
+    {
+     "name": "Maverick Lauren Lanning",
+     "type": "interview",
+     "role": "Creator of the Oddworld franchise, game designer",
+     "topic": "Future of Oddworld, multimedia expansion (film/TV), and industry trends",
+     "at": "00:06:00"
+    },
+    {
+     "name": "Pete Schayner",
+     "type": "interview",
+     "role": "Filmmaker, video production expert",
+     "topic": "Digital filmmaking techniques and avoiding film school",
+     "at": "00:27:00"
+    },
+    {
+     "name": "Gerald Everett Jones",
+     "type": "interview",
+     "role": "Filmmaker, video production expert",
+     "topic": "Digital filmmaking techniques and avoiding film school",
+     "at": "00:27:00"
+    }
+   ],
+   "segments": [],
+   "topics": [
+    "Oddworld franchise",
+    "Video game industry trends",
+    "Digital filmmaking",
+    "PGP encryption",
+    "Vinyl toy art scene",
+    "Around the Net web culture",
+    "Movie piracy laws",
+    "User created consoles"
+   ],
+   "media": [
+    "cartoon-fridge.com (Simpsons, Family Guy)",
+    "ChrisJordan.com (Cell phones/circuit boards)",
+    "Oddworld franchise",
+    "The Matrix (Bullet Time effect)",
+    "PGP encryption software",
+    "Vinyl toys (Mad L's)",
+    "Next-gen gaming consoles"
+   ],
+   "reviewed": false
+  },
+  {
+   "date": "2005-04-21",
+   "year": "2005",
+   "title": "Animated Goop, Segway HQ Tour, iPod shuffle alternatives",
+   "epNo": "5065",
+   "hosts": [
+    "Kevin Pereira",
+    "Sarah Lane"
+   ],
+   "summary": "The episode covered a wide range of tech topics, starting with the history of Google's first computer and discussing creepy new search history functions. Later segments featured an extensive review of MP3 players, comparing alternatives to the iPod Shuffle. The show also showcased the burgeoning 8-bit art movement at IM 8Bit, followed by a detailed segment on viscoelastic fluid simulation (goop) with James O'Brien. Finally, Kevin took viewers on a tour of the Segway factory.",
+   "notable": "The discussion about Amber Smith battling cyber squatters to reclaim her official website name (AmberSmith.com) was highlighted as a notable personal story in tech history.",
+   "appearances": [
+    {
+     "name": "John Gibson",
+     "type": "correspondent",
+     "role": "Art/Video Game Exhibit Curator",
+     "topic": "IM 8-bit art exhibit and its success",
+     "at": "00:08:00"
+    },
+    {
+     "name": "Amber Smith",
+     "type": "interview",
+     "role": "Model/Actress",
+     "topic": "Joint Operations Escalations game and personal brand history",
+     "at": "00:21:30"
+    },
+    {
+     "name": "James O'Brien",
+     "type": "interview",
+     "role": "Professor of Computer Science/Simulation Expert",
+     "topic": "Viscoelastic fluid simulation (Goop)",
+     "at": "00:30:00"
+    },
+    {
+     "name": "Live It",
+     "type": "performance",
+     "role": "Band",
+     "topic": "Live music performance",
+     "at": "00:20:30"
+    }
+   ],
+   "segments": [],
+   "topics": [
+    "8-bit art",
+    "viscoelastic fluid simulation",
+    "MP3 player review",
+    "Google search history",
+    "Segway factory tour",
+    "ArtPad website"
+   ],
+   "media": [
+    "Google's first computer (1996)",
+    "IM 8-bit art prints and paintings",
+    "Sony Cyche MP3 player",
+    "iAudio MP3 player",
+    "ArtPad website tool",
+    "Segway XT/GT golf model"
+   ],
+   "reviewed": false
+  },
+  {
+   "date": "2005-04-22",
+   "year": "2005",
+   "title": "Moriarty, Dark Tip, Livitz, Livitz",
+   "epNo": "5066",
+   "hosts": [
+    "Kevin Pereira",
+    "Kevin Rose"
+   ],
+   "summary": "The episode covered a mix of pop culture news, including leaked photos of next-gen Xbox consoles and deep dives into film properties like Superman and Watchmen. A major focus was the segment on Tim Burton's 'The Corpse Bride,' detailing its traditional stop-motion animation process. The show also featured tech segments covering Segway manufacturing, a look at lock picking tools, and reviewing new video games like 'Country Justice: Revenge of the Rednecks.'",
+   "notable": "The discussion regarding fan expectations in adapting beloved properties (like Hitchhiker's Guide) was notable, as was the detailed segment on traditional stop-motion animation for 'The Corpse Bride,' which highlighted its complexity and artistry.",
+   "appearances": [
+    {
+     "name": "Drew McQueenie (Moriarty)",
+     "type": "interview",
+     "role": "Movie news correspondent/expert on DC Comics properties",
+     "topic": "Superman returns, Watchmen, The Corpse Bride, and fan expectations in cinema",
+     "at": "00:06:30"
+    },
+    {
+     "name": "Brendan Moran",
+     "type": "correspondent",
+     "role": "Tech/Industrial Correspondent",
+     "topic": "Inside tour of the Segway assembly line and manufacturing process",
+     "at": "00:17:00"
+    },
+    {
+     "name": "Josh",
+     "type": "phone/remote",
+     "role": "Caller discussing gaming consoles",
+     "topic": "Comparing PSP vs DS, and general console advice",
+     "at": "00:29:00"
+    },
+    {
+     "name": "John",
+     "type": "phone/remote",
+     "role": "Caller discussing PC modding",
+     "topic": "Tips for modifying and customizing an Xbox console",
+     "at": "00:30:30"
+    },
+    {
+     "name": "Jake",
+     "type": "phone/remote",
+     "role": "Caller discussing tech security",
+     "topic": "Recommendations for spyware and adware removers",
+     "at": "00:31:30"
+    }
+   ],
+   "segments": [],
+   "topics": [
+    "Xbox leaks",
+    "The Corpse Bride",
+    "Hitchhiker's Guide to the Galaxy",
+    "Segway technology",
+    "Flash games",
+    "Spyware removal",
+    "Console modding"
+   ],
+   "media": [
+    "Dadaware shoes (fashion)",
+    "Xbox One console leaks",
+    "The Corpse Bride (film)",
+    "Superman (comic/film)",
+    "Watchmen (comics/film)",
+    "Hitchhiker's Guide to the Galaxy (book/film)",
+    "Segway personal transporter",
+    "Flash games (Google Images quiz)",
+    "Country Justice: Revenge of the Rednecks (video game)",
+    "PSP and DS (gaming consoles)",
+    "Xbox modding tools (hardware)"
+   ],
+   "reviewed": false
+  },
+  {
+   "date": "2005-04-25",
+   "year": "2005",
+   "title": "Xeni Jardin, Adult Swim, Area 51",
+   "epNo": "5067",
+   "hosts": [
+    "Kevin Pereira",
+    "Sarah Lane"
+   ],
+   "summary": "The episode covered a wide range of pop culture topics, starting with the history and creative freedom of Adult Swim at William Street. A major segment detailed the shift from film to digital cinema technology using components like those made by Texas Instruments. The show also featured discussions on gaming, covering rumors about Halo 2.5 for Xbox and an in-depth look at the Area 51 video game concept. Finally, the episode wrapped up with 'Gems of the Internet' featuring unusual finds like grass couches and bearded babies.",
+   "notable": "The segment detailing the transition to digital cinema technology was notable, highlighting how components are making film obsolete. The discussion about William Street provided a look into the creative process behind Adult Swim, emphasizing its non-corporate, collaborative culture. The coverage of *The Hitchhiker's Guide* movie hype cycle and the Area 51 game both captured major pop culture buzz.",
+   "appearances": [
+    {
+     "name": "Sarah Lane",
+     "type": "interview",
+     "role": "Co-host/Interviewer",
+     "topic": "Show updates, pop culture discussion",
+     "at": "00:01:30"
+    },
+    {
+     "name": "Kevin Pereira",
+     "type": "mention",
+     "role": "Host",
+     "topic": "General show hosting/Wrap-up",
+     "at": "00:42:00"
+    },
+    {
+     "name": "Keith Crawford",
+     "type": "interview",
+     "role": "Adult Swim Creative Director",
+     "topic": "History of William Street and Adult Swim culture",
+     "at": "00:08:30"
+    },
+    {
+     "name": "Shenny Jardin",
+     "type": "interview",
+     "role": "Co-editor, Boingboing.net",
+     "topic": "Digital cinema technology and SRL events",
+     "at": "00:12:30"
+    },
+    {
+     "name": "Zach Wood",
+     "type": "interview",
+     "role": "Video Game Producer (Midway)",
+     "topic": "Area 51 video game development and concept",
+     "at": "00:27:00"
+    }
+   ],
+   "segments": [],
+   "topics": [
+    "Hitchhiker's Guide to the Galaxy movie",
+    "Adult Swim / William Street",
+    "Digital Cinema Projectors",
+    "Area 51 conspiracy theory",
+    "SRL (Survival Research Laboratories)",
+    "Gems of the Internet"
+   ],
+   "media": [
+    "Hitchhiker's Guide to the Galaxy (Film)",
+    "Greatest American Hero (TV Series)",
+    "Nokia phone",
+    "Xbox 360 / Halo 2.5",
+    "Digital Cinema Projectors (Texas Instruments)",
+    "Area 51 (Video Game concept)",
+    "Windows 64-bit"
+   ],
+   "reviewed": false
+  },
+  {
+   "date": "2005-04-26",
+   "year": "2005",
+   "title": "Stephan Martiniere, Portable Retro Gaming, Chris Gore",
+   "epNo": "5068",
+   "hosts": [
+    "Kevin Pereira",
+    "Sarah Lane",
+    "Chris Gore",
+    "Kevin Rose"
+   ],
+   "summary": "The episode features a deep dive into the concept art for Star Wars: Episode III - Revenge of the Sith with artist Stefan Martiniere. The show also explores various internet and tech topics, including building a retro handheld gaming device from scratch and demonstrating an HTML source code crawler. Later segments cover pop culture reviews, such as Lemony Snicket's DVD set and the film F for Fake, while concluding with 'The Feed,' which discusses new media like Open Media Network and the potential of Adult Swim.",
+   "notable": "Stefan Martiniere presented never-before-seen concept art for Star Wars: Episode III. The segment on building a retro handheld gaming device using an LCD screen and Super Joystick components was highly detailed and technical.",
+   "appearances": [
+    {
+     "name": "Stefan Martiniere",
+     "type": "interview",
+     "role": "concept artist (Star Wars)",
+     "topic": "Concept art and design process for Star Wars: Episode III - Revenge of the Sith",
+     "at": "00:10:30"
+    },
+    {
+     "name": "Kevin Pereira",
+     "type": "interview",
+     "role": "host/presenter",
+     "topic": "Show hosting and segment introduction",
+     "at": "00:00:00"
+    },
+    {
+     "name": "Sarah Lane",
+     "type": "interview",
+     "role": "host/presenter",
+     "topic": "Show hosting, tech downloads, and segment introduction",
+     "at": "00:01:30"
+    },
+    {
+     "name": "Chris Gore",
+     "type": "interview",
+     "role": "host/presenter",
+     "topic": "DVD reviews and pop culture commentary",
+     "at": "00:02:00"
+    }
+   ],
+   "segments": [],
+   "topics": [
+    "Star Wars concept art",
+    "Retro gaming builds",
+    "Adult Swim animation",
+    "Internet web design (HTML/Java)",
+    "eBay auction finds"
+   ],
+   "media": [
+    "Star Wars: Episode III - Revenge of the Sith (concept art)",
+    "Lemony Snicket's a Series of Unfortunate Events (DVD)",
+    "F for Fake (film)",
+    "Citizen Kane (DVD)",
+    "Crank Yankers, Season 2, Volume 1 (DVD)",
+    "Keyhole (software/map technology)",
+    "Adult Swim cartoons"
+   ],
+   "reviewed": false
+  },
+  {
+   "date": "2005-04-27",
+   "year": "2005",
+   "title": "Magic Bullet, Keystroke Logger, Adult Swim",
+   "epNo": "5069",
+   "hosts": [
+    "Sarah Lane"
+   ],
+   "summary": "The episode covered a wide range of topics, starting with the history and technical challenges of early web bulletin boards. The show featured a deep dive into digital security, discussing hardware keystroke loggers like Keycatcher and eBlaster. Later segments reviewed gaming titles such as Unreal Championship 2 and provided an expert demonstration by Sean Seyfried on using Magic Bullet Suite to convert video footage from interlaced 60i to cinematic 24P.",
+   "notable": "The segment detailing the unauthorized biography 'Icon Steve Jobs' and Apple's aggressive removal of books published by John Wiley & Sons was a notable discussion point regarding tech industry power dynamics. The detailed comparison between 60i and 24P video capture techniques provided valuable information for filmmakers.",
+   "appearances": [
+    {
+     "name": "Kevin Rose",
+     "type": "mention",
+     "role": "Host/Tech Expert",
+     "topic": "Keystroke loggers and digital security",
+     "at": "00:01:00"
+    },
+    {
+     "name": "Sean Seyfried",
+     "type": "interview",
+     "role": "Red Giant software product manager",
+     "topic": "Video conversion (60i to 24P) using Magic Bullet Suite",
+     "at": "00:26:00"
+    }
+   ],
+   "segments": [],
+   "topics": [
+    "Keystroke loggers",
+    "Adult Swim programming",
+    "Web usability design",
+    "Unreal Championship 2",
+    "Magic Bullet Suite",
+    "Video frame rates (24P vs 60i)",
+    "Direct TV/Satellite broadcasting",
+    "William Street Adventures"
+   ],
+   "media": [
+    "Unreal Championship 2",
+    "Aqua Teen Hunger Force",
+    "Office Space",
+    "Magic Bullet Software",
+    "iPod accessories",
+    "Direct TV/Satellite services"
+   ],
+   "reviewed": false
+  },
+  {
+   "date": "2005-04-28",
+   "year": "2005",
+   "title": "Gonzo Gizmos, AOTS BBS, LAN Party",
+   "epNo": "5070",
+   "hosts": [
+    "Kevin Pereira",
+    "Sarah Lane",
+    "Kevin Rose"
+   ],
+   "summary": "This episode features a deep dive into historical internet technology with Simon Field, who explores the mechanics and culture of Bulletin Board Systems (BBS). The show also highlights modern tech trends, reviewing everything from early smartphone cameras to self-balancing Segboards. A major segment involves an interview with Miss Rebecca Love, discussing go-go dancing in China. Finally, Kevin Rose covers industry news via 'The Feed,' reporting on Marvel Comics' new movie funding model.",
+   "notable": "The detailed historical look at Bulletin Board Systems (BBS) and the demonstration of running old DOS/Amiga games like Dungeon Master is a major nostalgic highlight. The discussion about Miss Rebecca Love's go-go dancing career in China was also notable.",
+   "appearances": [
+    {
+     "name": "Simon Field",
+     "type": "interview",
+     "role": "Inventor, DIY expert, author of 'Gonzo Gizmo's Projects and Devices to Channel Your Inner Geek'",
+     "topic": "Building scientific toys and gadgets (e.g., radio, cannon)",
+     "at": "00:00:00"
+    },
+    {
+     "name": "Samsung SCHA91",
+     "type": "mention",
+     "role": "Camera phone model",
+     "topic": "Early smartphone camera quality and video mode",
+     "at": "00:01:30"
+    },
+    {
+     "name": "Matt",
+     "type": "mention",
+     "role": "Owner of a recumbent bike",
+     "topic": "Internet memes (Mustard Man) and Photoshop manipulation",
+     "at": "00:03:30"
+    },
+    {
+     "name": "Miss Rebecca Love",
+     "type": "interview",
+     "role": "Go-go dancer/Performer",
+     "topic": "Life in China, go-go dancing culture, and Miss Rebecca Love's brand",
+     "at": "00:17:59"
+    },
+    {
+     "name": "Josh (Caller)",
+     "type": "phone/remote",
+     "role": "Tech enthusiast calling in from Hillsborough, NH",
+     "topic": "Best PC for gaming and computer science career advice",
+     "at": "00:34:00"
+    },
+    {
+     "name": "Francisco (Caller)",
+     "type": "phone/remote",
+     "role": "Tech enthusiast calling in from Dallas, TX",
+     "topic": "Job market competitiveness in computer science and niche programming fields",
+     "at": "00:36:00"
+    }
+   ],
+   "segments": [],
+   "topics": [
+    "Bulletin Board Systems (BBS)",
+    "Go-go dancing",
+    "DIY electronics projects",
+    "Early smartphone cameras",
+    "Internet memes",
+    "Marvel Comics movie deals",
+    "Tech history",
+    "China travel"
+   ],
+   "media": [
+    "Samsung SCHA91 (smartphone)",
+    "Segboard (self-balancing skateboard)",
+    "Aqua Teen Hunger Force (movie/franchise)",
+    "Marvel Comics (Captain America, Nick Fury)",
+    "Old News Baby (website)"
+   ],
+   "reviewed": false
+  },
+  {
+   "date": "2005-04-29",
+   "year": "2005",
+   "title": "Rob Schrab, Star Wars Celebration, Apple's Tiger",
+   "epNo": "5071",
+   "hosts": [
+    "Kevin Pereira",
+    "Sarah Lane",
+    "Brendan Moran"
+   ],
+   "summary": "This episode covers a mix of tech reviews and pop culture hype. The hosts discuss the latest features of Mac OS X Tiger, including Spotlight and Safari, with expert Scott Michela. They also dive into gaming, reviewing the PSP title Verticube. Much of the show's second half is dedicated to 'The Feed,' where Rob Schraub demonstrates prop-making and puppetry skills for Channel 101, while Kevin Pereira recounts his trip to Star Wars Celebration 3.",
+   "notable": "The episode features a deep dive into Apple's Mac OS X Tiger update, highlighting new features like Spotlight. It also provides an early look at the gaming potential of PSP titles and includes Rob Schraub demonstrating advanced prop-making techniques for puppetry.",
+   "appearances": [
+    {
+     "name": "Groove Foundation",
+     "type": "performance",
+     "role": "Live band/Musicians",
+     "topic": "Playing 'Jungle Song'",
+     "at": "00:00:30"
+    },
+    {
+     "name": "Scott Michela",
+     "type": "correspondent",
+     "role": "Tech expert (PlasticBugs.com)",
+     "topic": "Mac OS X Tiger features (Spotlight, Safari)",
+     "at": "00:14:30"
+    },
+    {
+     "name": "Rob Schraub",
+     "type": "performance",
+     "role": "Puppeteer/Prop Maker",
+     "topic": "Demonstrating prop building and puppetry for Channel 101",
+     "at": "00:25:30"
+    },
+    {
+     "name": "Justin",
+     "type": "phone/remote",
+     "role": "Caller (Guest)",
+     "topic": "Discussing Guild Wars on PC",
+     "at": "00:19:59"
+    }
+   ],
+   "segments": [],
+   "topics": [
+    "Mac OS X Tiger",
+    "Star Wars Celebration 3",
+    "Puppetry/Props",
+    "Indie Gaming (Verticube)",
+    "Internet culture and sharing music",
+    "Bear safety tips"
+   ],
+   "media": [
+    "Star Wars (Celebration 3)",
+    "Mac OS X Tiger",
+    "Spotlight",
+    "Safari",
+    "Verticube",
+    "PlayStation Portable (PSP)",
+    "House of Cosby's"
+   ],
+   "reviewed": false
+  },
+  {
+   "date": "2005-05-02",
+   "year": "2005",
+   "title": "Blur Studio, Episode III Video Game, HD Streaming",
+   "epNo": "5072",
+   "hosts": [
+    "Kevin Pereira",
+    "Sarah Lane",
+    "Kevin Rose"
+   ],
+   "summary": "The episode covered a wide range of topics, starting with an examination of early Windows Longhorn and various internet oddities like Boxed Thoughts and Kittenwar.com. A major segment featured Blur Studio's founders, Tim Miller and Jeff Fowler, discussing their transition from game cinematics to Oscar-nominated short films. The latter half focused heavily on Star Wars, covering fan film awards and a deep dive into the upcoming video game adaptation of Revenge of the Sith. Finally, Kevin Rose reviewed the Buffalo Link Theater, an advanced multimedia DVD player.",
+   "notable": "The segment discussing MIT's announcement for a Time Travelers convention (May 7th) was noted as a fun historical bit. The appearance and detailed discussion with Blur Studio founders highlighted their meteoric rise in the industry.",
+   "appearances": [
+    {
+     "name": "Blur Studio (Tim Miller & Jeff Fowler)",
+     "type": "interview",
+     "role": "3D animation studio pioneers",
+     "topic": "The rise of 3D animation, game cinematics, and short films",
+     "at": "00:08:30"
+    },
+    {
+     "name": "Justin Lambrose",
+     "type": "interview",
+     "role": "LucasArts producer",
+     "topic": "The development of the Star Wars Episode III: Revenge of the Sith game",
+     "at": "00:26:30"
+    },
+    {
+     "name": "Mark Rossano",
+     "type": "interview",
+     "role": "fan film creator",
+     "topic": "Star Wars fan films and the Spirit of Fandom Award",
+     "at": "00:13:59"
+    }
+   ],
+   "segments": [],
+   "topics": [
+    "3D animation industry",
+    "Star Wars fan films",
+    "Windows Longhorn critique",
+    "Internet art/websites (Boxed Thoughts)",
+    "Video codecs and electronics reviews",
+    "Revenge of the Sith game"
+   ],
+   "media": [
+    "Windows Longhorn (OS)",
+    "Boxed Thoughts (website)",
+    "Kittenwar.com (website)",
+    "Blur Studio animations/games",
+    "Star Wars Episode III: Revenge of the Sith (video game)",
+    "Buffalo Link Theater (DVD player)"
+   ],
+   "reviewed": false
+  },
+  {
+   "date": "2005-05-03",
+   "year": "2005",
+   "title": "VideogameDC.com, Hitchiker's Creatures, Chris Gore",
+   "epNo": "5073",
+   "hosts": [
+    "Sarah Lane",
+    "Kevin Rose"
+   ],
+   "summary": "The episode features a deep dive into pop culture technology and media, starting with gadget reviews like the Bose and JBL speakers. The segment 'Around the Net' explores how platforms like Flickr are using metadata and tags to categorize information globally. Later segments cover physical media, reviewing DVDs such as Star Trek Enterprise and National Treasure, before moving into tech topics like decentralized BitTorrenting and the benefits of Linux. The episode concludes with a look at animation techniques (Flash) and a segment on eBay auction oddities.",
+   "notable": "The discussion about 'Azorius' (a trackerless BitTorrent client) was notable for explaining how decentralization allows file sharing to continue even if original trackers fail, addressing a major pain point in P2P networking. The appearance of the Invader Zim box set also served as a fun recommendation.",
+   "appearances": [
+    {
+     "name": "Chris Gore",
+     "type": "interview",
+     "role": "Pop culture expert, segment participant",
+     "topic": "DVD reviews, memorabilia, pop culture commentary",
+     "at": "00:00:00"
+    },
+    {
+     "name": "Brendan",
+     "type": "mention",
+     "role": "Guest/Collector",
+     "topic": "Star Wars autographs and collectibles",
+     "at": "00:00:00"
+    },
+    {
+     "name": "Creator of Rise of the Mushroom Kingdom",
+     "type": "interview",
+     "role": "Animator/Game developer",
+     "topic": "Creating animated content using 16-bit sprites (Mario style)",
+     "at": "00:00:00"
+    },
+    {
+     "name": "Star Wars Convention Attendee",
+     "type": "interview",
+     "role": "Fan/Attendee",
+     "topic": "Costuming, conventions, and Star Wars lore (Boba Fett)",
+     "at": "00:15:30"
+    },
+    {
+     "name": "Randy Solomon",
+     "type": "interview",
+     "role": "Video game animator/artist",
+     "topic": "Creating animated shorts using Flash and retro video game sprites",
+     "at": "00:25:00"
+    },
+    {
+     "name": "Jim Henson Creature Shop Representative",
+     "type": "interview",
+     "role": "Creature designer/special effects expert",
+     "topic": "Animatronics and creature design for film (Hitchhiker's Guide)",
+     "at": "00:31:00"
+    },
+    {
+     "name": "Trent",
+     "type": "phone/remote",
+     "role": "Tech enthusiast",
+     "topic": "Linux operating system and open-source computing",
+     "at": "00:35:30"
+    }
+   ],
+   "segments": [],
+   "topics": [
+    "DVD Tuesday",
+    "BitTorrent decentralization",
+    "Flickr tagging/metadata",
+    "Video game animation (Flash)",
+    "Linux operating system",
+    "eBay auction oddities",
+    "Star Wars memorabilia"
+   ],
+   "media": [
+    "Bose Sound Dock",
+    "JBL speakers",
+    "Geobloggers (Flickr/Google Maps)",
+    "Azorius (BitTorrent client)",
+    "Star Trek Enterprise (DVD box set)",
+    "National Treasure (film)",
+    "Space Balls (film)",
+    "Invader Zim (box set)",
+    "Hitchhiker's Guide to the Galaxy (movie/creatures)",
+    "Mario Bros. / Sonic the Hedgehog (animation)"
+   ],
+   "reviewed": false
+  },
+  {
+   "date": "2006-01-05",
+   "year": "2006",
+   "title": "Episode — 2006-01-05",
+   "epNo": "",
+   "hosts": [
+    "Kevin Pereira",
+    "Brendan"
+   ],
+   "summary": "This episode, marking the show's return for 2006, covers a massive amount of pop culture news. The segment begins with coverage of the Consumer Electronics Show (CES), featuring Bill Gates discussing connectivity and Windows Vista. Movie promotion is strong, covering trailers for Mel Gibson's 'Apocalypto' and detailed interviews about Eli Roth's film 'Hostel.' Later segments include a review of new comics by Blair Butler and an interview with Kristana Loken regarding her role in the movie 'Blood Rain.'",
+   "notable": "The episode covers the first major tech event of 2006, CES. It also features the premiere promotion for Eli Roth's film Hostel, which was based on controversial real-life events.",
+   "appearances": [
+    {
+     "name": "Kristana Loken",
+     "type": "interview",
+     "role": "Actress (Blood Rain)",
+     "topic": "Promotion of the movie Blood Rain and discussing filming in Romania",
+     "at": "00:13:51"
+    },
+    {
+     "name": "Will O'Neill",
+     "type": "correspondent",
+     "role": "Gadget/Tech Correspondent",
+     "topic": "Reporting live from the Consumer Electronics Show (CES)",
+     "at": "00:04:51"
+    },
+    {
+     "name": "Bill Gates",
+     "type": "mention",
+     "role": "Microsoft Co-founder/CEO",
+     "topic": "Keynote speech on connectivity, Windows Vista, and future tech trends at CES",
+     "at": "00:06:52"
+    },
+    {
+     "name": "Eli Roth",
+     "type": "interview",
+     "role": "Writer/Director (Hostel)",
+     "topic": "Discussing the themes and production of his film Hostel, including its 'true-ish' events premise",
+     "at": "00:27:12"
+    },
+    {
+     "name": "Gloria Guerilla",
+     "type": "interview",
+     "role": "Actress (Fun with Dick and Jane)",
+     "topic": "Discussing her role in Fun with Dick and Jane and the experience of working in Hollywood",
+     "at": "00:20:39"
+    },
+    {
+     "name": "Blair Butler",
+     "type": "interview",
+     "role": "Comic Book Critic/Expert",
+     "topic": "Reviewing new comic books, including Ultimate Wolverine vs. Hulk and All-Star Batman and Robin",
+     "at": "00:35:36"
+    }
+   ],
+   "segments": [],
+   "topics": [
+    "Consumer Electronics Show (CES)",
+    "Blood Rain movie",
+    "Hostel film",
+    "Comic books",
+    "Windows Vista",
+    "Apocalypto trailer",
+    "Tech gadgets",
+    "Movie trailers"
+   ],
+   "media": [
+    "Consumer Electronics Show (CES)",
+    "Blood Rain (movie)",
+    "Apocalypto (movie)",
+    "Windows Vista (OS)",
+    "Xbox 360",
+    "Blu-ray/HD DVD formats",
+    "Fun with Dick and Jane (movie)",
+    "Ultimate Wolverine vs. Hulk (comic book)",
+    "All-Star Batman and Robin (comic book)"
+   ],
+   "reviewed": false
+  }
+ ]
+}

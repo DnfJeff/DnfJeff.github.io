@@ -1,226 +1,309 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>About — Analog Atlas</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>About — DNF</title>
     <meta
       name="description"
-      content="About Dnf_Jeff — creative technologist, digital preservationist, and toolmaker."
+      content="Jeff Adkins — tools, digital preservation and a lot of notes. What I work on, what I've released, and how to get hold of me."
     />
-    <link rel="stylesheet" href="css/main.css?v=3" />
+    <meta name="theme-color" content="#e8551d" />
+    <link rel="icon" href="favicon.ico" sizes="32x32" />
+    <link rel="icon" href="assets/web/icon.png" type="image/png" />
+    <link rel="stylesheet" href="css/site.css?v=1" />
+    <script>
+      document.documentElement.classList.add("js");
+      try {
+        var t = localStorage.getItem("dnf-theme");
+        if (t) document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
   </head>
+
   <body>
-    <!-- ====== HEADER ====== -->
-    <header class="site-header">
-      <div class="container header-inner">
-        <a href="index.html" class="brand">
-          <img class="brand-icon" src="assets/AnalogAtlas_Icon.png" alt="Analog Atlas" />
-          Analog Atlas
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header class="topbar">
+      <div class="wrap topbar-in">
+        <a class="brand" href="index.html">
+          <img src="assets/web/logo-sm.png" alt="" width="30" height="30" />
+          <b>DNF</b>
         </a>
-        <span class="page-label">About</span>
-
-        <nav class="main-nav" aria-label="Primary">
-          <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="about.html" class="active">About</a></li>
-            <li><a href="programs.html">Programs</a></li>
-            <li><a href="note-library.html">Notes</a></li>
-            <li><a href="contact.html">Contact</a></li>
-          </ul>
+        <nav class="nav" id="nav" aria-label="Primary">
+          <a href="index.html">Home</a>
+          <a href="hod.html">Hod</a>
+          <a href="aots.html">Attack of the Show</a>
+          <a href="library.html">Writing</a>
+          <a href="about.html" aria-current="page">About</a>
         </nav>
-
-        <button
-          class="nav-toggle"
-          aria-label="Toggle navigation"
-          aria-expanded="false"
-        >
-          <span></span><span></span><span></span>
-        </button>
+        <div class="bar-tools">
+          <button class="iconbtn" data-palette-open aria-label="Search the site">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="6.4" /><path d="m16 16 4.2 4.2" />
+            </svg>
+            <span class="kbd-hint" aria-hidden="true">⌘K</span>
+          </button>
+          <button class="iconbtn" data-theme-toggle aria-label="Switch theme"></button>
+          <button class="iconbtn menubtn" data-menu aria-expanded="false" aria-controls="nav" aria-label="Menu">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+          </button>
+        </div>
       </div>
     </header>
 
-    <nav class="mobile-nav" aria-label="Mobile navigation" hidden>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html" class="active">About</a></li>
-        <li><a href="programs.html">Programs</a></li>
-        <li><a href="note-library.html">Notes</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-    </nav>
-
-    <!-- ====== ABOUT ====== -->
-    <section class="section">
-      <div class="container">
-        <div class="about-grid">
-          <!-- Profile sidebar -->
-          <div class="about-profile">
-            <div class="avatar-placeholder">J</div>
-            <h1>Dnf_Jeff</h1>
-            <p class="subtitle">
-              Creative Technologist &amp; Digital Preservationist
+    <main id="main">
+      <!-- ===================================================== intro -->
+      <section class="wrap" style="padding-block: var(--s8) var(--s6)">
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+            gap: var(--s7);
+            align-items: start;
+          "
+        >
+          <div>
+            <p class="eyebrow">About</p>
+            <h1 style="font-size: clamp(2.2rem, 5.4vw, 3.4rem); margin-bottom: var(--s4)">
+              Jeff Adkins
+            </h1>
+            <p style="font-size: 1.08rem" class="soft">
+              I make tools, keep archives, and take an unreasonable number of
+              notes. Most of what I do starts with "how does this actually
+              work?" and ends as something somebody else can use — a utility, a
+              checklist, a spec.
             </p>
-          </div>
-
-          <!-- Bio content -->
-          <div class="about-content">
-            <div class="card" style="margin-bottom: 1.5rem">
-              <h2 style="margin-bottom: 0.75rem">Who I Am</h2>
-              <p>
-                Welcome to my corner of the internet — a space where creative
-                exploration, digital preservation, and community-driven
-                innovation converge.
-              </p>
-              <p>
-                I'm a creative technologist dedicated to transforming ideas into
-                dynamic experiences using tools like <strong>Blender</strong>,
-                <strong>Unreal Engine</strong>, and <strong>Python</strong>. My
-                journey began with <strong>CSVmaker</strong>, my first software
-                release — a lightweight utility for organizing file structures
-                into clean CSV data.
-              </p>
-            </div>
-
-            <div class="card" style="margin-bottom: 1.5rem">
-              <h2 style="margin-bottom: 0.75rem">What I Do</h2>
-              <p>
-                At
-                <a
-                  href="https://www.youtube.com/@OfficalComicBookNews"
-                  target="_blank"
-                  rel="noopener"
-                  >OfficialComicBookNews</a
-                >, I built a reusable system that dynamically loads comic images
-                and descriptions from CSV files — blending automation with
-                creative presentation.
-              </p>
-              <p>
-                I'm deeply involved in archival and preservation efforts. Some
-                of my archival and video work can be found on
-                <a
-                  href="https://www.youtube.com/@Dnf_Jeff"
-                  target="_blank"
-                  rel="noopener"
-                  >my YouTube channel</a
-                >.
-              </p>
-              <p>
-                My work is informed by a long-standing habit of systematic
-                note-taking and project planning, ensuring every project is as
-                thoughtfully curated as it is innovative.
-              </p>
-            </div>
-
-            <div class="card">
-              <h2 style="margin-bottom: 0.75rem">Philosophy</h2>
-              <p>
-                This site isn't a "let's talk" pitch — it's a celebration of
-                projects that push the boundaries of digital expression and
-                community collaboration. It's about preserving creative outputs
-                for the long haul and sharing the tools and knowledge that make
-                it possible.
-              </p>
-              <p>
-                Thank you for exploring my world of ideas and digital
-                craftsmanship.
-              </p>
+            <p class="soft">
+              The work runs on Blender, Unreal Engine, Python and a lot of time
+              in hex editors. It started with <b>CSVmaker</b>, a small utility
+              for turning a folder tree into clean CSV data, and it's grown into
+              two long projects: a Sims 1 preservation platform, and an
+              episode-level index of a TV show nobody archived properly.
+            </p>
+            <div class="chiprow">
+              <span class="tag">Python</span><span class="tag">Blender</span>
+              <span class="tag">Unreal Engine</span><span class="tag">JavaScript</span>
+              <span class="tag">Reverse engineering</span><span class="tag">Digital archival</span>
+              <span class="tag">Video production</span><span class="tag">Game modding</span>
+              <span class="tag">Git</span>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
 
-    <!-- ====== SKILLS ====== -->
-    <section class="section">
-      <div class="container">
-        <div class="section-header">
-          <h2>Tools &amp; Skills</h2>
-          <p>Technologies and tools I work with regularly.</p>
+          <figure style="margin: 0" data-rise>
+            <img
+              src="assets/web/jones.webp"
+              alt="A Sims 2 family portrait: my sim in a beanie, standing next to Jones, a beagle"
+              width="900"
+              height="1565"
+              loading="lazy"
+              style="border-radius: var(--r-card); border: 1px solid var(--line); box-shadow: var(--shadow-soft)"
+            />
+            <figcaption class="stamp" style="margin-top: var(--s3); display: block; max-width: 34ch">
+              Family portrait, The Sims 2. That's Jones, who was a real dog and
+              a very good one.
+            </figcaption>
+          </figure>
         </div>
-        <div class="skills-grid">
-          <div class="skill-tag">Python</div>
-          <div class="skill-tag">Blender</div>
-          <div class="skill-tag">Unreal Engine</div>
-          <div class="skill-tag">HTML / CSS</div>
-          <div class="skill-tag">JavaScript</div>
-          <div class="skill-tag">Git / GitHub</div>
-          <div class="skill-tag">CSV Automation</div>
-          <div class="skill-tag">Digital Archival</div>
-          <div class="skill-tag">Video Production</div>
-          <div class="skill-tag">Game Modding</div>
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- ====== LINKS ====== -->
-    <section class="section">
-      <div class="container">
-        <div class="section-header">
-          <h2>Find Me Online</h2>
+      <!-- ==================================================== what -->
+      <section class="wrap band-sm">
+        <div class="lede" data-rise>
+          <div>
+            <p class="eyebrow">What I actually do</p>
+            <h2>Three habits</h2>
+          </div>
         </div>
-        <div class="card-grid" style="max-width: 640px">
-          <a
-            href="https://github.com/DnfJeff"
-            target="_blank"
-            rel="noopener"
-            class="card"
-            style="text-decoration: none"
-          >
+        <div class="grid grid-3">
+          <article class="card" data-rise>
+            <p class="eyebrow">Build</p>
+            <h3>Tools</h3>
+            <p class="soft" style="margin: 0">
+              Small utilities that do one job properly, and one large one that's
+              trying to make a twenty-five-year-old game's files survive another
+              twenty-five. If a thing I need doesn't exist, that's usually the
+              start of a project.
+            </p>
+          </article>
+          <article class="card" data-rise>
+            <p class="eyebrow">Keep</p>
+            <h3>Archives</h3>
+            <p class="soft" style="margin: 0">
+              Video, file formats, broadcast television. Material that was
+              disposable when it was made and is now genuinely hard to find. Some
+              of the video work lives on
+              <a href="https://www.youtube.com/@Dnf_Jeff" target="_blank" rel="noopener">my YouTube channel</a>.
+            </p>
+          </article>
+          <article class="card" data-rise>
+            <p class="eyebrow">Write</p>
+            <h3>Notes</h3>
+            <p class="soft" style="margin: 0">
+              Every project generates documents — plans, findings, checklists.
+              I've stopped treating those as private scaffolding and started
+              publishing them. They're in
+              <a href="library.html">the library</a>.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <!-- ==================================================== tools -->
+      <section class="wrap band-sm" id="tools">
+        <div class="lede" data-rise>
+          <div>
+            <p class="eyebrow">Released</p>
+            <h2>Tools you can download</h2>
+          </div>
+          <p>Free, no strings. More will land here as they get finished.</p>
+        </div>
+
+        <article class="card" data-rise>
+          <div style="display: flex; align-items: center; gap: var(--s3); flex-wrap: wrap; margin-bottom: var(--s3)">
+            <h3 style="margin: 0">CSVmaker</h3>
+            <span class="pill done">v1.0.0</span>
+            <span class="stamp">Windows · Python</span>
+          </div>
+          <p class="soft">
+            Point it at any folder and it walks every sub-directory, capturing
+            full file paths into a clean CSV. Built for wrangling large
+            collections — pictures, video, documents, game assets. It was my
+            first release and it still gets used weekly.
+          </p>
+          <div style="display: flex; gap: var(--s3); flex-wrap: wrap; margin-top: var(--s4)">
+            <a
+              class="btn btn-ink"
+              href="https://github.com/DnfJeff/PublicGitWorkspace/raw/main/CSVmaker/dist/Csvmaker.exe"
+            >
+              Download CSVmaker
+            </a>
+            <a class="btn btn-quiet" href="https://github.com/DnfJeff/PublicGitWorkspace" target="_blank" rel="noopener">
+              View source
+            </a>
+            <a class="btn btn-quiet" href="note.html?n=notes%2Ftools%2FCSVmakerReadMe.html">Read me</a>
+          </div>
+        </article>
+
+        <article class="card" data-rise style="border-style: dashed; box-shadow: none; margin-top: var(--s4)">
+          <h3 style="color: var(--ink-soft)">Hod — not yet</h3>
+          <p class="soft" style="margin: 0">
+            The Sims 1 platform is in private development. There's a progress
+            panel with numbers and screenshots on
+            <a href="hod.html">its own page</a>, and it'll be downloadable here
+            when it's ready to be.
+          </p>
+        </article>
+      </section>
+
+      <!-- ================================================== contact -->
+      <section class="wrap band-sm" id="contact">
+        <div class="lede" data-rise>
+          <div>
+            <p class="eyebrow">Get in touch</p>
+            <h2>Where to find me</h2>
+          </div>
+          <p>
+            The fastest way to reach me about anything on this site is a GitHub
+            issue — it lands somewhere I actually look.
+          </p>
+        </div>
+        <div class="grid grid-3">
+          <a class="card tile" href="https://github.com/DnfJeff" target="_blank" rel="noopener" data-rise>
             <h3>GitHub</h3>
-            <p>Source code, releases, and open-source projects.</p>
+            <p>Source, releases, and the issue tracker for this site.</p>
+            <span class="tile-go">@DnfJeff</span>
           </a>
-          <a
-            href="https://www.youtube.com/@Dnf_Jeff"
-            target="_blank"
-            rel="noopener"
-            class="card"
-            style="text-decoration: none"
-          >
+          <a class="card tile" href="https://www.youtube.com/@Dnf_Jeff" target="_blank" rel="noopener" data-rise>
             <h3>YouTube</h3>
-            <p>Archive videos, tests, and preservations.</p>
+            <p>Archive uploads, tests and preservation work.</p>
+            <span class="tile-go">@Dnf_Jeff</span>
           </a>
           <a
+            class="card tile"
             href="https://www.youtube.com/@OfficalComicBookNews"
             target="_blank"
             rel="noopener"
-            class="card"
-            style="text-decoration: none"
+            data-rise
           >
-            <h3>OfficialComicBookNews</h3>
-            <p>Comic book content with dynamic CSV-driven displays.</p>
+            <h3>Comic Book News</h3>
+            <p>
+              Where I built a system that pulls comic images and copy straight
+              out of CSV files.
+            </p>
+            <span class="tile-go">@OfficalComicBookNews</span>
           </a>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- ====== FOOTER ====== -->
-    <footer class="site-footer">
-      <div class="container">
-        <div class="footer-inner">
-          <div>
-            <div class="footer-brand">Analog Atlas</div>
-            <ul class="footer-links">
-              <li><a href="index.html">Home</a></li>
-              <li><a href="about.html">About</a></li>
-              <li><a href="programs.html">Programs</a></li>
-              <li><a href="note-library.html">Notes</a></li>
-              <li><a href="contact.html">Contact</a></li>
-              <li>
-                <a
-                  href="https://github.com/DnfJeff"
-                  target="_blank"
-                  rel="noopener"
-                  >GitHub</a
-                >
-              </li>
-            </ul>
-          </div>
+      <!-- ================================================ colophon -->
+      <section class="wrap band-sm">
+        <div class="card" data-rise style="max-width: 66ch">
+          <p class="eyebrow">Colophon</p>
+          <p class="soft">
+            Hand-written HTML, CSS and JavaScript. No framework, no build step,
+            no analytics, nothing loaded from anyone else's server. The project
+            panels read from JSON files generated by scripts in
+            <code>tools/</code>, so the numbers on this site are whatever the
+            projects last reported rather than something I typed in.
+          </p>
+          <p class="soft" style="margin: 0">
+            The orange is a painting of mine. The typeface is whatever serif your
+            system reaches for first. This site used to be called Analog Atlas;
+            it's just DNF now.
+          </p>
         </div>
-        <p class="footer-copy">&copy; 2025 Analog Atlas. Built by Dnf_Jeff.</p>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="wrap foot-in">
+        <div class="foot-mark">
+          <img src="assets/web/logo-sm.png" alt="" width="40" height="40" />
+          <p>Tools, archives and notes. Built and broken by Jeff.</p>
+        </div>
+        <div>
+          <h4>Projects</h4>
+          <ul>
+            <li><a href="hod.html">Hod — Sims 1 tools</a></li>
+            <li><a href="aots.html">Attack of the Show notes</a></li>
+            <li><a href="library.html">Writing &amp; notes</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Elsewhere</h4>
+          <ul>
+            <li><a href="https://github.com/DnfJeff" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="https://www.youtube.com/@Dnf_Jeff" target="_blank" rel="noopener">YouTube</a></li>
+            <li><a href="https://www.youtube.com/@OfficalComicBookNews" target="_blank" rel="noopener">Comic Book News</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Site</h4>
+          <ul>
+            <li><a href="about.html">About &amp; contact</a></li>
+            <li><a href="about.html#tools">Tools I've released</a></li>
+            <li><a href="https://github.com/DnfJeff/DnfJeff.github.io" target="_blank" rel="noopener">Source</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="wrap foot-base">
+        <p>© <span id="year">2026</span> Jeff Adkins</p>
+        <p class="mono">Press ⌘K or / to jump anywhere</p>
       </div>
     </footer>
 
-    <script src="js/main.js?v=3"></script>
+    <div class="palette" id="palette" hidden role="dialog" aria-modal="true" aria-label="Jump to">
+      <div class="palette-box">
+        <input type="text" placeholder="Jump to a page, a note, an episode…" aria-label="Search" autocomplete="off" />
+        <ul role="listbox"></ul>
+        <p class="palette-none" hidden>Nothing matches that.</p>
+      </div>
+    </div>
+
+    <script src="js/site.js?v=1"></script>
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
   </body>
 </html>

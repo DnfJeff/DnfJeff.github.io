@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Attack of the Show — episode notes — DNF</title>
+    <meta
+      name="description"
+      content="Episode-by-episode notes on G4's Attack of the Show (2005–2013): who turned up, what they talked about, and when."
+    />
+    <meta name="theme-color" content="#e8551d" />
+    <link rel="icon" href="favicon.ico" sizes="32x32" />
+    <link rel="icon" href="assets/web/icon.png" type="image/png" />
+    <link rel="stylesheet" href="css/site.css?v=1" />
+    <script>
+      document.documentElement.classList.add("js");
+      try {
+        var t = localStorage.getItem("dnf-theme");
+        if (t) document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+  </head>
+
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header class="topbar">
+      <div class="wrap topbar-in">
+        <a class="brand" href="index.html">
+          <img src="assets/web/logo-sm.png" alt="" width="30" height="30" />
+          <b>DNF</b>
+        </a>
+        <nav class="nav" id="nav" aria-label="Primary">
+          <a href="index.html">Home</a>
+          <a href="hod.html">Hod</a>
+          <a href="aots.html" aria-current="page">Attack of the Show</a>
+          <a href="library.html">Writing</a>
+          <a href="about.html">About</a>
+        </nav>
+        <div class="bar-tools">
+          <button class="iconbtn" data-palette-open aria-label="Search the site">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="6.4" /><path d="m16 16 4.2 4.2" />
+            </svg>
+            <span class="kbd-hint" aria-hidden="true">⌘K</span>
+          </button>
+          <button class="iconbtn" data-theme-toggle aria-label="Switch theme"></button>
+          <button class="iconbtn menubtn" data-menu aria-expanded="false" aria-controls="nav" aria-label="Menu">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <!-- ===================================================== header -->
+      <section class="wrap" style="padding-block: var(--s8) var(--s6)">
+        <p class="eyebrow">Project · television archival</p>
+        <h1 style="font-size: clamp(2.2rem, 5.4vw, 3.4rem); margin-bottom: var(--s4)">
+          Attack of the Show
+        </h1>
+        <p style="max-width: 62ch; font-size: 1.08rem" class="soft">
+          G4's daily show ran from March 2005 to January 2013 and was never
+          properly indexed. Most of it isn't streaming anywhere. I'm working
+          through what survives and writing down what actually happened in each
+          episode — who turned up, what they were there for, and where in the
+          runtime to find it.
+        </p>
+        <p class="stamp" id="aots-stamp">Loading…</p>
+      </section>
+
+      <section class="wrap band-sm" style="padding-top: 0">
+        <div class="stats" id="aots-summary" data-rise></div>
+      </section>
+
+      <!-- ====================================================== years -->
+      <section class="wrap band-sm" id="years-section">
+        <div class="lede" data-rise>
+          <div>
+            <p class="eyebrow">The run</p>
+            <h2>Nine years, one at a time</h2>
+          </div>
+          <p>
+            Each bar is episodes written up against the reconstructed broadcast
+            schedule for that year. Greyed-out years haven't been started.
+          </p>
+        </div>
+        <div class="years" id="years"></div>
+      </section>
+
+      <!-- =================================================== episodes -->
+      <section class="wrap band-sm">
+        <div class="lede" data-rise>
+          <div>
+            <p class="eyebrow">Notes</p>
+            <h2>Episodes</h2>
+            <p class="stamp" id="year-context" style="margin-top: var(--s2); display: block"></p>
+          </div>
+          <label class="searchbox" style="min-width: min(100%, 20rem)">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="6.4" /><path d="m16 16 4.2 4.2" />
+            </svg>
+            <input id="ep-search" type="search" placeholder="A guest, a topic, a segment…" aria-label="Search episodes" />
+          </label>
+        </div>
+        <div id="episodes"></div>
+      </section>
+
+      <section class="wrap band-sm">
+        <div class="card" data-rise style="max-width: 62ch">
+          <p class="eyebrow">How these are made</p>
+          <p class="soft" style="margin: 0">
+            Each episode gets transcribed, then read through and broken down into
+            hosts, appearances, segments and topics. Only the finished notes end
+            up on this site — no transcripts, no video, nothing that isn't mine
+            to publish. Timestamps point into the episode, not to a copy of it.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="wrap foot-in">
+        <div class="foot-mark">
+          <img src="assets/web/logo-sm.png" alt="" width="40" height="40" />
+          <p>Tools, archives and notes. Built and broken by Jeff.</p>
+        </div>
+        <div>
+          <h4>Projects</h4>
+          <ul>
+            <li><a href="hod.html">Hod — Sims 1 tools</a></li>
+            <li><a href="aots.html">Attack of the Show notes</a></li>
+            <li><a href="library.html">Writing &amp; notes</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Elsewhere</h4>
+          <ul>
+            <li><a href="https://github.com/DnfJeff" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="https://www.youtube.com/@Dnf_Jeff" target="_blank" rel="noopener">YouTube</a></li>
+            <li><a href="https://www.youtube.com/@OfficalComicBookNews" target="_blank" rel="noopener">Comic Book News</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Site</h4>
+          <ul>
+            <li><a href="about.html">About &amp; contact</a></li>
+            <li><a href="about.html#tools">Tools I've released</a></li>
+            <li><a href="https://github.com/DnfJeff/DnfJeff.github.io" target="_blank" rel="noopener">Source</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="wrap foot-base">
+        <p>© <span id="year">2026</span> Jeff Adkins</p>
+        <p class="mono">Press ⌘K or / to jump anywhere</p>
+      </div>
+    </footer>
+
+    <div class="palette" id="palette" hidden role="dialog" aria-modal="true" aria-label="Jump to">
+      <div class="palette-box">
+        <input type="text" placeholder="Jump to a page, a note, an episode…" aria-label="Search" autocomplete="off" />
+        <ul role="listbox"></ul>
+        <p class="palette-none" hidden>Nothing matches that.</p>
+      </div>
+    </div>
+
+    <script src="js/site.js?v=1"></script>
+    <script src="js/aots.js?v=1"></script>
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>

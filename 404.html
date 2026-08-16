@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Not found — DNF</title>
+    <meta name="robots" content="noindex" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="stylesheet" href="/css/site.css?v=1" />
+    <script>
+      document.documentElement.classList.add("js");
+      try {
+        var t = localStorage.getItem("dnf-theme");
+        if (t) document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="wrap topbar-in">
+        <a class="brand" href="/">
+          <img src="/assets/web/logo-sm.png" alt="" width="30" height="30" />
+          <b>DNF</b>
+        </a>
+        <nav class="nav" id="nav" aria-label="Primary">
+          <a href="/">Home</a>
+          <a href="/hod.html">Hod</a>
+          <a href="/aots.html">Attack of the Show</a>
+          <a href="/library.html">Writing</a>
+          <a href="/about.html">About</a>
+        </nav>
+        <div class="bar-tools">
+          <button class="iconbtn" data-theme-toggle aria-label="Switch theme"></button>
+          <button class="iconbtn menubtn" data-menu aria-expanded="false" aria-controls="nav" aria-label="Menu">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrap" style="padding-block: var(--s9)">
+      <p class="eyebrow">404</p>
+      <h1 style="font-size: clamp(2.2rem, 6vw, 3.4rem)">
+        No signal on this channel.
+      </h1>
+      <p class="soft" style="max-width: 46ch; font-size: 1.06rem">
+        That page isn't here. It may have been renamed in the rebuild — most of
+        the old site now lives under one of these.
+      </p>
+      <div class="grid grid-3" style="margin-top: var(--s6); max-width: 60rem">
+        <a class="card tile" href="/hod.html"><h3>Hod</h3><p>The Sims 1 tooling project.</p><span class="tile-go">Open</span></a>
+        <a class="card tile" href="/aots.html"><h3>Attack of the Show</h3><p>Episode notes, year by year.</p><span class="tile-go">Open</span></a>
+        <a class="card tile" href="/library.html"><h3>Writing</h3><p>Guides, checklists and plans.</p><span class="tile-go">Open</span></a>
+      </div>
+    </main>
+
+    <script src="/js/site.js?v=1"></script>
+  </body>
+</html>
