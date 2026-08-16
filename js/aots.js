@@ -47,10 +47,15 @@
       btn.dataset.year = y.year;
       btn.setAttribute("aria-pressed", String(y.year === year));
       btn.disabled = y.noted === 0;
+      /* A year with notes but no verified episode count has no denominator
+         to draw against — hatch the trough rather than show a bar at zero,
+         which would read as "nothing done here". */
+      const unknown = y.total === 0 && y.noted > 0;
+      const state = unknown ? " unknown" : y.noted === 0 ? " empty" : "";
       btn.innerHTML = `
         <b>${y.year}</b>
         <small>${y.noted} / ${y.total || "?"}</small>
-        <span class="meter${y.noted === 0 ? " empty" : ""}" style="--p:${pct(y.noted, y.total)}"><i></i></span>`;
+        <span class="meter${state}" style="--p:${unknown ? 100 : pct(y.noted, y.total)}"><i></i></span>`;
       btn.title = y.total
         ? `${y.noted} of ${y.total} episodes written up`
         : `${y.noted} written up — the ${y.year} schedule hasn't been reconstructed yet`;

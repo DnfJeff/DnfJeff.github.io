@@ -848,6 +848,16 @@ hr {
 .meter.empty > i {
   background: var(--line-strong);
 }
+/* No verified total to measure against — hatching says "unknown", where a
+   bar at zero would wrongly say "none done". */
+.meter.unknown > i {
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--accent) 0 4px,
+    transparent 4px 9px
+  );
+  opacity: 0.6;
+}
 
 .meter-row {
   display: grid;
