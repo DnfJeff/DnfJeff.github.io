@@ -15,8 +15,6 @@
         -->
     <img src="/PersonalSite/John.jpg" />
     <h1>Hi, my name is Pork, John</h1>
-    <!-- Button to trigger audio play -->
-    <button id="playButton">Play Audio</button>
     <h2>Fun facts about me:</h2>
     <ul>
       <li>36 years old</li>
@@ -31,19 +29,5 @@
     </p>
     <input type="text" placeholder="Enter email..." />
     <button>Join newsletter</button>
-
-    <!-- Audio element -->
-    <audio id="audioPlayer" src="/PersonalSite/niggachain.mp3"></audio>
-
-    <script>
-      // Get references to the button and audio element
-      const button = document.getElementById("playButton");
-      const audio = document.getElementById("audioPlayer");
-
-      // Add event listener to play audio when button is clicked
-      button.addEventListener("click", function () {
-        audio.play();
-      });
-    </script>
   </body>
 </html>
