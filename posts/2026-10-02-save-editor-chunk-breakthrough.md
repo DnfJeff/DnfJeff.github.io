@@ -16,11 +16,13 @@ attachments:
     file: "assets/web/canvas-wide.webp"
     title: "Storage Engine Pipeline"
     caption: "The Hod storage engine proving bit-for-bit idempotency across save files."
-addendums:
-  - date: "2026-10-02 21:40"
-    note: "Ran the parser across 40 user saves from the Livin' Large expansion. Zero chunk pointer drift detected."
-  - date: "2026-10-03 09:15"
-    note: "Confirmed Mac PowerPC legacy releases store chunk sizes in big-endian notation while x86 PC builds use little-endian. Adding a dual-endian codec pass to the ingest pipeline."
+comments:
+  - id: "a69dbec65f1d47c4ae94967949e6f832"
+    date: "2026-10-02 21:40"
+    body: "Ran the parser across 40 user saves from the Livin' Large expansion. Zero chunk pointer drift detected."
+  - id: "3c84fd74d9b947aea1c233751119e069"
+    date: "2026-10-03 09:15"
+    body: "Confirmed Mac PowerPC legacy releases store chunk sizes in big-endian notation while x86 PC builds use little-endian. Adding a dual-endian codec pass to the ingest pipeline."
 ---
 
 Spent the last few days in hex editors comparing how the original Sims 1 executable reads save state IFF chunks versus how the newer Legacy Collection handles re-indexing. 

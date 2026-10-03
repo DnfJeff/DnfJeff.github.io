@@ -1,7 +1,7 @@
 /* =========================================================================
    DNF — Dedicated Post Reader
-   Loads one dispatch from data/feed.json, renders the full-bleed prose,
-   attached drawings and media gallery, author addendums rail, and pager.
+   Loads one post from data/feed.json, renders the full prose,
+   attached drawings and media gallery, author comments rail, and pager.
    ========================================================================= */
 
 (function () {
@@ -193,7 +193,7 @@
   (async function init() {
     const data = await json("data/feed.json");
     if (!data || !data.posts) {
-      fail(bodyEl, "Couldn't load dispatch data.");
+      fail(bodyEl, "Couldn't load post data.");
       return;
     }
 
@@ -202,7 +202,7 @@
     const at = posts.indexOf(post);
 
     if (!post) {
-      fail(bodyEl, "That dispatch does not exist.");
+      fail(bodyEl, "That post does not exist.");
       return;
     }
 
@@ -230,20 +230,20 @@
     // Body
     bodyEl.innerHTML = markdown(post.body);
 
-    // Addendums
+    // Author comments
     if (addendumsEl) {
-      if (post.addendums && post.addendums.length) {
-        addendumsEl.innerHTML = post.addendums
+      if (post.comments && post.comments.length) {
+        addendumsEl.innerHTML = post.comments
           .map(
             (a) => `
             <div class="addendum-item">
               <span class="addendum-date">${esc(a.date)}</span>
-              <p class="addendum-note">${esc(a.note)}</p>
+              <p class="addendum-note">${esc(a.body)}</p>
             </div>`
           )
           .join("");
       } else {
-        addendumsEl.innerHTML = `<p class="soft" style="font-size:0.86rem;margin:0">No addendums logged for this dispatch yet.</p>`;
+        addendumsEl.innerHTML = `<p class="soft" style="font-size:0.86rem;margin:0">No comments on this post yet.</p>`;
       }
     }
 
@@ -333,7 +333,7 @@
                <span class="stamp">${esc(p.date)} · ${esc(p.project)}</span>
              </a>`
           : "<div></div>";
-      pagerEl.innerHTML = link(posts[at - 1], "Newer Dispatch") + link(posts[at + 1], "Older Dispatch");
+      pagerEl.innerHTML = link(posts[at - 1], "Newer Post") + link(posts[at + 1], "Older Post");
     }
 
     // Inspector controls

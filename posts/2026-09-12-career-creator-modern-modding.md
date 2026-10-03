@@ -12,9 +12,10 @@ attachments:
     file: "assets/web/icon.png"
     title: "Career Creator Icon & Spec"
     caption: "32-bit toolchain integration for legacy Sims 1 career tables."
-addendums:
-  - date: "2026-09-15 16:30"
-    note: "Added automatic GUID conflict detection against the standard Maxis career ID registry."
+comments:
+  - id: "ebecd727aafa4a8ca9d5f1cd1c669a3d"
+    date: "2026-09-15 16:30"
+    body: "Added automatic GUID conflict detection against the standard Maxis career ID registry."
 ---
 
 Custom careers in The Sims 1 were notoriously brittle: installing a new job track often overwrote default Maxis `Work.iff` strings or caused memory faults if wage tiers exceeded 10 levels.

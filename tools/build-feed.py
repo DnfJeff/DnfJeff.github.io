@@ -2,8 +2,8 @@
 """
 Index everything under posts/ into data/feed.json.
 
-Walks posts/ for .md dispatches, parses frontmatter and markdown body,
-extracts author addendums/updates, resolves linked library notes, processes
+Walks posts/ for .md posts, parses frontmatter and markdown body,
+extracts author comments, resolves linked library notes, processes
 Excalidraw drawings into scalable SVG, and compiles data/feed.json for the
 Feed timeline page.
 
@@ -15,6 +15,7 @@ import json
 import math
 import re
 import sys
+from frontmatter import parse as parse_simple_frontmatter
 from datetime import date, datetime
 from pathlib import Path
 
@@ -50,19 +51,7 @@ def parse_frontmatter(text):
                     return meta, body
                 except Exception:
                     pass
-            # Fallback simple parser if YAML load fails
-            meta = {}
-            for line in raw_meta.splitlines():
-                if ":" in line and not line.startswith(" "):
-                    k, v = line.split(":", 1)
-                    k = k.strip()
-                    v = v.strip().strip('"\'')
-                    if v.startswith("[") and v.endswith("]"):
-                        items = [x.strip().strip('"\'') for x in v[1:-1].split(",") if x.strip()]
-                        meta[k] = items
-                    else:
-                        meta[k] = v
-            return meta, body
+            return parse_simple_frontmatter(text)
     return {}, text
 
 
@@ -260,7 +249,8 @@ def main():
         attachments = process_attachments(raw_attachments)
 
         # Author Addendums (Follow-up notes appended without mutating main text)
-        addendums = meta.get("addendums") or []
+        comments = meta.get("comments") or meta.get("addendums") or []
+        comments = [{"id": c.get("id", f"legacy-{i}"), "date": c.get("date", ""), "body": c.get("body", c.get("note", ""))} for i, c in enumerate(comments) if isinstance(c, dict)]
 
         # Related Library Notes Interplay
         rel_notes = meta.get("related_notes") or []
@@ -299,7 +289,7 @@ def main():
             "summary": summary,
             "body": body.strip(),
             "attachments": attachments,
-            "addendums": addendums,
+            "comments": comments,
             "linked_notes": linked_cards,
         })
 
@@ -308,7 +298,10 @@ def main():
 
     # Gather available tags, projects, and dates for sidebar filters
     all_tags = sorted(list(set(t for p in posts for t in p["tags"])))
-    all_projects = sorted(list(set(p["project"] for p in posts if p["project"])))
+    options_file = DATA / "feed-options.json"
+    options = json.loads(options_file.read_text(encoding="utf-8")) if options_file.exists() else {}
+    all_projects = sorted(set(options.get("projects", [])) | set(p["project"] for p in posts if p["project"]))
+    all_statuses = sorted(set(options.get("statuses", [])) | set(p["status"] for p in posts if p["status"]))
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
     payload = {
@@ -316,13 +309,14 @@ def main():
         "count": len(posts),
         "tags": all_tags,
         "projects": all_projects,
+        "statuses": all_statuses,
         "posts": posts
     }
     OUT.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(f"build-feed: {len(posts)} posts -> {OUT.relative_to(ROOT)}")
     for p in posts:
         att_summary = f"{len(p['attachments'])} atts" if p['attachments'] else "no atts"
-        add_summary = f"{len(p['addendums'])} updates" if p['addendums'] else "no updates"
+        add_summary = f"{len(p['comments'])} comments" if p['comments'] else "no comments"
         print(f"  {p['date']} [{p['project']:<10}] {p['title'][:44]:<46} ({att_summary}, {add_summary})")
 
 

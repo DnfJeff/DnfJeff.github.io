@@ -9,6 +9,8 @@
   const labels = { project: "Project", tag: "Tag", status: "Status", media: "Attachments", q: "Search" };
   const mediaLabels = { drawing: "Drawings", image: "Images", none: "No attachments" };
   let posts = [];
+  let feedData = {};
+  let selectedPostId = "";
   const readerUrl = (post) => `post.html?p=${encodeURIComponent(post.id)}`;
   const attachmentType = (att) => att.type === "drawing" || /\.excalidraw$/i.test(att.file || "") ? "drawing" : "image";
   const unique = (values) => [...new Set(values.filter(Boolean))].sort((a, b) => a.localeCompare(b));
@@ -21,7 +23,7 @@
     if (filters.media === "none" && attachments.length) return false;
     if (filters.media && filters.media !== "none" && !attachments.some((a) => attachmentType(a) === filters.media)) return false;
     const haystack = [post.title, post.summary, post.body, post.project, ...(post.tags || []),
-      ...(post.addendums || []).map((a) => a.note),
+      ...(post.comments || []).map((a) => a.body),
       ...attachments.flatMap((a) => [a.title, a.caption]),
       ...(post.linked_notes || []).flatMap((n) => [n.title, n.summary])].join(" ").toLowerCase();
     return !filters.q || haystack.includes(filters.q.toLowerCase());
@@ -41,8 +43,8 @@
       <div class="feed-filter-panel">
         <h2 class="eyebrow">Browse the feed</h2>
         <div class="feed-filter-fields">
-          <div>${selectFilter("project", "Project", unique(posts.map((p) => p.project)), "All projects")}</div>
-          <div>${selectFilter("status", "Status", unique(posts.map((p) => p.status)), "Any status")}</div>
+          <div>${selectFilter("project", "Project", unique(feedData.projects || posts.map((p) => p.project)), "All projects")}</div>
+          <div>${selectFilter("status", "Status", unique(feedData.statuses || posts.map((p) => p.status)), "Any status")}</div>
           <div>${selectFilter("media", "Attachments", types, "Any attachment type")}</div>
         </div>
         <fieldset class="feed-tag-filter"><legend>Tags</legend><div class="chiprow">
@@ -56,17 +58,29 @@
         <a href="about.html#tools">Tools &amp; reverse engineering <span aria-hidden="true">↗</span></a>
       </nav>`;
 
-    const updates = posts.flatMap((post) => (post.addendums || []).map((a) => ({ ...a, post })))
-      .sort((a, b) => b.date.localeCompare(a.date)).slice(0, 4);
-    $("#feed-rail-right").innerHTML = updates.length ? `
-      <div class="feed-updates"><h2 class="eyebrow">Recent field notes</h2>
-      <p class="soft">Follow-ups from across the feed.</p><div class="addendum-track">
-        ${updates.map((a) => `<div class="addendum-item">
-          <time class="addendum-date">${esc(a.date)}</time>
-          <a class="feed-update-link" href="${readerUrl(a.post)}">${esc(a.post.title)}</a>
-          <p class="addendum-note">${esc(a.note)}</p>
-        </div>`).join("")}
-      </div></div>` : "";
+  }
+
+  function renderComments() {
+    const post = posts.find((p) => p.id === selectedPostId);
+    const rail = $("#feed-rail-right");
+    if (!post) { rail.innerHTML = ""; return; }
+    const comments = post.comments || [];
+    rail.innerHTML = `<div class="feed-updates" id="feed-comments-panel"><h2 class="eyebrow">Comments · ${comments.length}</h2>
+      <a class="feed-update-link" href="${readerUrl(post)}">${esc(post.title)} ↗</a>
+      ${comments.length ? `<div class="addendum-track">${comments.map((comment) => `<div class="addendum-item">
+        <time class="addendum-date">${esc(comment.date)}</time><p class="addendum-note">${esc(comment.body)}</p>
+      </div>`).join("")}</div>` : `<p class="soft">No comments on this post yet.</p>`}</div>`;
+  }
+
+  function selectPost(id, focus = false) {
+    selectedPostId = id;
+    $$(".feed-post").forEach((card) => {
+      const active = card.id === id;
+      card.classList.toggle("is-active", active);
+      card.setAttribute("aria-current", active ? "true" : "false");
+    });
+    renderComments();
+    if (focus) document.getElementById(id)?.focus({ preventScroll: true });
   }
 
   function renderAttachments(post) {
@@ -89,7 +103,7 @@
 
   function renderPost(post) {
     const summary = post.summary || (post.body || "").split(/\n\s*\n/)[0].slice(0, 300);
-    return `<article class="feed-post" id="${esc(post.id)}" data-status="${esc(post.status)}">
+    return `<article class="feed-post${post.id === selectedPostId ? " is-active" : ""}" id="${esc(post.id)}" data-status="${esc(post.status)}" tabindex="0" aria-label="Select ${esc(post.title)} to show its comments" aria-current="${post.id === selectedPostId}">
       <div class="feed-post-head"><div class="feed-meta-row"><span class="eyebrow">${esc(post.project)}</span><time class="stamp" datetime="${esc(post.date)}">${esc(post.date)}</time></div>
       ${post.status ? `<span class="pill ${esc(post.status)}">${esc(post.status)}</span>` : ""}</div>
       <h2 class="feed-post-title"><a href="${readerUrl(post)}">${esc(post.title)}</a></h2>
@@ -97,13 +111,14 @@
       <div class="chiprow feed-post-tags">${(post.tags || []).map((tag) => `<button type="button" class="tag" data-tag="${esc(tag)}" aria-pressed="${filters.tag === tag}">${esc(tag)}</button>`).join("")}</div>
       ${renderAttachments(post)}
       ${(post.linked_notes || []).length ? `<div class="feed-related"><span class="stamp">Related writing</span>${post.linked_notes.map((n) => `<a href="note.html?n=${encodeURIComponent(n.path)}">${esc(n.title)} <span aria-hidden="true">→</span></a>`).join("")}</div>` : ""}
-      <div class="feed-post-foot"><span class="stamp">${(post.addendums || []).length ? `${post.addendums.length} field note${post.addendums.length === 1 ? "" : "s"}` : ""}</span>
+      <div class="feed-post-foot"><span class="stamp">${(post.comments || []).length} comment${(post.comments || []).length === 1 ? "" : "s"}</span>
       <a class="feed-read-link" href="${readerUrl(post)}">Read full post <span aria-hidden="true">→</span></a></div>
     </article>`;
   }
 
   function render() {
     const list = posts.filter(matches);
+    if (!list.some((post) => post.id === selectedPostId)) selectedPostId = list[0]?.id || "";
     $("#feed-count").textContent = `Showing ${list.length} of ${posts.length} posts`;
     stream.innerHTML = list.length ? `<div class="feed-track">${list.map(renderPost).join("")}</div>` :
       `<div class="empty card"><h2>No matching posts</h2><p class="soft">Try another search or remove a filter.</p><button type="button" class="btn btn-ghost" data-clear>Clear all filters</button></div>`;
@@ -115,6 +130,7 @@
       el.setAttribute("aria-pressed", String(filters.tag === el.dataset.tag));
       el.classList.toggle("here", filters.tag === el.dataset.tag);
     });
+    renderComments();
   }
 
   function updateFilters() {
@@ -161,6 +177,16 @@
         $("#feed-search").value = "";
         updateFilters();
         $("#feed-search").focus({ preventScroll: true });
+      }
+    });
+    stream.addEventListener("click", (event) => {
+      if (event.target.closest("a, button, input, select, textarea")) return;
+      const card = event.target.closest(".feed-post");
+      if (card) selectPost(card.id);
+    });
+    stream.addEventListener("keydown", (event) => {
+      if (event.target.matches(".feed-post") && (event.key === "Enter" || event.key === " ")) {
+        event.preventDefault(); selectPost(event.target.id, true);
       }
     });
     window.addEventListener("popstate", () => { readFilters(); render(); });
@@ -251,6 +277,7 @@
   (async function init() {
     const data = await json("data/feed.json");
     if (!Array.isArray(data?.posts)) { fail(stream, "Couldn't load the feed. Please reload to try again."); return; }
+    feedData = data;
     posts = [...data.posts].sort((a, b) => b.date.localeCompare(a.date));
     renderSidebar();
     wireFilters();

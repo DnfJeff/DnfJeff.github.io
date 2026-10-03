@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Dispatch — The Feed — DNF</title>
-    <meta name="description" content="A dispatch from the DNF feed and timeline." />
+    <title>Post — The Feed — DNF</title>
+    <meta name="description" content="A post from the DNF feed and timeline." />
     <meta name="theme-color" content="#e8551d" />
     <link rel="icon" href="favicon.ico" sizes="32x32" />
     <link rel="icon" href="assets/web/icon.png" type="image/png" />
@@ -51,12 +51,12 @@
     <main id="main" class="feed-wrap" style="padding-block: var(--s7) var(--s9)">
       <p class="stamp">
         <a href="feed.html" style="text-decoration: none">The Feed</a>
-        <span aria-hidden="true"> / </span><span id="post-crumb">Dispatch</span>
+        <span aria-hidden="true"> / </span><span id="post-crumb">Post</span>
       </p>
 
       <header style="margin: var(--s4) 0 var(--s6); max-width: 900px">
         <div style="display:flex;align-items:center;gap:var(--s3);margin-bottom:var(--s2);flex-wrap:wrap">
-          <span class="eyebrow" id="post-project" style="margin:0">Dispatch</span>
+          <span class="eyebrow" id="post-project" style="margin:0">Post</span>
           <span class="pill here" id="post-status">in motion</span>
         </div>
         <h1 id="post-title" style="font-size: clamp(2rem, 5vw, 3rem); margin-bottom: var(--s3)">Loading…</h1>
@@ -67,15 +67,15 @@
       <div class="post-page-layout">
         <!-- Main reading body & attachments -->
         <article class="feed-prose" style="font-size:1.05rem" id="post-body">
-          <p class="soft">Fetching the dispatch…</p>
+          <p class="soft">Fetching the post…</p>
         </article>
 
-        <!-- Sidebar: Field Notes, Linked Library Notes, Project Info -->
+        <!-- Sidebar: comments, linked library notes, project info -->
         <aside class="post-page-sidebar">
           <div class="card" id="post-addendums-card" style="padding:var(--s4)">
-            <p class="eyebrow" style="margin:0 0 var(--s2)">Field Notes &amp; Updates</p>
+            <p class="eyebrow" style="margin:0 0 var(--s2)">Comments</p>
             <div class="addendum-track" id="post-addendums-track">
-              <p class="soft" style="font-size:0.86rem;margin:0">No addendums on this dispatch.</p>
+              <p class="soft" style="font-size:0.86rem;margin:0">No comments on this post.</p>
             </div>
           </div>
 
@@ -101,7 +101,7 @@
       </section>
 
       <!-- Next / Prev Pager -->
-      <nav class="grid grid-2" id="post-pager" style="margin-top: var(--s8)" aria-label="More dispatches"></nav>
+      <nav class="grid grid-2" id="post-pager" style="margin-top: var(--s8)" aria-label="More posts"></nav>
     </main>
 
     <!-- Unified Media & Drawing Inspector Modal -->
@@ -165,7 +165,7 @@
 
     <div class="palette" id="palette" hidden role="dialog" aria-modal="true" aria-label="Jump to">
       <div class="palette-box">
-        <input type="text" placeholder="Jump to a page, a note, an episode, a dispatch…" aria-label="Search" autocomplete="off" />
+        <input type="text" placeholder="Jump to a page, a note, an episode, a post…" aria-label="Search" autocomplete="off" />
         <ul role="listbox"></ul>
         <p class="palette-none" hidden>Nothing matches that.</p>
       </div>

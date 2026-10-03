@@ -11,9 +11,10 @@ attachments:
     file: "assets/web/logo.png"
     title: "G4 AOTS Master Catalog"
     caption: "Reconstructed air-date metadata matching commercial break markers."
-addendums:
-  - date: "2026-09-25 14:10"
-    note: "Archivist community confirmed the July 14, 2006 Comic-Con special was originally broadcast live as a double-length slot."
+comments:
+  - id: "5c03219c2f624f779277a326eb86fb33"
+    date: "2026-09-25 14:10"
+    body: "Archivist community confirmed the July 14, 2006 Comic-Con special was originally broadcast live as a double-length slot."
 ---
 
 When G4 syndicated Attack of the Show back in 2006, episodes were aired live at 7:00 PM EST and re-run late at night with edited promo spots. Tape captures that circulate online often have mismatched dates depending on whether the recorder set their VCR timer for the live broadcast or the overnight syndication slot.

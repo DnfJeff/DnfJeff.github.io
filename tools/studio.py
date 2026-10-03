@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
 DNF Content Studio — Local Site Manager (Pass 2)
-A lightweight, offline browser-based dashboard for managing Feed dispatches,
-surfacing In-Motion / Done tags, author addendums, library writings,
+A lightweight, offline browser-based dashboard for managing Feed posts,
+project/status choices, author comments, library writings,
 Excalidraw attachments, and one-click site rebuilds.
 
 Run:
@@ -19,6 +19,8 @@ import sys
 import urllib.parse
 import urllib.request
 import webbrowser
+from uuid import uuid4
+from frontmatter import parse as parse_frontmatter, dump as dump_frontmatter
 from datetime import date, datetime
 from pathlib import Path
 
@@ -85,6 +87,9 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
         elif url.path == "/api/library":
             self.send_json(self.get_library())
             return
+        elif url.path == "/api/feed-options":
+            self.send_json(self.get_feed_options())
+            return
         elif url.path == "/" or url.path == "/studio":
             self.send_html(self.render_dashboard())
             return
@@ -109,12 +114,16 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
             self.send_json(self.save_post(data))
         elif url.path == "/api/update-status":
             self.send_json(self.update_status(data))
-        elif url.path == "/api/add-addendum":
-            self.send_json(self.add_addendum(data))
+        elif url.path == "/api/save-comment":
+            self.send_json(self.save_comment(data))
+        elif url.path == "/api/delete-comment":
+            self.send_json(self.delete_comment(data))
+        elif url.path == "/api/add-feed-option":
+            self.send_json(self.add_feed_option(data))
         elif url.path == "/api/save-note":
             self.send_json(self.save_note(data))
         elif url.path == "/api/git-commit":
-            msg = data.get("message") or "Update feed and library dispatches"
+            msg = data.get("message") or "Update posts and library notes"
             cmd = f'git add . && git commit -m "{msg}"'
             res = run_command(cmd)
             self.send_json(res)
@@ -198,23 +207,41 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
                 pass
         return {"entries": [], "count": 0}
 
+    def get_feed_options(self):
+        path = DATA / "feed-options.json"
+        saved = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+        feed = self.get_posts()
+        return {key: sorted(set(saved.get(key, [])) | set(feed.get(key, [])), key=str.casefold)
+                for key in ("projects", "statuses")}
+
+    def add_feed_option(self, data):
+        key = {"project": "projects", "status": "statuses"}.get(data.get("kind"))
+        value = str(data.get("value") or "").strip()
+        if not key or not value or len(value) > 60 or any(c in value for c in "<>\n\r"):
+            return {"success": False, "error": "Enter a project or status of up to 60 characters."}
+        path = DATA / "feed-options.json"
+        saved = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {"projects": [], "statuses": []}
+        match = next((item for item in self.get_feed_options()[key] if item.casefold() == value.casefold()), None)
+        if match:
+            return {"success": True, "value": match}
+        saved.setdefault(key, []).append(value)
+        path.write_text(json.dumps(saved, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        run_command(f'"{sys.executable}" tools/build-feed.py')
+        return {"success": True, "value": value}
+
     def update_status(self, data):
         post_id = data.get("post_id")
         new_status = data.get("status")
-        if not post_id or not new_status:
+        if not post_id or not re.fullmatch(r"[\w-]+", str(post_id)) or not new_status:
             return {"success": False, "error": "post_id and status required"}
 
         file_path = POSTS / f"{post_id}.md"
         if not file_path.exists():
             return {"success": False, "error": "File not found"}
 
-        content = file_path.read_text(encoding="utf-8")
-        if re.search(r"status:\s*.*", content):
-            content = re.sub(r'status:\s*["\']?.*?["\']?\n', f'status: "{new_status}"\n', content, count=1)
-        else:
-            content = re.sub(r"---\n", f'---\nstatus: "{new_status}"\n', content, count=1)
-
-        file_path.write_text(content, encoding="utf-8")
+        meta, body = parse_frontmatter(file_path.read_text(encoding="utf-8"))
+        meta["status"] = new_status
+        file_path.write_text(dump_frontmatter(meta, body), encoding="utf-8")
         run_command(f'"{sys.executable}" tools/build-feed.py')
         return {"success": True, "status": new_status}
 
@@ -224,6 +251,8 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
             return {"success": False, "error": "Title is required"}
 
         post_id = data.get("id")
+        if post_id and not re.fullmatch(r"[\w-]+", str(post_id)):
+            return {"success": False, "error": "Invalid post ID"}
         d_str = data.get("date") or date.today().isoformat()
         if not post_id:
             slug = re.sub(r"[^\w]+", "-", title.lower()).strip("-")
@@ -240,76 +269,53 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
             "summary": data.get("summary") or "",
             "related_notes": data.get("related_notes") or [],
             "attachments": data.get("attachments") or [],
-            "addendums": data.get("addendums") or [],
+            "comments": (parse_frontmatter(file_path.read_text(encoding="utf-8"))[0].get("comments") or []) if file_path.exists() else [],
         }
 
         body = data.get("body", "").strip()
-        raw_lines = ["---"]
-        for k, v in frontmatter.items():
-            if isinstance(v, list):
-                if not v:
-                    raw_lines.append(f"{k}: []")
-                elif k in ("attachments", "addendums"):
-                    raw_lines.append(f"{k}:")
-                    for item in v:
-                        raw_lines.append("  -")
-                        for ik, iv in item.items():
-                            raw_lines.append(f'    {ik}: "{iv}"')
-                else:
-                    raw_lines.append(f"{k}:")
-                    for item in v:
-                        raw_lines.append(f'  - "{item}"')
-            elif isinstance(v, str):
-                raw_lines.append(f'{k}: "{v}"')
-            else:
-                raw_lines.append(f"{k}: {v}")
-        raw_lines.append("---")
-        raw_lines.append("")
-        raw_lines.append(body)
-        raw_lines.append("")
-
         POSTS.mkdir(parents=True, exist_ok=True)
-        file_path.write_text("\n".join(raw_lines), encoding="utf-8")
+        file_path.write_text(dump_frontmatter(frontmatter, body), encoding="utf-8")
 
         run_command(f'"{sys.executable}" tools/build-feed.py')
         return {"success": True, "id": post_id, "path": file_path.as_posix()}
 
-    def add_addendum(self, data):
-        post_id = data.get("post_id")
-        note_text = data.get("note", "").strip()
-        if not post_id or not note_text:
-            return {"success": False, "error": "Post ID and Note are required"}
-
-        file_path = POSTS / f"{post_id}.md"
-        if not file_path.exists():
-            return {"success": False, "error": f"Post file not found: {post_id}.md"}
-
-        content = file_path.read_text(encoding="utf-8")
-        date_str = (
-            data.get("date") or datetime.now().strftime("%Y-%m-%d %H:%M")
-        )
-
-        parts = content.split("---", 2)
-        if len(parts) < 3:
-            return {"success": False, "error": "Invalid frontmatter in post"}
-
-        raw_fm = parts[1]
-        body = parts[2]
-
-        new_entry = f'  - date: "{date_str}"\n    note: "{note_text}"\n'
-
-        if "addendums:" in raw_fm:
-            raw_fm = re.sub(
-                r"(addendums:\s*(\[\])?)", r"addendums:\n" + new_entry, raw_fm
-            )
+    def comment_change(self, data, delete=False):
+        post_id = str(data.get("post_id") or "")
+        if not re.fullmatch(r"[\w-]+", post_id):
+            return {"success": False, "error": "Invalid post ID"}
+        path = POSTS / f"{post_id}.md"
+        if not path.exists():
+            return {"success": False, "error": "Post not found"}
+        meta, body = parse_frontmatter(path.read_text(encoding="utf-8"))
+        comments = meta.get("comments") or meta.get("addendums") or []
+        meta.pop("addendums", None)
+        comment_id = str(data.get("id") or "")
+        existing = next((c for c in comments if c.get("id") == comment_id), None)
+        if delete:
+            if not existing:
+                return {"success": False, "error": "Comment not found"}
+            comments.remove(existing)
         else:
-            raw_fm = raw_fm.rstrip() + f"\naddendums:\n{new_entry}"
+            comment_body = str(data.get("body") or "").strip()
+            if not comment_body:
+                return {"success": False, "error": "Comment cannot be empty"}
+            if comment_id and not existing:
+                return {"success": False, "error": "Comment not found"}
+            if existing:
+                existing["body"] = comment_body
+            else:
+                existing = {"id": uuid4().hex, "date": datetime.now().strftime("%Y-%m-%d %H:%M"), "body": comment_body}
+                comments.append(existing)
+        meta["comments"] = comments
+        path.write_text(dump_frontmatter(meta, body), encoding="utf-8")
+        ok = run_command(f'"{sys.executable}" tools/build-feed.py')
+        return {"success": ok["success"], "comment": existing if not delete else None, "error": ok["stderr"] if not ok["success"] else ""}
 
-        new_content = f"---{raw_fm}---{body}"
-        file_path.write_text(new_content, encoding="utf-8")
+    def save_comment(self, data):
+        return self.comment_change(data)
 
-        run_command(f'"{sys.executable}" tools/build-feed.py')
-        return {"success": True, "date": date_str}
+    def delete_comment(self, data):
+        return self.comment_change(data, delete=True)
 
     def save_note(self, data):
         title = data.get("title", "").strip()
@@ -387,25 +393,33 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
     </header>
 
     <div class="studio-tabs">
-      <button class="tab-btn active" data-tab="tab-manage">Dispatches Manager</button>
-      <button class="tab-btn" data-tab="tab-composer">Feed Composer</button>
-      <button class="tab-btn" data-tab="tab-addendums">Field Notes &amp; Updates</button>
+      <button class="tab-btn active" data-tab="tab-manage">Posts</button>
+      <button class="tab-btn" data-tab="tab-composer">Post Composer</button>
+      <button class="tab-btn" data-tab="tab-addendums">Comments</button>
       <button class="tab-btn" data-tab="tab-library">Library Notes</button>
       <button class="tab-btn" data-tab="tab-sync">Git &amp; Sync</button>
       <button class="tab-btn" data-tab="tab-obsidian">Obsidian Guide</button>
     </div>
+    <dialog id="feed-option-dialog" class="card" style="padding:var(--s5);width:min(420px,calc(100vw - 2rem));color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:var(--r-card)">
+      <form id="feed-option-form" class="studio-form">
+        <h3 id="feed-option-heading" style="margin:0">Add project</h3>
+        <div class="field"><label for="feed-option-name">Name</label><input id="feed-option-name" maxlength="60" required autocomplete="off"></div>
+        <div class="action-bar"><button type="button" class="btn btn-ghost" id="feed-option-cancel">Cancel</button><button type="submit" class="btn btn-solid">Add</button></div>
+        <span id="feed-option-error" class="stamp" role="status"></span>
+      </form>
+    </dialog>
 
     <!-- TAB 0: DISPATCHES MANAGER -->
     <section id="tab-manage" class="studio-tab-content">
       <div class="card" style="padding:var(--s5)">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--s4);flex-wrap:wrap;gap:var(--s3)">
           <div>
-            <h3 style="margin:0">Dispatches &amp; Timeline Feed</h3>
-            <span class="stamp" id="manage-count">Loading dispatches...</span>
+            <h3 style="margin:0">Posts &amp; Timeline Feed</h3>
+            <span class="stamp" id="manage-count">Loading posts...</span>
           </div>
           <div style="display:flex;gap:var(--s2);align-items:center">
-            <input type="search" id="manage-search" placeholder="Search dispatches, project, tags..." style="padding:6px 12px;border:1px solid var(--line-strong);border-radius:6px;font-size:0.88rem;width:240px"/>
-            <button type="button" class="btn btn-solid" onclick="switchTab('tab-composer'); resetForm();">+ New Dispatch</button>
+            <input type="search" id="manage-search" placeholder="Search posts, project, tags..." style="padding:6px 12px;border:1px solid var(--line-strong);border-radius:6px;font-size:0.88rem;width:240px"/>
+            <button type="button" class="btn btn-solid" onclick="switchTab('tab-composer'); resetForm();">+ New Post</button>
           </div>
         </div>
 
@@ -413,10 +427,7 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
         <div class="status-filter-bar" style="display:flex;gap:var(--s2);margin-bottom:var(--s4);flex-wrap:wrap;align-items:center">
           <span class="eyebrow" style="margin:0">Status Filter:</span>
           <button type="button" class="chip here" data-manage-filter="all" id="mf-all">All (<span id="count-all">0</span>)</button>
-          <button type="button" class="chip" data-manage-filter="in motion" id="mf-in-motion">In Motion (<span id="count-in-motion">0</span>)</button>
-          <button type="button" class="chip" data-manage-filter="done" id="mf-done">Done (<span id="count-done">0</span>)</button>
-          <button type="button" class="chip" data-manage-filter="ahead" id="mf-ahead">Ahead (<span id="count-ahead">0</span>)</button>
-          <button type="button" class="chip" data-manage-filter="shelf" id="mf-shelf">Shelved (<span id="count-shelf">0</span>)</button>
+          <span id="manage-status-filters"></span>
         </div>
 
         <div style="overflow-x:auto">
@@ -428,7 +439,7 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
                 <th>Title</th>
                 <th>Status (Instant Change)</th>
                 <th>Attachments</th>
-                <th>Field Updates</th>
+                <th>Comments</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -447,30 +458,21 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
           <input type="hidden" id="p-id"/>
           <div class="form-row">
             <div class="field" style="grid-column: span 2">
-              <label>Dispatch Title</label>
+              <label>Post Title</label>
               <input type="text" id="p-title" placeholder="e.g. Save Editor: Parsing Sims 1 IFF Chunks" required/>
             </div>
             <div class="field">
               <label>Project</label>
-              <select id="p-project">
-                <option value="Hod">Hod</option>
-                <option value="Attack of the Show">Attack of the Show</option>
-                <option value="Tools">Tools</option>
-                <option value="Research">Research</option>
-                <option value="General">General</option>
-              </select>
+              <select id="p-project"></select>
+              <button type="button" class="btn btn-ghost" data-add-option="project">+ Add project</button>
             </div>
           </div>
 
           <div class="form-row">
             <div class="field">
               <label>Status Pill</label>
-              <select id="p-status">
-                <option value="in motion">in motion</option>
-                <option value="done">done</option>
-                <option value="ahead">ahead</option>
-                <option value="shelf">shelved</option>
-              </select>
+              <select id="p-status"></select>
+              <button type="button" class="btn btn-ghost" data-add-option="status">+ Add status</button>
             </div>
             <div class="field">
               <label>Tags (comma separated)</label>
@@ -500,7 +502,7 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
           </div>
 
           <div class="field">
-            <label>Dispatch Body (Markdown)</label>
+            <label>Post Body (Markdown)</label>
             <div class="split-editor">
               <textarea id="p-body" placeholder="Write in Markdown. Bold **text**, `code`, lists, and quotes work seamlessly..."></textarea>
               <div class="preview-box feed-prose" id="p-preview">
@@ -511,7 +513,7 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
 
           <div class="action-bar">
             <span id="save-msg" class="stamp"></span>
-            <button type="submit" class="btn btn-solid">Save &amp; Publish Dispatch</button>
+            <button type="submit" class="btn btn-solid">Save Post</button>
           </div>
         </form>
       </div>
@@ -520,27 +522,25 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
     <!-- TAB 2: ADDENDUMS -->
     <section id="tab-addendums" class="studio-tab-content" hidden>
       <div class="card" style="padding:var(--s5)">
-        <h3 style="margin-top:0">Append Field Note / Update</h3>
-        <p class="soft">
-          Add timestamped progress logs or follow-ups to an existing dispatch without mutating the original body text.
-        </p>
+        <h3 style="margin-top:0">Post Comments</h3>
+        <p class="soft">Your comments appear with the selected post. Add, edit, or delete them here.</p>
 
         <form id="addendum-form" class="studio-form">
           <div class="field">
-            <label>Select Target Dispatch</label>
+            <label>Select Post</label>
             <select id="a-post-select"></select>
           </div>
 
           <div id="a-existing-list" style="margin:var(--s3) 0"></div>
 
           <div class="field">
-            <label>New Addendum / Field Note</label>
+            <label>New Comment</label>
             <textarea id="a-note" style="min-height:100px" placeholder="e.g. Tested on real save. Verified endianness difference in Mac PowerPC release." required></textarea>
           </div>
 
           <div class="action-bar">
             <span id="addendum-msg" class="stamp"></span>
-            <button type="submit" class="btn btn-solid">Append Field Note</button>
+            <button type="submit" class="btn btn-solid">Add Comment</button>
           </div>
         </form>
       </div>
@@ -623,6 +623,45 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
 
   <script>
     let globalPosts = [];
+    let feedOptions = { projects: [], statuses: [] };
+    const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+    async function loadFeedOptions() {
+      const response = await fetch('/api/feed-options');
+      feedOptions = await response.json();
+      [['p-project', 'projects'], ['p-status', 'statuses']].forEach(([id, key]) => {
+        const select = document.getElementById(id);
+        const previous = select.value;
+        select.innerHTML = feedOptions[key].map(value => `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`).join('');
+        const preferred = key === 'projects' ? 'Hod' : 'in motion';
+        select.value = feedOptions[key].includes(previous) ? previous : (feedOptions[key].includes(preferred) ? preferred : (feedOptions[key][0] || ''));
+      });
+    }
+
+    const optionDialog = document.getElementById('feed-option-dialog');
+    let optionKind = 'project';
+    document.querySelectorAll('[data-add-option]').forEach(button => button.addEventListener('click', () => {
+      optionKind = button.dataset.addOption;
+      document.getElementById('feed-option-heading').textContent = `Add ${optionKind}`;
+      document.getElementById('feed-option-name').value = '';
+      document.getElementById('feed-option-error').textContent = '';
+      optionDialog.showModal();
+      document.getElementById('feed-option-name').focus();
+    }));
+    document.getElementById('feed-option-cancel').addEventListener('click', () => optionDialog.close());
+    document.getElementById('feed-option-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const kind = optionKind;
+      const value = document.getElementById('feed-option-name').value.trim();
+      if (!value) return;
+      const response = await fetch('/api/add-feed-option', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({kind, value}) });
+      const result = await response.json();
+      if (!result.success) { document.getElementById('feed-option-error').textContent = result.error; return; }
+      await loadFeedOptions();
+      document.getElementById(kind === 'project' ? 'p-project' : 'p-status').value = result.value;
+      await loadDispatchesTable();
+      optionDialog.close();
+    });
 
     function switchTab(tabId) {
       document.querySelectorAll('.tab-btn').forEach(b => {
@@ -685,8 +724,8 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
     function resetForm() {
       document.getElementById('p-id').value = '';
       document.getElementById('p-title').value = '';
-      document.getElementById('p-project').value = 'Hod';
-      document.getElementById('p-status').value = 'in motion';
+      document.getElementById('p-project').value = feedOptions.projects.includes('Hod') ? 'Hod' : feedOptions.projects[0];
+      document.getElementById('p-status').value = feedOptions.statuses.includes('in motion') ? 'in motion' : feedOptions.statuses[0];
       document.getElementById('p-tags').value = '';
       document.getElementById('p-date').value = new Date().toISOString().split('T')[0];
       document.getElementById('p-summary').value = '';
@@ -710,6 +749,9 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
       document.getElementById('p-date').value = p.date || '';
       document.getElementById('p-summary').value = p.summary || '';
       document.getElementById('p-body').value = p.body || '';
+      Array.from(document.getElementById('p-related-notes').options).forEach(option => {
+        option.selected = (p.linked_notes || []).some(note => note.path === option.value);
+      });
 
       const attList = document.getElementById('attachments-list');
       attList.innerHTML = '';
@@ -726,7 +768,7 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
       const sel = document.getElementById('a-post-select');
       if (sel) {
         sel.value = postId;
-        renderExistingAddendums();
+        renderExistingComments();
       }
       const noteInput = document.getElementById('a-note');
       if (noteInput) noteInput.focus();
@@ -766,31 +808,28 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
       });
 
       if (!filtered.length) {
-        tbody.innerHTML = '<tr><td colspan="7" class="soft" style="text-align:center;padding:var(--s4)">No dispatches match the current filter.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" class="soft" style="text-align:center;padding:var(--s4)">No posts match the current filter.</td></tr>';
         return;
       }
 
       tbody.innerHTML = filtered.map(p => `
         <tr>
-          <td class="mono" style="font-size:0.84rem;white-space:nowrap">${p.date}</td>
-          <td><b>${p.project}</b></td>
+          <td class="mono" style="font-size:0.84rem;white-space:nowrap">${escapeHtml(p.date)}</td>
+          <td><b>${escapeHtml(p.project)}</b></td>
           <td>
-            <a href="post.html?p=${encodeURIComponent(p.id)}" target="_blank" style="color:var(--ink);text-decoration:none;font-weight:600">${p.title}</a>
-            ${p.summary ? `<p class="soft" style="font-size:0.82rem;margin:2px 0 0">${p.summary}</p>` : ''}
+            <a href="post.html?p=${encodeURIComponent(p.id)}" target="_blank" style="color:var(--ink);text-decoration:none;font-weight:600">${escapeHtml(p.title)}</a>
+            ${p.summary ? `<p class="soft" style="font-size:0.82rem;margin:2px 0 0">${escapeHtml(p.summary)}</p>` : ''}
           </td>
           <td>
-            <select class="pill ${p.status}" onchange="changeStatus('${p.id}', this.value)" style="cursor:pointer;border:none;outline:none" title="Change status instantly">
-              <option value="in motion" ${p.status === 'in motion' ? 'selected' : ''}>in motion</option>
-              <option value="done" ${p.status === 'done' ? 'selected' : ''}>done</option>
-              <option value="ahead" ${p.status === 'ahead' ? 'selected' : ''}>ahead</option>
-              <option value="shelf" ${p.status === 'shelf' ? 'selected' : ''}>shelved</option>
+            <select class="pill" onchange="changeStatus('${p.id}', this.value)" style="cursor:pointer;border:none;outline:none" title="Change status instantly">
+              ${feedOptions.statuses.map(status => `<option value="${escapeHtml(status)}" ${p.status === status ? 'selected' : ''}>${escapeHtml(status)}</option>`).join('')}
             </select>
           </td>
           <td class="stamp">${(p.attachments||[]).length} atts</td>
-          <td class="stamp">${(p.addendums||[]).length} updates</td>
+          <td class="stamp">${(p.comments||[]).length}</td>
           <td style="white-space:nowrap">
             <button type="button" class="btn btn-ghost" style="padding:2px 8px;font-size:0.8rem" onclick="editPost('${p.id}')">Edit</button>
-            <button type="button" class="btn btn-ghost" style="padding:2px 8px;font-size:0.8rem" onclick="quickAddAddendum('${p.id}')">+ Note</button>
+            <button type="button" class="btn btn-ghost" style="padding:2px 8px;font-size:0.8rem" onclick="quickAddAddendum('${p.id}')">Comments</button>
             <a href="post.html?p=${encodeURIComponent(p.id)}" target="_blank" class="btn btn-ghost" style="padding:2px 8px;font-size:0.8rem;text-decoration:none">View ↗</a>
           </td>
         </tr>
@@ -805,32 +844,25 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
 
         // Update counts
         const countAll = globalPosts.length;
-        const countMotion = globalPosts.filter(p => p.status === 'in motion').length;
-        const countDone = globalPosts.filter(p => p.status === 'done').length;
-        const countAhead = globalPosts.filter(p => p.status === 'ahead').length;
-        const countShelf = globalPosts.filter(p => p.status === 'shelf').length;
-
         const countEl = document.getElementById('manage-count');
-        if (countEl) countEl.textContent = `${countAll} total dispatches`;
+        if (countEl) countEl.textContent = `${countAll} total posts`;
 
         if (document.getElementById('count-all')) document.getElementById('count-all').textContent = countAll;
-        if (document.getElementById('count-in-motion')) document.getElementById('count-in-motion').textContent = countMotion;
-        if (document.getElementById('count-done')) document.getElementById('count-done').textContent = countDone;
-        if (document.getElementById('count-ahead')) document.getElementById('count-ahead').textContent = countAhead;
-        if (document.getElementById('count-shelf')) document.getElementById('count-shelf').textContent = countShelf;
+        document.getElementById('manage-status-filters').innerHTML = feedOptions.statuses.map(status =>
+          `<button type="button" class="chip ${activeManageFilter === status ? 'here' : ''}" data-manage-filter="${escapeHtml(status)}">${escapeHtml(status)} (${globalPosts.filter(p => p.status === status).length})</button>`).join(' ');
 
         renderDispatchesTable();
         loadPostsForAddendums();
       } catch(e){}
     }
 
-    document.querySelectorAll('[data-manage-filter]').forEach(btn => {
-      btn.addEventListener('click', () => {
+    document.querySelector('.status-filter-bar').addEventListener('click', (event) => {
+      const btn = event.target.closest('[data-manage-filter]');
+      if (!btn) return;
         document.querySelectorAll('[data-manage-filter]').forEach(b => b.classList.remove('here'));
         btn.classList.add('here');
         activeManageFilter = btn.dataset.manageFilter;
         renderDispatchesTable();
-      });
     });
 
     document.getElementById('manage-search')?.addEventListener('input', (e) => {
@@ -870,7 +902,7 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
     document.getElementById('post-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const saveMsg = document.getElementById('save-msg');
-      saveMsg.textContent = 'Saving dispatch...';
+      saveMsg.textContent = 'Saving post...';
 
       const attRows = Array.from(document.querySelectorAll('.attach-row'));
       const attachments = attRows.map(r => ({
@@ -903,7 +935,7 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
         });
         const data = await res.json();
         if (data.success) {
-          saveMsg.textContent = '✓ Dispatch saved & published!';
+          saveMsg.textContent = '✓ Post saved & published!';
           loadDispatchesTable();
           setTimeout(() => switchTab('tab-manage'), 1200);
         } else {
@@ -927,43 +959,64 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
 
     async function loadPostsForAddendums() {
       const sel = document.getElementById('a-post-select');
+      const previous = sel.value;
       sel.innerHTML = globalPosts.map(p => `
-        <option value="${p.id}">${p.date} — [${p.project}] ${p.title} (${(p.addendums||[]).length} updates)</option>
+        <option value="${escapeHtml(p.id)}">${escapeHtml(p.date)} — [${escapeHtml(p.project)}] ${escapeHtml(p.title)} (${(p.comments||[]).length} ${(p.comments||[]).length === 1 ? 'comment' : 'comments'})</option>
       `).join('');
-      renderExistingAddendums();
+      if (globalPosts.some(p => p.id === previous)) sel.value = previous;
+      renderExistingComments();
     }
 
-    function renderExistingAddendums() {
+    function renderExistingComments() {
       const selId = document.getElementById('a-post-select').value;
       const listEl = document.getElementById('a-existing-list');
       const post = globalPosts.find(p => p.id === selId);
-      if (!post || !post.addendums || !post.addendums.length) {
-        listEl.innerHTML = '<span class="stamp">No existing field notes on this post yet.</span>';
+      if (!post || !post.comments || !post.comments.length) {
+        listEl.innerHTML = '<span class="stamp">No comments on this post yet.</span>';
         return;
       }
-      listEl.innerHTML = '<span class="eyebrow">Existing Addendums:</span><ul style="padding-left:1.2rem;margin:var(--s1) 0" class="soft">' +
-        post.addendums.map(a => `<li><b>${a.date}:</b> ${a.note}</li>`).join('') + '</ul>';
+      listEl.innerHTML = '<span class="eyebrow">Comments</span>' + post.comments.map(c => `
+        <div class="card" style="padding:var(--s3);margin:var(--s2) 0" data-comment-id="${escapeHtml(c.id)}">
+          <span class="stamp">${escapeHtml(c.date)}</span>
+          <textarea style="min-height:80px;margin:var(--s2) 0">${escapeHtml(c.body)}</textarea>
+          <div style="display:flex;gap:var(--s2)"><button type="button" class="btn btn-ghost" data-comment-action="save">Save edit</button>
+          <button type="button" class="btn btn-ghost" data-comment-action="delete">Delete</button></div>
+        </div>`).join('');
     }
 
-    document.getElementById('a-post-select').addEventListener('change', renderExistingAddendums);
+    document.getElementById('a-post-select').addEventListener('change', renderExistingComments);
+    document.getElementById('a-existing-list').addEventListener('click', async (event) => {
+      const button = event.target.closest('[data-comment-action]');
+      if (!button) return;
+      const item = button.closest('[data-comment-id]');
+      const deleting = button.dataset.commentAction === 'delete';
+      if (deleting && !confirm('Delete this comment?')) return;
+      const response = await fetch(deleting ? '/api/delete-comment' : '/api/save-comment', {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ post_id: document.getElementById('a-post-select').value, id: item.dataset.commentId, body: item.querySelector('textarea').value })
+      });
+      const result = await response.json();
+      document.getElementById('addendum-msg').textContent = result.success ? (deleting ? 'Comment deleted.' : 'Comment updated.') : result.error;
+      if (result.success) await loadDispatchesTable();
+    });
 
     document.getElementById('addendum-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const msg = document.getElementById('addendum-msg');
-      msg.textContent = 'Appending update...';
+      msg.textContent = 'Adding comment...';
       const payload = {
         post_id: document.getElementById('a-post-select').value,
-        note: document.getElementById('a-note').value.trim()
+        body: document.getElementById('a-note').value.trim()
       };
       try {
-        const res = await fetch('/api/add-addendum', {
+        const res = await fetch('/api/save-comment', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
         const data = await res.json();
         if (data.success) {
-          msg.textContent = '✓ Field note logged & site rebuilt!';
+          msg.textContent = '✓ Comment added.';
           document.getElementById('a-note').value = '';
           loadDispatchesTable();
         } else {
@@ -991,7 +1044,7 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
     }
 
     document.getElementById('btn-git-commit').addEventListener('click', async () => {
-      const msg = prompt('Commit message:', 'Update feed dispatches & site');
+      const msg = prompt('Commit message:', 'Update posts and site');
       if (!msg) return;
       const res = await fetch('/api/git-commit', {
         method: 'POST',
@@ -1022,7 +1075,7 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
 
     loadStatus();
     loadLibraryOptions();
-    loadDispatchesTable();
+    loadFeedOptions().then(loadDispatchesTable);
   </script>
 </body>
 </html>"""

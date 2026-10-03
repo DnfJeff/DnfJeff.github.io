@@ -1885,6 +1885,8 @@ hr {
 .feed-post.is-active {
   border-color: var(--accent);
 }
+.feed-post { cursor: pointer; }
+.feed-post:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 
 /* Timeline node bullet */
 .feed-post::before {
@@ -2481,7 +2483,9 @@ hr {
     grid-template-columns: 260px minmax(0, 1fr);
   }
   .feed-rail-right {
-    display: none;
+    display: block;
+    position: static;
+    grid-column: 2;
   }
   .feed-inline-addendums {
     display: block !important;
@@ -2501,6 +2505,7 @@ hr {
   .feed-rail-left {
     position: static;
   }
+  .feed-rail-right { grid-column: 1; }
   .feed-track {
     margin-left: 4px;
     padding-left: var(--s4);

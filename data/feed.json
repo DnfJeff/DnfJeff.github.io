@@ -13,8 +13,16 @@
   ],
   "projects": [
     "Attack of the Show",
+    "General",
     "Hod",
+    "Research",
     "Tools"
+  ],
+  "statuses": [
+    "ahead",
+    "done",
+    "in motion",
+    "shelf"
   ],
   "posts": [
     {
@@ -47,14 +55,16 @@
           "caption": "The Hod storage engine proving bit-for-bit idempotency across save files."
         }
       ],
-      "addendums": [
+      "comments": [
         {
+          "id": "a69dbec65f1d47c4ae94967949e6f832",
           "date": "2026-10-02 21:40",
-          "note": "Ran the parser across 40 user saves from the Livin' Large expansion. Zero chunk pointer drift detected."
+          "body": "Ran the parser across 40 user saves from the Livin' Large expansion. Zero chunk pointer drift detected."
         },
         {
+          "id": "3c84fd74d9b947aea1c233751119e069",
           "date": "2026-10-03 09:15",
-          "note": "Confirmed Mac PowerPC legacy releases store chunk sizes in big-endian notation while x86 PC builds use little-endian. Adding a dual-endian codec pass to the ingest pipeline."
+          "body": "Confirmed Mac PowerPC legacy releases store chunk sizes in big-endian notation while x86 PC builds use little-endian. Adding a dual-endian codec pass to the ingest pipeline."
         }
       ],
       "linked_notes": [
@@ -95,10 +105,11 @@
           "caption": "Reconstructed air-date metadata matching commercial break markers."
         }
       ],
-      "addendums": [
+      "comments": [
         {
+          "id": "5c03219c2f624f779277a326eb86fb33",
           "date": "2026-09-25 14:10",
-          "note": "Archivist community confirmed the July 14, 2006 Comic-Con special was originally broadcast live as a double-length slot."
+          "body": "Archivist community confirmed the July 14, 2006 Comic-Con special was originally broadcast live as a double-length slot."
         }
       ],
       "linked_notes": []
@@ -125,10 +136,11 @@
           "caption": "32-bit toolchain integration for legacy Sims 1 career tables."
         }
       ],
-      "addendums": [
+      "comments": [
         {
+          "id": "ebecd727aafa4a8ca9d5f1cd1c669a3d",
           "date": "2026-09-15 16:30",
-          "note": "Added automatic GUID conflict detection against the standard Maxis career ID registry."
+          "body": "Added automatic GUID conflict detection against the standard Maxis career ID registry."
         }
       ],
       "linked_notes": [
