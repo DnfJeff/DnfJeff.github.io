@@ -2224,91 +2224,80 @@ hr {
 }
 
 /* Projects Navigation in Feed Sidebar */
-.project-nav-row {
+.project-nav-list {
   display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: var(--s2);
+  flex-direction: column;
+  gap: var(--s2);
 }
 
-.project-nav-btn {
+.project-nav-link {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex: 1;
-  min-width: 0;
-  padding: 7px 12px;
+  width: 100%;
+  padding: 10px 14px;
   border: 1px solid var(--line);
   border-radius: var(--r-card);
   background: var(--surface);
   color: var(--ink);
-  cursor: pointer;
-  text-align: left;
-  font-family: inherit;
-  font-size: 0.88rem;
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 500;
   transition: border-color var(--t-fast) var(--ease),
     background var(--t-fast) var(--ease),
-    color var(--t-fast) var(--ease);
+    color var(--t-fast) var(--ease),
+    transform var(--t-fast) var(--ease);
 }
 
-.project-nav-btn:hover {
+.project-nav-link:hover {
   border-color: var(--line-strong);
   background: var(--surface-2);
+  color: var(--ink);
+  text-decoration: none;
+  transform: translateX(2px);
 }
 
-.project-nav-btn.here {
+.project-nav-link.active {
   background: var(--accent-wash);
   border-color: var(--accent);
   color: var(--accent-ink);
   font-weight: 600;
 }
 
-.project-nav-name {
+.project-nav-link .project-nav-title {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  padding-right: 4px;
 }
 
-.project-nav-count {
+.project-nav-link .project-nav-count {
   font-family: var(--mono);
   font-size: 0.72rem;
   background: var(--code-bg);
-  padding: 1px 7px;
-  border-radius: 10px;
+  padding: 2px 8px;
+  border-radius: 12px;
   color: var(--ink-faint);
   flex: none;
+  margin-left: var(--s2);
 }
 
-.project-nav-btn.here .project-nav-count {
-  background: color-mix(in srgb, var(--accent) 20%, transparent);
+.project-nav-link.active .project-nav-count {
+  background: color-mix(in srgb, var(--accent) 25%, transparent);
   color: var(--accent-ink);
 }
 
-.project-panel-link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 7px 9px;
-  border: 1px solid var(--line);
-  border-radius: var(--r-card);
-  background: var(--surface);
-  color: var(--ink-soft);
+.project-nav-link .project-nav-arrow {
   font-family: var(--mono);
-  font-size: 0.72rem;
-  text-decoration: none;
-  white-space: nowrap;
+  font-size: 0.85rem;
+  color: var(--ink-faint);
+  transition: transform var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
   flex: none;
-  transition: border-color var(--t-fast) var(--ease),
-    color var(--t-fast) var(--ease),
-    background var(--t-fast) var(--ease);
+  margin-left: var(--s2);
 }
 
-.project-panel-link:hover {
-  border-color: var(--accent);
-  color: var(--accent-ink);
-  background: var(--surface-2);
-  text-decoration: none;
+.project-nav-link:hover .project-nav-arrow {
+  color: var(--accent);
+  transform: translateX(3px);
 }
 
 /* Unified Media & Drawing Inspector Modal */

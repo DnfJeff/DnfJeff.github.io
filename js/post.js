@@ -282,7 +282,7 @@
           if (isDrawing) {
             return `
               <div class="attach-card is-drawing" role="button" tabindex="0" data-idx="${idx}">
-                <div class="attach-preview" style="aspect-ratio: 16/10">
+                <div class="attach-preview" style="aspect-ratio: 16/10; pointer-events: none">
                   <span class="attach-badge">Vector Drawing</span>
                   ${att.svg_inline || ""}
                 </div>
@@ -294,7 +294,7 @@
           } else {
             return `
               <div class="attach-card" role="button" tabindex="0" data-idx="${idx}">
-                <div class="attach-preview" style="aspect-ratio: 16/10">
+                <div class="attach-preview" style="aspect-ratio: 16/10; pointer-events: none">
                   <span class="attach-badge">Image</span>
                   <img src="${esc(att.file)}" alt="${esc(title)}" loading="lazy">
                 </div>

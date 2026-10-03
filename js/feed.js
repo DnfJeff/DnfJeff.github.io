@@ -137,7 +137,7 @@
 
   /* --------------------------------------------------- attachments tray */
 
-  function renderAttachments(attachments) {
+  function renderAttachments(attachments, postId) {
     if (!attachments || !attachments.length) return "";
 
     const count = attachments.length;
@@ -152,8 +152,8 @@
         if (isDrawing) {
           const svgContent = att.svg_inline || "";
           return `
-            <div class="attach-card is-drawing" role="button" tabindex="0" data-att-idx="${idx}" data-drawing-file="${esc(att.file)}" title="Click to zoom and pan drawing">
-              <div class="attach-preview">
+            <div class="attach-card is-drawing" role="button" tabindex="0" data-post-id="${esc(postId)}" data-idx="${idx}" title="Click to zoom and pan drawing">
+              <div class="attach-preview" style="pointer-events:none">
                 <span class="attach-badge">Vector Drawing</span>
                 ${svgContent}
               </div>
@@ -164,8 +164,8 @@
             </div>`;
         } else {
           return `
-            <div class="attach-card" role="button" tabindex="0" data-att-idx="${idx}" data-img-file="${esc(att.file)}" title="Click to open image">
-              <div class="attach-preview">
+            <div class="attach-card" role="button" tabindex="0" data-post-id="${esc(postId)}" data-idx="${idx}" title="Click to inspect image">
+              <div class="attach-preview" style="pointer-events:none">
                 <span class="attach-badge">Image</span>
                 <img src="${esc(att.file)}" alt="${esc(title)}" loading="lazy">
               </div>
@@ -348,7 +348,7 @@
         </div>
 
         ${renderLibraryInterplay(post.linked_notes)}
-        ${renderAttachments(post.attachments)}
+        ${renderAttachments(post.attachments, post.id)}
         ${renderInlineAddendums(post.addendums)}
 
         <div class="feed-post-foot">
@@ -370,18 +370,10 @@
     if (activeProject !== "all" && p.project.toLowerCase() !== activeProject.toLowerCase()) {
       return false;
     }
-    if (activeStatus !== "all" && (p.status || "").toLowerCase() !== activeStatus.toLowerCase()) {
-      return false;
-    }
-    if (activeTag !== "all" && !(p.tags || []).some((t) => t.toLowerCase() === activeTag.toLowerCase())) {
-      return false;
-    }
-
     if (searchQuery) {
       const haystack = `${p.title} ${p.summary} ${p.body} ${(p.tags || []).join(" ")} ${p.project}`.toLowerCase();
       if (!haystack.includes(searchQuery.toLowerCase())) return false;
     }
-
     return true;
   }
 
@@ -418,8 +410,6 @@
 
   function resetFilters() {
     activeProject = "all";
-    activeStatus = "all";
-    activeTag = "all";
     searchQuery = "";
     const searchInput = $("#feed-search");
     if (searchInput) searchInput.value = "";
@@ -432,46 +422,21 @@
   function renderLeftRail() {
     if (!leftRailEl || !feedData) return;
 
-    // Projects list with links to dedicated panels
+    // Real, direct Projects navigation links
     const projectsList = [
-      { id: "all", name: "All Projects", count: feedData.posts.length },
-      { id: "Hod", name: "Hod (Sims 1 Tools)", count: feedData.posts.filter((p) => p.project === "Hod").length, panelUrl: "hod.html" },
-      { id: "Attack of the Show", name: "Attack of the Show", count: feedData.posts.filter((p) => p.project === "Attack of the Show").length, panelUrl: "aots.html" },
-      { id: "Tools", name: "Tools & Reverse Eng.", count: feedData.posts.filter((p) => p.project === "Tools").length, panelUrl: "about.html#tools" },
+      { id: "all", name: "All Feed Dispatches", count: feedData.posts.length, url: "feed.html", isHome: true },
+      { id: "Hod", name: "Hod (Sims 1 Tools)", count: feedData.posts.filter((p) => p.project === "Hod").length, url: "hod.html" },
+      { id: "Attack of the Show", name: "Attack of the Show", count: feedData.posts.filter((p) => p.project === "Attack of the Show").length, url: "aots.html" },
+      { id: "Tools", name: "Tools & Reverse Eng.", count: feedData.posts.filter((p) => p.project === "Tools").length, url: "about.html#tools" },
     ];
 
-    const projectItems = projectsList
+    const projectNavLinks = projectsList
       .map(
         (proj) => `
-        <div class="project-nav-row">
-          <button type="button" class="project-nav-btn${activeProject.toLowerCase() === proj.id.toLowerCase() ? " here" : ""}" data-feed-project="${esc(proj.id)}">
-            <span class="project-nav-name">${esc(proj.name)}</span>
-            <span class="project-nav-count">${proj.count}</span>
-          </button>
-          ${proj.panelUrl ? `<a href="${esc(proj.panelUrl)}" title="Visit dedicated ${esc(proj.name)} panel" class="project-panel-link">Panel ↗</a>` : ""}
-        </div>`
-      )
-      .join("");
-
-    // Status items (instant 1-click filter)
-    const statuses = ["all", "in motion", "done", "ahead"];
-    const statusButtons = statuses
-      .map(
-        (st) => `
-        <button type="button" class="chip${activeStatus.toLowerCase() === st.toLowerCase() ? " here" : ""}" data-feed-status="${esc(st)}">
-          ${st === "all" ? "All Statuses" : esc(st)}
-        </button>`
-      )
-      .join("");
-
-    // Tags (instant 1-click filter)
-    const tags = feedData.tags || [];
-    const tagChips = tags
-      .map(
-        (t) => `
-        <button type="button" class="tag${activeTag.toLowerCase() === t.toLowerCase() ? " here" : ""}" data-feed-tag="${esc(t)}">
-          ${esc(t)}
-        </button>`
+        <a href="${esc(proj.url)}" class="project-nav-link${proj.isHome ? " active" : ""}">
+          <span class="project-nav-title">${esc(proj.name)}</span>
+          ${proj.isHome ? `<span class="project-nav-count">${proj.count}</span>` : `<span class="project-nav-arrow">→</span>`}
+        </a>`
       )
       .join("");
 
@@ -486,23 +451,10 @@
       </div>
 
       <div class="card" style="padding:var(--s4)">
-        <p class="eyebrow" style="margin:0 0 var(--s2)">Projects</p>
-        ${projectItems}
-      </div>
-
-      <div class="card" style="padding:var(--s4)">
-        <p class="eyebrow" style="margin:0 0 var(--s2)">Filter by Status</p>
-        <div class="chiprow" style="margin:0">
-          ${statusButtons}
-        </div>
-      </div>
-
-      <div class="card" style="padding:var(--s4)">
-        <p class="eyebrow" style="margin:0 0 var(--s2)">Topics &amp; Tags</p>
-        <div class="chiprow" style="margin:0">
-          <button type="button" class="tag${activeTag === "all" ? " here" : ""}" data-feed-tag="all">All</button>
-          ${tagChips}
-        </div>
+        <p class="eyebrow" style="margin:0 0 var(--s3)">Projects</p>
+        <nav class="project-nav-list" aria-label="Projects">
+          ${projectNavLinks}
+        </nav>
       </div>`;
   }
 
@@ -519,13 +471,13 @@
   }
 
   function openInspector(title, caption, type, content) {
-    const modal = $("#inspector-modal");
+    const modal = document.getElementById("inspector-modal");
     if (!modal) return;
 
-    const titleEl = $("#inspector-title");
-    const capEl = $("#inspector-cap");
-    const badgeEl = $("#inspector-badge");
-    const canvasEl = $("#inspector-canvas");
+    const titleEl = document.getElementById("inspector-title");
+    const capEl = document.getElementById("inspector-cap");
+    const badgeEl = document.getElementById("inspector-badge");
+    const canvasEl = document.getElementById("inspector-canvas");
 
     if (titleEl) titleEl.textContent = title || (type === "drawing" ? "Vector Drawing" : "Image Capture");
     if (capEl) capEl.textContent = caption || "";
@@ -548,11 +500,11 @@
   }
 
   function closeInspector() {
-    const modal = $("#inspector-modal");
+    const modal = document.getElementById("inspector-modal");
     if (!modal) return;
     modal.hidden = true;
     document.body.style.overflow = "";
-    const canvasEl = $("#inspector-canvas");
+    const canvasEl = document.getElementById("inspector-canvas");
     if (canvasEl) canvasEl.innerHTML = "";
   }
 
@@ -568,70 +520,32 @@
       });
     }
 
-    // Left Rail clicks (delegated)
-    leftRailEl?.addEventListener("click", (e) => {
-      // Don't intercept dedicated external panel links
-      if (e.target.closest(".project-panel-link")) return;
+    // Attachment inspection click: attached to document for 100% reliable trigger
+    document.addEventListener("click", (e) => {
+      const attachCard = e.target.closest(".attach-card");
+      if (!attachCard) return;
 
-      const projBtn = e.target.closest("[data-feed-project]");
-      if (projBtn) {
-        activeProject = projBtn.dataset.feedProject;
-        renderLeftRail();
-        renderStream();
-        return;
-      }
+      e.preventDefault();
+      e.stopPropagation();
 
-      const statusBtn = e.target.closest("[data-feed-status]");
-      if (statusBtn) {
-        activeStatus = statusBtn.dataset.feedStatus;
-        renderLeftRail();
-        renderStream();
-        return;
-      }
+      const postId = attachCard.dataset.postId;
+      const idx = parseInt(attachCard.dataset.idx, 10);
+      const post = (feedData && feedData.posts ? feedData.posts : []).find((p) => p.id === postId);
+      const att = post && post.attachments ? post.attachments[idx] : null;
 
-      const tagBtn = e.target.closest("[data-feed-tag]");
-      if (tagBtn) {
-        activeTag = tagBtn.dataset.feedTag;
-        renderLeftRail();
-        renderStream();
-        return;
+      if (att) {
+        const isDrawing = att.type === "drawing" || (att.file && att.file.endsWith(".excalidraw"));
+        if (isDrawing) {
+          openInspector(att.title || "Vector Drawing", att.caption, "drawing", att.svg_inline);
+        } else {
+          openInspector(att.title || "Image Capture", att.caption, "image", att.file);
+        }
       }
     });
 
     // Stream clicks (delegated)
     streamEl.addEventListener("click", (e) => {
-      // 1. Attachment inspection click (both drawings and images)
-      const attachCard = e.target.closest(".attach-card");
-      if (attachCard) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        const postCard = attachCard.closest(".feed-post");
-        const post = (feedData.posts || []).find((p) => p.id === postCard?.id);
-        const idx = parseInt(attachCard.dataset.attIdx, 10);
-        const att = post && post.attachments ? post.attachments[idx] : null;
-
-        if (att) {
-          const isDrawing = att.type === "drawing" || (att.file && att.file.endsWith(".excalidraw"));
-          if (isDrawing) {
-            openInspector(att.title || "Vector Drawing", att.caption, "drawing", att.svg_inline);
-          } else {
-            openInspector(att.title || "Image Capture", att.caption, "image", att.file);
-          }
-        }
-        return;
-      }
-
-      // 2. Tag click inside post
-      const tagBtn = e.target.closest("[data-feed-tag]");
-      if (tagBtn) {
-        activeTag = tagBtn.dataset.feedTag;
-        renderLeftRail();
-        renderStream();
-        return;
-      }
-
-      // 3. Click post to activate it in right rail
+      // Click post to activate it in right rail
       const postCard = e.target.closest(".feed-post");
       if (postCard && !e.target.closest("a, button, input, .attach-card")) {
         const id = postCard.id;
