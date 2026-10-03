@@ -3,11 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Feed &amp; Dispatches — DNF</title>
-    <meta
-      name="description"
-      content="Handcrafted dispatches, reverse engineering progress, archival finds, drawings and field notes by Jeff Adkins."
-    />
+    <title>Dispatch — The Feed — DNF</title>
+    <meta name="description" content="A dispatch from the DNF feed and timeline." />
     <meta name="theme-color" content="#e8551d" />
     <link rel="icon" href="favicon.ico" sizes="32x32" />
     <link rel="icon" href="assets/web/icon.png" type="image/png" />
@@ -51,50 +48,61 @@
       </div>
     </header>
 
-    <main id="main">
-      <!-- ===================================================== header -->
-      <section class="wrap" style="padding-block: var(--s8) var(--s5)">
-        <p class="eyebrow">Timeline &amp; field dispatches</p>
-        <h1 style="font-size: clamp(2.2rem, 5.4vw, 3.4rem); margin-bottom: var(--s3)">
-          The Feed
-        </h1>
-        <p style="max-width: 62ch; font-size: 1.08rem" class="soft">
-          Handcrafted dispatches, reverse engineering breakthroughs, archival finds,
-          and vector diagrams. Updates and field notes are appended chronologically.
-        </p>
-      </section>
+    <main id="main" class="feed-wrap" style="padding-block: var(--s7) var(--s9)">
+      <p class="stamp">
+        <a href="feed.html" style="text-decoration: none">The Feed</a>
+        <span aria-hidden="true"> / </span><span id="post-crumb">Dispatch</span>
+      </p>
 
-      <!-- ================================================= search / status -->
-      <section class="wrap" style="padding-bottom: var(--s4)">
-        <div class="lede" style="margin-bottom: var(--s3); align-items: center">
-          <label class="searchbox" style="max-width: 32rem; flex: 1">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <circle cx="11" cy="11" r="6.4" /><path d="m16 16 4.2 4.2" />
-            </svg>
-            <input id="feed-search" type="search" placeholder="Search dispatches, tags, notes…" aria-label="Search feed" />
-          </label>
-          <p class="stamp" id="feed-count"></p>
+      <header style="margin: var(--s4) 0 var(--s6); max-width: 900px">
+        <div style="display:flex;align-items:center;gap:var(--s3);margin-bottom:var(--s2);flex-wrap:wrap">
+          <span class="eyebrow" id="post-project" style="margin:0">Dispatch</span>
+          <span class="pill here" id="post-status">in motion</span>
         </div>
-      </section>
+        <h1 id="post-title" style="font-size: clamp(2rem, 5vw, 3rem); margin-bottom: var(--s3)">Loading…</h1>
+        <p class="stamp" id="post-meta"></p>
+        <div class="chiprow" id="post-tags" style="margin-top: var(--s3)"></div>
+      </header>
 
-      <!-- ================================================ 3-column layout -->
-      <div class="feed-wrap" style="padding-bottom: var(--s9)">
-        <div class="feed-layout">
-          <!-- Left Rail: Filters, Bio & Categories -->
-          <aside class="feed-rail-left" id="feed-rail-left"></aside>
+      <div class="post-page-layout">
+        <!-- Main reading body & attachments -->
+        <article class="feed-prose" style="font-size:1.05rem" id="post-body">
+          <p class="soft">Fetching the dispatch…</p>
+        </article>
 
-          <!-- Center Stream: Connected Timeline -->
-          <section class="feed-stream" id="feed-stream">
-            <div class="empty"><p>Loading the feed…</p></div>
-          </section>
+        <!-- Sidebar: Field Notes, Linked Library Notes, Project Info -->
+        <aside class="post-page-sidebar">
+          <div class="card" id="post-addendums-card" style="padding:var(--s4)">
+            <p class="eyebrow" style="margin:0 0 var(--s2)">Field Notes &amp; Updates</p>
+            <div class="addendum-track" id="post-addendums-track">
+              <p class="soft" style="font-size:0.86rem;margin:0">No addendums on this dispatch.</p>
+            </div>
+          </div>
 
-          <!-- Right Rail: Dedicated Author Addendums & Logs -->
-          <aside class="feed-rail-right" id="feed-rail-right"></aside>
-        </div>
+          <div id="post-library-container"></div>
+
+          <div class="card" style="padding:var(--s4)">
+            <p class="eyebrow" style="margin:0 0 var(--s2)">Navigation</p>
+            <a href="feed.html" class="tile-go" style="margin:0">← Back to Timeline Stream</a>
+          </div>
+        </aside>
       </div>
-    </main>
 
-    <!-- ==================================================== modals -->
+      <!-- Full-bleed Attachments & Drawing Gallery -->
+      <section class="post-gallery-full" id="post-gallery-section" hidden>
+        <div class="lede">
+          <div>
+            <p class="eyebrow">Attached Artifacts &amp; Media</p>
+            <h2>Drawings &amp; Captures</h2>
+          </div>
+          <span class="stamp">Click any item to inspect in full resolution</span>
+        </div>
+        <div class="attach-grid grid-3" id="post-gallery-grid"></div>
+      </section>
+
+      <!-- Next / Prev Pager -->
+      <nav class="grid grid-2" id="post-pager" style="margin-top: var(--s8)" aria-label="More dispatches"></nav>
+    </main>
 
     <!-- Excalidraw Vector Viewer Modal -->
     <div class="drawing-modal" id="drawing-modal" hidden role="dialog" aria-modal="true" aria-label="Drawing inspector">
@@ -112,16 +120,6 @@
       </div>
       <div class="drawing-modal-body">
         <div class="drawing-canvas" id="drawing-canvas"></div>
-      </div>
-    </div>
-
-    <!-- Full Post Reader Modal -->
-    <div class="post-reader-modal" id="post-reader-modal" hidden role="dialog" aria-modal="true" aria-label="Post reader">
-      <div class="post-reader-box">
-        <button type="button" class="iconbtn" data-close-reader aria-label="Close reader" style="position:absolute;top:var(--s4);right:var(--s4)">
-          ✕
-        </button>
-        <div id="post-reader-content"></div>
       </div>
     </div>
 
@@ -184,7 +182,7 @@
     </div>
 
     <script src="js/site.js?v=2"></script>
-    <script src="js/feed.js?v=2"></script>
+    <script src="js/post.js?v=2"></script>
     <script>
       document.getElementById("year").textContent = new Date().getFullYear();
     </script>

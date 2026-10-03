@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-DNF Content Studio — Local Site Manager
+DNF Content Studio — Local Site Manager (Pass 2)
 A lightweight, offline browser-based dashboard for managing Feed dispatches,
-author addendums, library writings, Excalidraw attachments, and one-click
-site rebuilds.
+surfacing In-Motion / Done tags, author addendums, library writings,
+Excalidraw attachments, and one-click site rebuilds.
 
 Run:
     python tools/studio.py
@@ -70,6 +70,11 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
         elif url.path == "/api/posts":
             self.send_json(self.get_posts())
             return
+        elif url.path == "/api/get-post":
+            params = urllib.parse.parse_qs(url.query)
+            p_id = params.get("id", [""])[0]
+            self.send_json(self.get_single_post(p_id))
+            return
         elif url.path == "/api/library":
             self.send_json(self.get_library())
             return
@@ -77,7 +82,6 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
             self.send_html(self.render_dashboard())
             return
 
-        # Serve static repository files (e.g. previewing site, css, assets)
         super().do_GET()
 
     def do_POST(self):
@@ -96,6 +100,8 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
             self.send_json({"success": ok, "message": msg})
         elif url.path == "/api/save-post":
             self.send_json(self.save_post(data))
+        elif url.path == "/api/update-status":
+            self.send_json(self.update_status(data))
         elif url.path == "/api/add-addendum":
             self.send_json(self.add_addendum(data))
         elif url.path == "/api/save-note":
@@ -169,6 +175,13 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
                 pass
         return {"posts": [], "count": 0}
 
+    def get_single_post(self, post_id):
+        feed = self.get_posts()
+        for p in feed.get("posts", []):
+            if p.get("id") == post_id:
+                return {"success": True, "post": p}
+        return {"success": False, "error": "Post not found"}
+
     def get_library(self):
         lib_file = DATA / "library.json"
         if lib_file.exists():
@@ -177,6 +190,26 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
             except Exception:
                 pass
         return {"entries": [], "count": 0}
+
+    def update_status(self, data):
+        post_id = data.get("post_id")
+        new_status = data.get("status")
+        if not post_id or not new_status:
+            return {"success": False, "error": "post_id and status required"}
+
+        file_path = POSTS / f"{post_id}.md"
+        if not file_path.exists():
+            return {"success": False, "error": "File not found"}
+
+        content = file_path.read_text(encoding="utf-8")
+        if re.search(r"status:\s*.*", content):
+            content = re.sub(r'status:\s*["\']?.*?["\']?\n', f'status: "{new_status}"\n', content, count=1)
+        else:
+            content = re.sub(r"---\n", f'---\nstatus: "{new_status}"\n', content, count=1)
+
+        file_path.write_text(content, encoding="utf-8")
+        run_command(f'"{sys.executable}" tools/build-feed.py')
+        return {"success": True, "status": new_status}
 
     def save_post(self, data):
         title = data.get("title", "").strip()
@@ -203,7 +236,6 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
             "addendums": data.get("addendums") or [],
         }
 
-        # Format YAML frontmatter
         body = data.get("body", "").strip()
         raw_lines = ["---"]
         for k, v in frontmatter.items():
@@ -232,7 +264,6 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
         POSTS.mkdir(parents=True, exist_ok=True)
         file_path.write_text("\n".join(raw_lines), encoding="utf-8")
 
-        # Auto rebuild feed
         run_command(f'"{sys.executable}" tools/build-feed.py')
         return {"success": True, "id": post_id, "path": file_path.as_posix()}
 
@@ -251,19 +282,16 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
             data.get("date") or datetime.now().strftime("%Y-%m-%d %H:%M")
         )
 
-        # Parse frontmatter and append addendum
         parts = content.split("---", 2)
         if len(parts) < 3:
             return {"success": False, "error": "Invalid frontmatter in post"}
 
-        # We will parse via regex/yaml
         raw_fm = parts[1]
         body = parts[2]
 
         new_entry = f'  - date: "{date_str}"\n    note: "{note_text}"\n'
 
         if "addendums:" in raw_fm:
-            # append to addendums
             raw_fm = re.sub(
                 r"(addendums:\s*(\[\])?)", r"addendums:\n" + new_entry, raw_fm
             )
@@ -273,7 +301,6 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
         new_content = f"---{raw_fm}---{body}"
         file_path.write_text(new_content, encoding="utf-8")
 
-        # Auto rebuild feed
         run_command(f'"{sys.executable}" tools/build-feed.py')
         return {"success": True, "date": date_str}
 
@@ -303,7 +330,6 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
 
         file_path.write_text(content, encoding="utf-8")
 
-        # Auto rebuild library
         run_command(f'"{sys.executable}" tools/build-library.py')
         return {"success": True, "path": file_path.as_posix()}
 
@@ -314,26 +340,29 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>DNF Content Studio</title>
-  <link rel="stylesheet" href="css/site.css?v=1"/>
+  <link rel="stylesheet" href="css/site.css?v=2"/>
   <style>
-    .studio-container { max-width: 1200px; margin: var(--s5) auto; padding: 0 var(--s5); }
+    .studio-container { max-width: 1320px; margin: var(--s5) auto; padding: 0 var(--s5); }
     .studio-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); padding-bottom: var(--s4); margin-bottom: var(--s5); flex-wrap: wrap; gap: var(--s3); }
-    .studio-tabs { display: flex; gap: var(--s2); margin-bottom: var(--s5); }
-    .tab-btn { font-family: var(--display); font-size: 1.1rem; padding: var(--s2) var(--s4); border: 1px solid var(--line); background: var(--surface); border-radius: var(--r-card); cursor: pointer; color: var(--ink); }
+    .studio-tabs { display: flex; gap: var(--s2); margin-bottom: var(--s5); flex-wrap: wrap; }
+    .tab-btn { font-family: var(--display); font-size: 1.05rem; padding: var(--s2) var(--s4); border: 1px solid var(--line); background: var(--surface); border-radius: var(--r-card); cursor: pointer; color: var(--ink); }
     .tab-btn.active { background: var(--accent-wash); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
     .studio-form { display: grid; gap: var(--s4); }
-    .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--s4); }
+    .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--s4); }
     .field { display: flex; flex-direction: column; gap: var(--s1); }
     .field label { font-family: var(--mono); font-size: 0.76rem; text-transform: uppercase; color: var(--ink-faint); font-weight: 600; }
     .field input, .field select, .field textarea { padding: var(--s3); border: 1px solid var(--line-strong); border-radius: 6px; font-family: inherit; font-size: 0.95rem; background: var(--surface); color: var(--ink); }
-    .field textarea { font-family: var(--mono); font-size: 0.9rem; line-height: 1.5; min-height: 220px; }
+    .field textarea { font-family: var(--mono); font-size: 0.9rem; line-height: 1.5; min-height: 240px; }
     .split-editor { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s4); }
-    .preview-box { border: 1px solid var(--line); border-radius: 6px; padding: var(--s4); background: var(--surface); overflow-y: auto; max-height: 380px; }
-    .attach-row { display: flex; gap: var(--s2); align-items: center; margin-top: var(--s2); }
+    .preview-box { border: 1px solid var(--line); border-radius: 6px; padding: var(--s4); background: var(--surface); overflow-y: auto; max-height: 400px; }
+    .attach-row { display: flex; gap: var(--s2); align-items: center; margin-top: var(--s2); flex-wrap: wrap; }
     .status-badge { display: inline-flex; align-items: center; gap: var(--s2); padding: var(--s1) var(--s3); border-radius: var(--r-pill); font-family: var(--mono); font-size: 0.78rem; background: var(--surface-2); border: 1px solid var(--line); }
     .status-badge.clean { color: var(--done); border-color: var(--done); }
     .status-badge.dirty { color: var(--brand); border-color: var(--brand); }
     .action-bar { display: flex; gap: var(--s3); align-items: center; justify-content: flex-end; margin-top: var(--s4); }
+    .post-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+    .post-table th, .post-table td { padding: var(--s3); border-bottom: 1px solid var(--line); text-align: left; }
+    .post-table th { font-family: var(--mono); font-size: 0.76rem; text-transform: uppercase; color: var(--ink-faint); }
   </style>
 </head>
 <body>
@@ -345,23 +374,57 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
       </div>
       <div style="display:flex;align-items:center;gap:var(--s3)">
         <span id="git-indicator" class="status-badge clean">Git: Clean</span>
-        <button type="button" class="btn btn-solid" id="btn-rebuild-all">⚡ Rebuild Site</button>
-        <a href="feed.html" target="_blank" class="btn btn-ghost">Preview Feed ↗</a>
+        <button type="button" class="btn btn-solid" id="btn-rebuild-all">⚡ Rebuild All</button>
+        <a href="feed.html" target="_blank" class="btn btn-ghost">Open Feed ↗</a>
       </div>
     </header>
 
     <div class="studio-tabs">
-      <button class="tab-btn active" data-tab="tab-composer">Feed Composer</button>
-      <button class="tab-btn" data-tab="tab-addendums">Addendums & Field Logs</button>
+      <button class="tab-btn active" data-tab="tab-manage">Dispatches Manager</button>
+      <button class="tab-btn" data-tab="tab-composer">Feed Composer</button>
+      <button class="tab-btn" data-tab="tab-addendums">Field Notes &amp; Updates</button>
       <button class="tab-btn" data-tab="tab-library">Library Notes</button>
-      <button class="tab-btn" data-tab="tab-sync">Git & Sync</button>
+      <button class="tab-btn" data-tab="tab-sync">Git &amp; Sync</button>
       <button class="tab-btn" data-tab="tab-obsidian">Obsidian Guide</button>
     </div>
 
+    <!-- TAB 0: DISPATCHES MANAGER -->
+    <section id="tab-manage" class="studio-tab-content">
+      <div class="card" style="padding:var(--s5)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--s4);flex-wrap:wrap;gap:var(--s2)">
+          <div>
+            <h3 style="margin:0">All Published Dispatches</h3>
+            <span class="stamp" id="manage-count">Loading dispatches...</span>
+          </div>
+          <button type="button" class="btn btn-solid" onclick="switchTab('tab-composer'); resetForm();">+ New Dispatch</button>
+        </div>
+
+        <div style="overflow-x:auto">
+          <table class="post-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Project</th>
+                <th>Title</th>
+                <th>Status (Click to toggle)</th>
+                <th>Media</th>
+                <th>Notes</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="dispatches-table-body">
+              <tr><td colspan="7" class="soft">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
     <!-- TAB 1: FEED COMPOSER -->
-    <section id="tab-composer" class="studio-tab-content">
+    <section id="tab-composer" class="studio-tab-content" hidden>
       <div class="card" style="padding:var(--s5)">
         <form id="post-form" class="studio-form">
+          <input type="hidden" id="p-id"/>
           <div class="form-row">
             <div class="field" style="grid-column: span 2">
               <label>Dispatch Title</label>
@@ -406,11 +469,7 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
 
           <div class="field">
             <label>Link to Library Notes</label>
-            <select id="p-related-notes" multiple style="min-height:90px">
-              <option value="notes/projects/SaveEditorPlans.md">Save Editor — Legacy vs. Original File Structures</option>
-              <option value="notes/projects/Career Creator 3 DOC.html">Career Creator 3 Documentation</option>
-              <option value="notes/sims-guides/Sims1FullChecklist.html">Sims 1 Full Checklist</option>
-            </select>
+            <select id="p-related-notes" multiple style="min-height:90px"></select>
             <span class="stamp">Hold Ctrl / Cmd to select multiple notes</span>
           </div>
 
@@ -543,20 +602,23 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
   </div>
 
   <script>
-    // Tab switching
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.studio-tab-content').forEach(c => c.hidden = true);
-        btn.classList.add('active');
-        document.getElementById(btn.dataset.tab).hidden = false;
+    let globalPosts = [];
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.tab === tabId);
       });
+      document.querySelectorAll('.studio-tab-content').forEach(c => c.hidden = true);
+      const target = document.getElementById(tabId);
+      if (target) target.hidden = false;
+    }
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => switchTab(btn.dataset.tab));
     });
 
-    // Today's date
     document.getElementById('p-date').value = new Date().toISOString().split('T')[0];
 
-    // Live preview
     const bodyInput = document.getElementById('p-body');
     const previewBox = document.getElementById('p-preview');
     bodyInput.addEventListener('input', () => {
@@ -570,24 +632,116 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
         .replace(/\\n/gim, '<br>');
     });
 
-    // Attachments UI
-    const attList = document.getElementById('attachments-list');
-    document.getElementById('btn-add-att').addEventListener('click', () => {
+    function addAttachmentRow(type = 'drawing', file = '', title = '', caption = '') {
+      const attList = document.getElementById('attachments-list');
       const row = document.createElement('div');
       row.className = 'attach-row';
       row.innerHTML = `
         <select class="att-type" style="width:130px">
-          <option value="drawing">.excalidraw</option>
-          <option value="image">Image/GIF</option>
+          <option value="drawing" ${type === 'drawing' ? 'selected' : ''}>.excalidraw</option>
+          <option value="image" ${type === 'image' ? 'selected' : ''}>Image/GIF</option>
         </select>
-        <input type="text" class="att-file" placeholder="posts/assets/drawing.excalidraw" style="flex:1"/>
-        <input type="text" class="att-title" placeholder="Drawing Title" style="flex:1"/>
-        <input type="text" class="att-caption" placeholder="Caption (optional)" style="flex:1"/>
+        <input type="text" class="att-file" placeholder="posts/assets/drawing.excalidraw" value="${file}" style="flex:1"/>
+        <input type="text" class="att-title" placeholder="Drawing Title" value="${title}" style="flex:1"/>
+        <input type="text" class="att-caption" placeholder="Caption (optional)" value="${caption}" style="flex:1"/>
         <button type="button" class="btn btn-ghost" onclick="this.parentElement.remove()">✕</button>`;
       attList.appendChild(row);
-    });
+    }
 
-    // Rebuild Button
+    document.getElementById('btn-add-att').addEventListener('click', () => addAttachmentRow());
+
+    function resetForm() {
+      document.getElementById('p-id').value = '';
+      document.getElementById('p-title').value = '';
+      document.getElementById('p-project').value = 'Hod';
+      document.getElementById('p-status').value = 'in motion';
+      document.getElementById('p-tags').value = '';
+      document.getElementById('p-date').value = new Date().toISOString().split('T')[0];
+      document.getElementById('p-summary').value = '';
+      document.getElementById('p-body').value = '';
+      document.getElementById('attachments-list').innerHTML = '';
+      previewBox.innerHTML = '<p class="soft">Live preview will appear here...</p>';
+      document.getElementById('save-msg').textContent = '';
+    }
+
+    function editPost(id) {
+      const p = globalPosts.find(x => x.id === id);
+      if (!p) return;
+      document.getElementById('p-id').value = p.id;
+      document.getElementById('p-title').value = p.title || '';
+      document.getElementById('p-project').value = p.project || 'General';
+      document.getElementById('p-status').value = p.status || 'in motion';
+      document.getElementById('p-tags').value = (p.tags || []).join(', ');
+      document.getElementById('p-date').value = p.date || '';
+      document.getElementById('p-summary').value = p.summary || '';
+      document.getElementById('p-body').value = p.body || '';
+
+      const attList = document.getElementById('attachments-list');
+      attList.innerHTML = '';
+      (p.attachments || []).forEach(a => {
+        addAttachmentRow(a.type, a.file, a.title, a.caption);
+      });
+
+      bodyInput.dispatchEvent(new Event('input'));
+      switchTab('tab-composer');
+    }
+
+    async function toggleStatus(postId, current) {
+      const nextMap = { 'in motion': 'done', 'done': 'ahead', 'ahead': 'shelf', 'shelf': 'in motion' };
+      const nextStatus = nextMap[current] || 'in motion';
+      try {
+        const res = await fetch('/api/update-status', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ post_id: postId, status: nextStatus })
+        });
+        const data = await res.json();
+        if (data.success) {
+          loadDispatchesTable();
+        } else {
+          alert('Error updating status: ' + data.error);
+        }
+      } catch(e) {
+        alert('Error: ' + e);
+      }
+    }
+
+    async function loadDispatchesTable() {
+      try {
+        const res = await fetch('/api/posts');
+        const data = await res.json();
+        globalPosts = data.posts || [];
+        document.getElementById('manage-count').textContent = `${globalPosts.length} dispatches found`;
+
+        const tbody = document.getElementById('dispatches-table-body');
+        if (!globalPosts.length) {
+          tbody.innerHTML = '<tr><td colspan="7" class="soft">No dispatches yet.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = globalPosts.map(p => `
+          <tr>
+            <td class="mono" style="font-size:0.84rem">${p.date}</td>
+            <td><b>${p.project}</b></td>
+            <td><a href="post.html?p=${encodeURIComponent(p.id)}" target="_blank" style="color:var(--ink);text-decoration:none">${p.title}</a></td>
+            <td>
+              <button type="button" class="pill ${p.status}" onclick="toggleStatus('${p.id}', '${p.status}')" title="Click to cycle status" style="cursor:pointer;border:none">
+                ${p.status} ↻
+              </button>
+            </td>
+            <td class="stamp">${(p.attachments||[]).length} atts</td>
+            <td class="stamp">${(p.addendums||[]).length} updates</td>
+            <td>
+              <button type="button" class="btn btn-ghost" style="padding:2px 8px;font-size:0.8rem" onclick="editPost('${p.id}')">Edit</button>
+              <a href="post.html?p=${encodeURIComponent(p.id)}" target="_blank" class="btn btn-ghost" style="padding:2px 8px;font-size:0.8rem;text-decoration:none">View</a>
+            </td>
+          </tr>
+        `).join('');
+
+        loadPostsForAddendums();
+      } catch(e){}
+    }
+
     document.getElementById('btn-rebuild-all').addEventListener('click', async () => {
       const btn = document.getElementById('btn-rebuild-all');
       btn.disabled = true;
@@ -597,15 +751,15 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
         const data = await res.json();
         alert(data.message);
         loadStatus();
+        loadDispatchesTable();
       } catch(e) {
         alert('Rebuild error: ' + e);
       } finally {
         btn.disabled = false;
-        btn.textContent = '⚡ Rebuild Site';
+        btn.textContent = '⚡ Rebuild All';
       }
     });
 
-    // Post Submit
     document.getElementById('post-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const saveMsg = document.getElementById('save-msg');
@@ -622,6 +776,7 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
       const selNotes = Array.from(document.getElementById('p-related-notes').selectedOptions).map(o => o.value);
 
       const payload = {
+        id: document.getElementById('p-id').value.trim() || undefined,
         title: document.getElementById('p-title').value.trim(),
         project: document.getElementById('p-project').value,
         status: document.getElementById('p-status').value,
@@ -641,8 +796,9 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
         });
         const data = await res.json();
         if (data.success) {
-          saveMsg.textContent = '✓ Dispatch saved & site rebuilt!';
-          loadPostsForAddendums();
+          saveMsg.textContent = '✓ Dispatch saved & published!';
+          loadDispatchesTable();
+          setTimeout(() => switchTab('tab-manage'), 1200);
         } else {
           saveMsg.textContent = 'Error: ' + data.error;
         }
@@ -651,23 +807,29 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
       }
     });
 
-    // Load Posts into Addendum Selector
-    async function loadPostsForAddendums() {
+    async function loadLibraryOptions() {
       try {
-        const res = await fetch('/api/posts');
+        const res = await fetch('/api/library');
         const data = await res.json();
-        const sel = document.getElementById('a-post-select');
-        sel.innerHTML = (data.posts || []).map(p => `
-          <option value="${p.id}">${p.date} — ${p.title} (${(p.addendums||[]).length} updates)</option>
+        const sel = document.getElementById('p-related-notes');
+        sel.innerHTML = (data.entries || []).map(n => `
+          <option value="${n.path}">${n.section}: ${n.title}</option>
         `).join('');
-        renderExistingAddendums(data.posts);
       } catch(e){}
     }
 
-    function renderExistingAddendums(posts) {
+    async function loadPostsForAddendums() {
+      const sel = document.getElementById('a-post-select');
+      sel.innerHTML = globalPosts.map(p => `
+        <option value="${p.id}">${p.date} — [${p.project}] ${p.title} (${(p.addendums||[]).length} updates)</option>
+      `).join('');
+      renderExistingAddendums();
+    }
+
+    function renderExistingAddendums() {
       const selId = document.getElementById('a-post-select').value;
       const listEl = document.getElementById('a-existing-list');
-      const post = (posts || []).find(p => p.id === selId);
+      const post = globalPosts.find(p => p.id === selId);
       if (!post || !post.addendums || !post.addendums.length) {
         listEl.innerHTML = '<span class="stamp">No existing field notes on this post yet.</span>';
         return;
@@ -676,13 +838,8 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
         post.addendums.map(a => `<li><b>${a.date}:</b> ${a.note}</li>`).join('') + '</ul>';
     }
 
-    document.getElementById('a-post-select').addEventListener('change', async () => {
-      const res = await fetch('/api/posts');
-      const data = await res.json();
-      renderExistingAddendums(data.posts);
-    });
+    document.getElementById('a-post-select').addEventListener('change', renderExistingAddendums);
 
-    // Addendum Submit
     document.getElementById('addendum-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const msg = document.getElementById('addendum-msg');
@@ -701,7 +858,7 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
         if (data.success) {
           msg.textContent = '✓ Field note logged & site rebuilt!';
           document.getElementById('a-note').value = '';
-          loadPostsForAddendums();
+          loadDispatchesTable();
         } else {
           msg.textContent = 'Error: ' + data.error;
         }
@@ -710,7 +867,6 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
       }
     });
 
-    // Status & Git
     async function loadStatus() {
       try {
         const res = await fetch('/api/status');
@@ -728,7 +884,7 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
     }
 
     document.getElementById('btn-git-commit').addEventListener('click', async () => {
-      const msg = prompt('Commit message:', 'Update feed and dispatches');
+      const msg = prompt('Commit message:', 'Update feed dispatches & site');
       if (!msg) return;
       const res = await fetch('/api/git-commit', {
         method: 'POST',
@@ -757,9 +913,9 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
       }
     });
 
-    // Init
     loadStatus();
-    loadPostsForAddendums();
+    loadLibraryOptions();
+    loadDispatchesTable();
   </script>
 </body>
 </html>"""
@@ -770,7 +926,6 @@ def main():
     server = socketserver.TCPServer(("", PORT), StudioHandler)
     server.allow_reuse_address = True
 
-    # Try opening browser automatically if running interactively
     if "--no-browser" not in sys.argv:
         try:
             webbrowser.open(f"http://localhost:{PORT}")

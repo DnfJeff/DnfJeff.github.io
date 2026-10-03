@@ -1,8 +1,8 @@
 /* =========================================================================
-   DNF — Feed timeline engine
-   Loads data/feed.json, renders the 3-column chronological stream,
-   manages tag & project filtering, author addendums sync, bundled
-   attachments, and the interactive Excalidraw vector viewer.
+   DNF — Feed Timeline Engine (Pass 2)
+   Wide-screen responsive 3-column stream, centralized navigation,
+   rock-solid filter and attachment click handling, dynamic right rail
+   addendums hub, and direct reader view routing.
    ========================================================================= */
 
 (function () {
@@ -14,12 +14,12 @@
   const leftRailEl = $("#feed-rail-left");
   const rightRailEl = $("#feed-rail-right");
   const drawingModalEl = $("#drawing-modal");
-  const readerModalEl = $("#post-reader-modal");
 
   if (!streamEl) return;
 
   let feedData = null;
   let activeProject = "all";
+  let activeStatus = "all";
   let activeTag = "all";
   let activeMedia = "all";
   let searchQuery = "";
@@ -146,13 +146,13 @@
     const tiles = attachments
       .map((att, idx) => {
         const isDrawing = att.type === "drawing" || (att.file && att.file.endsWith(".excalidraw"));
-        const title = att.title || (isDrawing ? "Excalidraw Drawing" : "Attached Image");
+        const title = att.title || (isDrawing ? "Excalidraw Vector Drawing" : "Attached Image");
         const caption = att.caption || "";
 
         if (isDrawing) {
           const svgContent = att.svg_inline || "";
           return `
-            <div class="attach-card is-drawing" role="button" tabindex="0" data-view-drawing="${esc(att.file)}" data-title="${esc(title)}" data-caption="${esc(caption)}">
+            <div class="attach-card is-drawing" role="button" tabindex="0" data-att-idx="${idx}" data-drawing-file="${esc(att.file)}" title="Click to zoom and pan drawing">
               <div class="attach-preview">
                 <span class="attach-badge">Vector Drawing</span>
                 ${svgContent}
@@ -164,7 +164,7 @@
             </div>`;
         } else {
           return `
-            <div class="attach-card" role="button" tabindex="0" data-view-img="${esc(att.file)}" data-title="${esc(title)}" data-caption="${esc(caption)}">
+            <div class="attach-card" role="button" tabindex="0" data-att-idx="${idx}" data-img-file="${esc(att.file)}" title="Click to open image">
               <div class="attach-preview">
                 <span class="attach-badge">Image</span>
                 <img src="${esc(att.file)}" alt="${esc(title)}" loading="lazy">
@@ -182,7 +182,7 @@
       <div class="feed-attachments">
         <div class="feed-attachments-head">
           <span class="eyebrow" style="margin:0">Bundled Attachments (${count})</span>
-          <span class="stamp">Click to inspect</span>
+          <span class="stamp">Click any item to inspect</span>
         </div>
         <div class="attach-grid ${gridClass}">
           ${tiles}
@@ -230,64 +230,107 @@
 
     return `
       <details class="feed-inline-addendums">
-        <summary>Author Field Notes & Addendums (${addendums.length})</summary>
+        <summary>Author Field Notes &amp; Addendums (${addendums.length})</summary>
         <div class="addendum-track">
           ${items}
         </div>
       </details>`;
   }
 
-  function updateRightRailAddendums(post) {
-    if (!rightRailEl) return;
+  /* ------------------------------------------------- right rail hub */
 
-    if (!post || !post.addendums || !post.addendums.length) {
-      rightRailEl.innerHTML = `
-        <div class="addendum-panel">
+  function updateRightRail(activePost) {
+    if (!rightRailEl || !feedData) return;
+
+    // 1. Active Post Section
+    let activeHtml = "";
+    if (activePost) {
+      const addendumsList = (activePost.addendums || [])
+        .map(
+          (a) => `
+          <div class="addendum-item">
+            <span class="addendum-date">${esc(a.date)}</span>
+            <p class="addendum-note">${esc(a.note)}</p>
+          </div>`
+        )
+        .join("");
+
+      activeHtml = `
+        <div class="addendum-panel" style="margin-bottom:var(--s4)">
           <div class="addendum-header">
-            <p class="eyebrow" style="margin:0">Field Notes & Errata</p>
-            <h3>No addendums</h3>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--s2)">
+              <span class="eyebrow" style="margin:0">Active Dispatch</span>
+              <span class="pill ${esc(activePost.status)}">${esc(activePost.status)}</span>
+            </div>
+            <h3 style="margin:var(--s1) 0"><a href="post.html?p=${encodeURIComponent(activePost.id)}" style="color:inherit;text-decoration:none">${esc(activePost.title)}</a></h3>
+            <span class="stamp">${activePost.project} · ${activePost.date}</span>
           </div>
-          <p class="soft" style="font-size:0.86rem;margin:0">
-            ${post ? "This dispatch stands as originally posted without follow-up notes." : "Select or scroll past any dispatch to view its author addendums."}
-          </p>
+
+          <div style="margin-bottom:var(--s3)">
+            <p class="eyebrow" style="font-size:0.68rem;margin:0 0 var(--s2)">Field Notes on this Dispatch (${(activePost.addendums||[]).length})</p>
+            ${
+              addendumsList
+                ? `<div class="addendum-track">${addendumsList}</div>`
+                : `<p class="soft" style="font-size:0.85rem;margin:0">No addendums on this dispatch yet.</p>`
+            }
+          </div>
+
+          <a href="post.html?p=${encodeURIComponent(activePost.id)}" class="tile-go" style="margin:0">
+            Open full reader view →
+          </a>
         </div>`;
-      return;
     }
 
-    const items = post.addendums
-      .map(
-        (a) => `
-        <div class="addendum-item">
-          <span class="addendum-date">${esc(a.date)}</span>
-          <p class="addendum-note">${esc(a.note)}</p>
-        </div>`
-      )
-      .join("");
+    // 2. Global Recent Field Notes across all dispatches
+    const allAddendums = [];
+    (feedData.posts || []).forEach((p) => {
+      (p.addendums || []).forEach((a) => {
+        allAddendums.push({
+          postTitle: p.title,
+          postId: p.id,
+          project: p.project,
+          date: a.date,
+          note: a.note,
+        });
+      });
+    });
 
-    rightRailEl.innerHTML = `
-      <div class="addendum-panel" data-rise>
-        <div class="addendum-header">
-          <p class="eyebrow" style="margin:0">Field Notes · ${esc(post.project)}</p>
-          <h3 style="margin-top:var(--s1)"><a href="#${esc(post.id)}" style="color:inherit;text-decoration:none">${esc(post.title)}</a></h3>
-          <span class="stamp">${post.addendums.length} follow-up note${post.addendums.length > 1 ? "s" : ""}</span>
-        </div>
-        <div class="addendum-track">
-          ${items}
+    allAddendums.sort((a, b) => (a.date < b.date ? 1 : -1));
+    const recentAddendums = allAddendums.slice(0, 4);
+
+    const recentHtml = `
+      <div class="card" style="padding:var(--s4)">
+        <p class="eyebrow" style="margin:0 0 var(--s2)">Recent Field Updates</p>
+        <div class="addendum-track" style="margin-top:var(--s3)">
+          ${
+            recentAddendums.length
+              ? recentAddendums
+                  .map(
+                    (item) => `
+              <div class="addendum-item">
+                <span class="addendum-date">${esc(item.date)} · <a href="#${esc(item.postId)}" style="color:var(--ink);text-decoration:none" data-jump-post="${esc(item.postId)}"><b>${esc(item.project)}</b></a></span>
+                <p class="addendum-note" style="font-size:0.85rem">${esc(item.note)}</p>
+              </div>`
+                  )
+                  .join("")
+              : `<p class="soft" style="font-size:0.85rem;margin:0">No recent updates.</p>`
+          }
         </div>
       </div>`;
-    observe(rightRailEl);
+
+    rightRailEl.innerHTML = activeHtml + recentHtml;
   }
 
-  /* ------------------------------------------------------- post rendering */
+  /* ------------------------------------------------------- post card */
 
   function renderPostCard(post) {
     const statusPill = post.status ? `<span class="pill ${esc(post.status)}">${esc(post.status)}</span>` : "";
     const tagsRow = (post.tags || [])
-      .map((t) => `<button type="button" class="tag" data-filter-tag="${esc(t)}">${esc(t)}</button>`)
+      .map((t) => `<button type="button" class="tag${activeTag.toLowerCase() === t.toLowerCase() ? " here" : ""}" data-feed-tag="${esc(t)}">${esc(t)}</button>`)
       .join(" ");
 
     return `
-      <article class="feed-post" id="${esc(post.id)}" data-status="${esc(post.status)}" data-rise>
+      <article class="feed-post" id="${esc(post.id)}" data-post-id="${esc(post.id)}" data-status="${esc(post.status)}">
         <div class="feed-post-head">
           <div class="feed-meta-row">
             <span class="eyebrow" style="margin:0">${esc(post.project)}</span>
@@ -297,7 +340,7 @@
         </div>
 
         <h3 class="feed-post-title">
-          <a href="feed.html?post=${encodeURIComponent(post.id)}" data-open-reader="${esc(post.id)}">${esc(post.title)}</a>
+          <a href="post.html?p=${encodeURIComponent(post.id)}">${esc(post.title)}</a>
         </h3>
 
         <div class="feed-prose">
@@ -313,7 +356,7 @@
             ${tagsRow}
           </div>
           <div>
-            <a href="feed.html?post=${encodeURIComponent(post.id)}" data-open-reader="${esc(post.id)}" style="text-decoration:none;font-weight:500">
+            <a href="post.html?p=${encodeURIComponent(post.id)}" class="btn btn-ghost" style="padding:var(--s1) var(--s3);font-size:0.85rem;text-decoration:none">
               Reader view →
             </a>
           </div>
@@ -325,6 +368,9 @@
 
   function matchesFilter(p) {
     if (activeProject !== "all" && p.project.toLowerCase() !== activeProject.toLowerCase()) {
+      return false;
+    }
+    if (activeStatus !== "all" && (p.status || "").toLowerCase() !== activeStatus.toLowerCase()) {
       return false;
     }
     if (activeTag !== "all" && !(p.tags || []).some((t) => t.toLowerCase() === activeTag.toLowerCase())) {
@@ -348,7 +394,7 @@
   }
 
   function renderStream() {
-    const list = feedData.posts.filter(matchesFilter);
+    const list = (feedData.posts || []).filter(matchesFilter);
     const countEl = $("#feed-count");
     if (countEl) {
       countEl.textContent = `${list.length} dispatch${list.length === 1 ? "" : "es"}`;
@@ -362,25 +408,25 @@
           <button type="button" class="btn btn-ghost" id="reset-filters-btn" style="margin-top:var(--s4)">Reset all filters</button>
         </div>`;
       $("#reset-filters-btn")?.addEventListener("click", resetFilters);
-      updateRightRailAddendums(null);
+      updateRightRail(null);
       return;
     }
 
     streamEl.innerHTML = `<div class="feed-track">${list.map(renderPostCard).join("")}</div>`;
     observe(streamEl);
 
-    // Default right rail to the topmost matching post
-    if (list[0]) {
-      activePostId = list[0].id;
-      updateRightRailAddendums(list[0]);
-      $(`#${list[0].id}`)?.classList.add("is-active");
+    // Set active post to the first matching one
+    const firstPost = list[0];
+    if (firstPost) {
+      activePostId = firstPost.id;
+      $(`#${firstPost.id}`)?.classList.add("is-active");
+      updateRightRail(firstPost);
     }
-
-    wirePostIntersectionObserver();
   }
 
   function resetFilters() {
     activeProject = "all";
+    activeStatus = "all";
     activeTag = "all";
     activeMedia = "all";
     searchQuery = "";
@@ -390,27 +436,48 @@
     renderStream();
   }
 
-  /* ---------------------------------------------------- left rail & controls */
+  /* ---------------------------------------------------- left rail */
 
   function renderLeftRail() {
     if (!leftRailEl || !feedData) return;
 
-    const projects = ["all", ...(feedData.projects || [])];
-    const tags = feedData.tags || [];
+    // Projects list with links to dedicated panels
+    const projectsList = [
+      { id: "all", name: "All Projects", count: feedData.posts.length },
+      { id: "Hod", name: "Hod (Sims 1 Tools)", count: feedData.posts.filter((p) => p.project === "Hod").length, panelUrl: "hod.html" },
+      { id: "Attack of the Show", name: "Attack of the Show", count: feedData.posts.filter((p) => p.project === "Attack of the Show").length, panelUrl: "aots.html" },
+      { id: "Tools", name: "Tools & Reverse Eng.", count: feedData.posts.filter((p) => p.project === "Tools").length, panelUrl: "about.html#tools" },
+    ];
 
-    const projectButtons = projects
+    const projectItems = projectsList
       .map(
         (proj) => `
-        <button type="button" class="chip${activeProject.toLowerCase() === proj.toLowerCase() ? " here" : ""}" data-filter-project="${esc(proj)}">
-          ${proj === "all" ? "All Projects" : esc(proj)}
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--s2);margin-bottom:var(--s2)">
+          <button type="button" class="chip${activeProject.toLowerCase() === proj.id.toLowerCase() ? " here" : ""}" data-feed-project="${esc(proj.id)}" style="flex:1;text-align:left">
+            ${esc(proj.name)}
+          </button>
+          ${proj.panelUrl ? `<a href="${esc(proj.panelUrl)}" title="Visit dedicated project panel" class="tile-go" style="margin:0;padding:2px 6px;font-size:0.75rem">Panel ↗</a>` : ""}
+        </div>`
+      )
+      .join("");
+
+    // Status items
+    const statuses = ["all", "in motion", "done", "ahead"];
+    const statusButtons = statuses
+      .map(
+        (st) => `
+        <button type="button" class="chip${activeStatus.toLowerCase() === st.toLowerCase() ? " here" : ""}" data-feed-status="${esc(st)}">
+          ${st === "all" ? "All Statuses" : esc(st)}
         </button>`
       )
       .join("");
 
+    // Tags
+    const tags = feedData.tags || [];
     const tagChips = tags
       .map(
         (t) => `
-        <button type="button" class="tag${activeTag.toLowerCase() === t.toLowerCase() ? " here" : ""}" data-filter-tag="${esc(t)}">
+        <button type="button" class="tag${activeTag.toLowerCase() === t.toLowerCase() ? " here" : ""}" data-feed-tag="${esc(t)}">
           ${esc(t)}
         </button>`
       )
@@ -418,23 +485,28 @@
 
     leftRailEl.innerHTML = `
       <div class="card" style="padding:var(--s4)">
-        <p class="eyebrow" style="margin:0 0 var(--s2)">Author</p>
-        <h4 style="margin:0 0 var(--s1)">Jeff Adkins</h4>
+        <p class="eyebrow" style="margin:0 0 var(--s2)">The Timeline</p>
+        <h4 style="margin:0 0 var(--s1)">Jeff Adkins · DNF</h4>
         <p class="soft" style="font-size:0.86rem;margin:0 0 var(--s3)">
-          Chronological dispatches, reverse engineering progress, archival finds and field notes.
+          Chronological workstream, reverse engineering dispatches, and field notes.
         </p>
         <span class="stamp">${feedData.count} total dispatches</span>
       </div>
 
       <div class="card" style="padding:var(--s4)">
-        <p class="eyebrow" style="margin:0 0 var(--s3)">Projects</p>
+        <p class="eyebrow" style="margin:0 0 var(--s2)">Projects</p>
+        ${projectItems}
+      </div>
+
+      <div class="card" style="padding:var(--s4)">
+        <p class="eyebrow" style="margin:0 0 var(--s2)">Filter by Status</p>
         <div class="chiprow" style="margin:0">
-          ${projectButtons}
+          ${statusButtons}
         </div>
       </div>
 
       <div class="card" style="padding:var(--s4)">
-        <p class="eyebrow" style="margin:0 0 var(--s2)">Content Filter</p>
+        <p class="eyebrow" style="margin:0 0 var(--s2)">Filter by Content</p>
         <div class="stack" style="gap:var(--s2);font-size:0.88rem">
           <label style="display:flex;align-items:center;gap:var(--s2);cursor:pointer">
             <input type="radio" name="media-filter" value="all" ${activeMedia === "all" ? "checked" : ""}>
@@ -456,61 +528,28 @@
       </div>
 
       <div class="card" style="padding:var(--s4)">
-        <p class="eyebrow" style="margin:0 0 var(--s3)">Topics & Tags</p>
+        <p class="eyebrow" style="margin:0 0 var(--s2)">Topics &amp; Tags</p>
         <div class="chiprow" style="margin:0">
-          <button type="button" class="tag${activeTag === "all" ? " here" : ""}" data-filter-tag="all">All</button>
+          <button type="button" class="tag${activeTag === "all" ? " here" : ""}" data-feed-tag="all">All</button>
           ${tagChips}
         </div>
       </div>`;
   }
 
-  /* --------------------------------------------- intersection observer & sync */
-
-  let streamObserver = null;
-  function wirePostIntersectionObserver() {
-    if (streamObserver) streamObserver.disconnect();
-    if (!("IntersectionObserver" in window)) return;
-
-    streamObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && entry.intersectionRatio >= 0.4) {
-            const id = entry.target.id;
-            if (id && id !== activePostId) {
-              activePostId = id;
-              $$(".feed-post.is-active", streamEl).forEach((el) => el.classList.remove("is-active"));
-              entry.target.classList.add("is-active");
-              const post = feedData.posts.find((p) => p.id === id);
-              if (post) updateRightRailAddendums(post);
-            }
-          }
-        });
-      },
-      { threshold: [0.4, 0.8] }
-    );
-
-    $$(".feed-post", streamEl).forEach((el) => streamObserver.observe(el));
-  }
-
   /* ---------------------------------------------------- excalidraw modal */
 
   let currentZoom = 1;
-  function openDrawingModal(file, title, caption) {
-    if (!drawingModalEl) return;
-    const post = feedData.posts.find((p) =>
-      (p.attachments || []).some((a) => a.file === file)
-    );
-    const att = post ? post.attachments.find((a) => a.file === file) : null;
-    const svgHtml = att && att.svg_inline ? att.svg_inline : `<p class="soft">Loading vector drawing...</p>`;
 
+  function openDrawingModal(title, caption, svgHtml) {
+    if (!drawingModalEl) return;
     const titleEl = $("#drawing-modal-title");
     const capEl = $("#drawing-modal-cap");
     const canvasEl = $("#drawing-canvas");
 
-    if (titleEl) titleEl.textContent = title || "Excalidraw Drawing";
+    if (titleEl) titleEl.textContent = title || "Excalidraw Vector Drawing";
     if (capEl) capEl.textContent = caption || "";
     if (canvasEl) {
-      canvasEl.innerHTML = svgHtml;
+      canvasEl.innerHTML = svgHtml || `<p class="soft">No drawing content.</p>`;
       currentZoom = 1;
       canvasEl.style.transform = `scale(${currentZoom})`;
     }
@@ -525,45 +564,7 @@
     document.body.style.overflow = "";
   }
 
-  /* --------------------------------------------------- reader modal / permalink */
-
-  function openReaderModal(postId) {
-    const post = feedData.posts.find((p) => p.id === postId);
-    if (!post || !readerModalEl) return;
-
-    const contentEl = $("#post-reader-content");
-    if (contentEl) {
-      contentEl.innerHTML = `
-        <div class="feed-post-head" style="margin-bottom:var(--s4)">
-          <div class="feed-meta-row">
-            <span class="eyebrow" style="margin:0">${esc(post.project)}</span>
-            <span class="stamp">· ${esc(post.date)}</span>
-          </div>
-          <span class="pill ${esc(post.status)}">${esc(post.status)}</span>
-        </div>
-        <h1 style="font-size:clamp(1.8rem,4vw,2.4rem);margin-bottom:var(--s4)">${esc(post.title)}</h1>
-        <div class="feed-prose" style="font-size:1.05rem">
-          ${markdown(post.body)}
-        </div>
-        ${renderLibraryInterplay(post.linked_notes)}
-        ${renderAttachments(post.attachments)}
-        ${renderInlineAddendums(post.addendums)}`;
-    }
-
-    readerModalEl.hidden = false;
-    document.body.style.overflow = "hidden";
-    // update URL without hard reloading
-    history.replaceState(null, "", `feed.html?post=${encodeURIComponent(postId)}`);
-  }
-
-  function closeReaderModal() {
-    if (!readerModalEl) return;
-    readerModalEl.hidden = true;
-    document.body.style.overflow = "";
-    history.replaceState(null, "", "feed.html");
-  }
-
-  /* ---------------------------------------------------- event listeners */
+  /* ---------------------------------------------------- event handling */
 
   function wireEvents() {
     // Search input
@@ -576,98 +577,149 @@
     }
 
     // Left Rail clicks (delegated)
-    if (leftRailEl) {
-      leftRailEl.addEventListener("click", (e) => {
-        const projBtn = e.target.closest("[data-filter-project]");
-        if (projBtn) {
-          activeProject = projBtn.dataset.filterProject;
-          renderLeftRail();
-          renderStream();
-          return;
-        }
-
-        const tagBtn = e.target.closest("[data-filter-tag]");
-        if (tagBtn) {
-          activeTag = tagBtn.dataset.filterTag;
-          renderLeftRail();
-          renderStream();
-          return;
-        }
-      });
-
-      leftRailEl.addEventListener("change", (e) => {
-        if (e.target.name === "media-filter") {
-          activeMedia = e.target.value;
-          renderStream();
-        }
-      });
-    }
-
-    // Stream clicks (delegated)
-    streamEl.addEventListener("click", (e) => {
-      // Drawing inspection
-      const drawCard = e.target.closest("[data-view-drawing]");
-      if (drawCard) {
-        openDrawingModal(
-          drawCard.dataset.viewDrawing,
-          drawCard.dataset.title,
-          drawCard.dataset.caption
-        );
-        return;
-      }
-
-      // Image inspection (trigger site lightbox or drawing modal)
-      const imgCard = e.target.closest("[data-view-img]");
-      if (imgCard) {
-        const full = imgCard.dataset.viewImg;
-        const title = imgCard.dataset.title;
-        const cap = imgCard.dataset.caption;
-        // Check if global lightbox exists
-        const lb = $("#lightbox");
-        if (lb) {
-          const img = $("img", lb);
-          const capEl = $("[data-lb-cap]", lb);
-          const titleEl = $("[data-lb-title]", lb);
-          if (img) img.src = full;
-          if (titleEl) titleEl.textContent = title;
-          if (capEl) capEl.textContent = cap;
-          lb.hidden = false;
-          document.body.style.overflow = "hidden";
-        } else {
-          openDrawingModal(full, title, cap);
-        }
-        return;
-      }
-
-      // Tag chip inside post
-      const tagBtn = e.target.closest("[data-filter-tag]");
-      if (tagBtn) {
-        activeTag = tagBtn.dataset.filterTag;
+    leftRailEl?.addEventListener("click", (e) => {
+      const projBtn = e.target.closest("[data-feed-project]");
+      if (projBtn) {
+        activeProject = projBtn.dataset.feedProject;
         renderLeftRail();
         renderStream();
         return;
       }
 
-      // Open full post reader view
-      const readerLink = e.target.closest("[data-open-reader]");
-      if (readerLink) {
-        e.preventDefault();
-        openReaderModal(readerLink.dataset.openReader);
+      const statusBtn = e.target.closest("[data-feed-status]");
+      if (statusBtn) {
+        activeStatus = statusBtn.dataset.feedStatus;
+        renderLeftRail();
+        renderStream();
         return;
       }
 
-      // Click on post card itself to activate addendums
+      const tagBtn = e.target.closest("[data-feed-tag]");
+      if (tagBtn) {
+        activeTag = tagBtn.dataset.feedTag;
+        renderLeftRail();
+        renderStream();
+        return;
+      }
+    });
+
+    // Content filter radio changes
+    leftRailEl?.addEventListener("change", (e) => {
+      if (e.target.name === "media-filter") {
+        activeMedia = e.target.value;
+        renderStream();
+      }
+    });
+
+    // Stream clicks (delegated)
+    streamEl.addEventListener("click", (e) => {
+      // 1. Drawing inspection click
+      const drawCard = e.target.closest(".attach-card.is-drawing");
+      if (drawCard) {
+        const postCard = drawCard.closest(".feed-post");
+        const post = (feedData.posts || []).find((p) => p.id === postCard?.id);
+        const idx = parseInt(drawCard.dataset.attIdx, 10);
+        const att = post && post.attachments ? post.attachments[idx] : null;
+        if (att) {
+          openDrawingModal(att.title, att.caption, att.svg_inline);
+          return;
+        }
+      }
+
+      // 2. Image lightbox click
+      const imgCard = e.target.closest(".attach-card:not(.is-drawing)");
+      if (imgCard) {
+        const postCard = imgCard.closest(".feed-post");
+        const post = (feedData.posts || []).find((p) => p.id === postCard?.id);
+        const idx = parseInt(imgCard.dataset.attIdx, 10);
+        const att = post && post.attachments ? post.attachments[idx] : null;
+        if (att) {
+          const lb = $("#lightbox");
+          if (lb) {
+            const img = $("img", lb);
+            const capEl = $("[data-lb-cap]", lb);
+            const titleEl = $("[data-lb-title]", lb);
+            if (img) img.src = att.file;
+            if (titleEl) titleEl.textContent = att.title || "";
+            if (capEl) capEl.textContent = att.caption || "";
+            lb.hidden = false;
+            document.body.style.overflow = "hidden";
+          }
+          return;
+        }
+      }
+
+      // 3. Tag click inside post
+      const tagBtn = e.target.closest("[data-feed-tag]");
+      if (tagBtn) {
+        activeTag = tagBtn.dataset.feedTag;
+        renderLeftRail();
+        renderStream();
+        return;
+      }
+
+      // 4. Click post to activate it in right rail
       const postCard = e.target.closest(".feed-post");
-      if (postCard) {
+      if (postCard && !e.target.closest("a, button, input")) {
         const id = postCard.id;
         if (id && id !== activePostId) {
           activePostId = id;
           $$(".feed-post.is-active", streamEl).forEach((el) => el.classList.remove("is-active"));
           postCard.classList.add("is-active");
-          const post = feedData.posts.find((p) => p.id === id);
-          if (post) updateRightRailAddendums(post);
+          const post = (feedData.posts || []).find((p) => p.id === id);
+          if (post) updateRightRail(post);
         }
       }
+    });
+
+    // Right Rail click to jump to post
+    rightRailEl?.addEventListener("click", (e) => {
+      const jumpLink = e.target.closest("[data-jump-post]");
+      if (jumpLink) {
+        const targetId = jumpLink.dataset.jumpPost;
+        const targetPost = document.getElementById(targetId);
+        if (targetPost) {
+          e.preventDefault();
+          targetPost.scrollIntoView({ behavior: "smooth", block: "center" });
+          activePostId = targetId;
+          $$(".feed-post.is-active", streamEl).forEach((el) => el.classList.remove("is-active"));
+          targetPost.classList.add("is-active");
+          const post = (feedData.posts || []).find((p) => p.id === targetId);
+          if (post) updateRightRail(post);
+        }
+      }
+    });
+
+    // Scroll listener to update active post in right rail reliably
+    let scrollTimeout = null;
+    window.addEventListener("scroll", () => {
+      if (scrollTimeout) return;
+      scrollTimeout = setTimeout(() => {
+        scrollTimeout = null;
+        const posts = $$(".feed-post", streamEl);
+        if (!posts.length) return;
+
+        const viewportCenter = window.innerHeight / 2;
+        let closestPost = null;
+        let closestDist = Infinity;
+
+        posts.forEach((el) => {
+          const rect = el.getBoundingClientRect();
+          const dist = Math.abs(rect.top + rect.height / 2 - viewportCenter);
+          if (dist < closestDist) {
+            closestDist = dist;
+            closestPost = el;
+          }
+        });
+
+        if (closestPost && closestPost.id !== activePostId) {
+          activePostId = closestPost.id;
+          posts.forEach((el) => el.classList.remove("is-active"));
+          closestPost.classList.add("is-active");
+          const post = (feedData.posts || []).find((p) => p.id === closestPost.id);
+          if (post) updateRightRail(post);
+        }
+      }, 100);
     });
 
     // Drawing modal zoom buttons
@@ -690,13 +742,22 @@
     });
 
     $("[data-close-drawing]")?.addEventListener("click", closeDrawingModal);
-    $("[data-close-reader]")?.addEventListener("click", closeReaderModal);
+    $("[data-lb-close]")?.addEventListener("click", () => {
+      const lb = $("#lightbox");
+      if (lb) {
+        lb.hidden = true;
+        document.body.style.overflow = "";
+      }
+    });
 
-    // Keyboard ESC to close modals
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
-        if (drawingModalEl && !drawingModalEl.hidden) closeDrawingModal();
-        if (readerModalEl && !readerModalEl.hidden) closeReaderModal();
+        closeDrawingModal();
+        const lb = $("#lightbox");
+        if (lb && !lb.hidden) {
+          lb.hidden = true;
+          document.body.style.overflow = "";
+        }
       }
     });
   }
@@ -713,12 +774,5 @@
     renderLeftRail();
     renderStream();
     wireEvents();
-
-    // Check if URL has ?post=<id> query param
-    const params = new URLSearchParams(location.search);
-    const targetPostId = params.get("post");
-    if (targetPostId) {
-      openReaderModal(targetPostId);
-    }
   })();
 })();

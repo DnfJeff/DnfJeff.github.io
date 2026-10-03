@@ -237,7 +237,7 @@
         grab("data/feed.json", (d) =>
           (d.posts || []).map((p) => ({
             label: `${p.date} — ${p.title}`,
-            href: `feed.html?post=${encodeURIComponent(p.id)}`,
+            href: `post.html?p=${encodeURIComponent(p.id)}`,
             kind: "dispatch",
           }))
         ),
