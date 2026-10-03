@@ -138,33 +138,54 @@
     return out.join("\n");
   }
 
-  /* ---------------------------------------------------- drawings & modal */
+  /* ---------------------------------------------------- unified inspector modal */
 
   let currentZoom = 1;
-  let activeDrawingSvg = "";
 
-  function openDrawingModal(title, caption, svgHtml) {
-    if (!drawingModalEl) return;
-    const titleEl = $("#drawing-modal-title");
-    const capEl = $("#drawing-modal-cap");
-    const canvasEl = $("#drawing-canvas");
+  function updateZoom(newZoom) {
+    currentZoom = Math.min(Math.max(newZoom, 0.4), 4.0);
+    const canvasEl = $("#inspector-canvas");
+    const zoomLabel = $("#inspector-zoom-level");
+    if (canvasEl) canvasEl.style.transform = `scale(${currentZoom})`;
+    if (zoomLabel) zoomLabel.textContent = `${Math.round(currentZoom * 100)}%`;
+  }
 
-    if (titleEl) titleEl.textContent = title || "Excalidraw Drawing";
+  function openInspector(title, caption, type, content) {
+    const modal = $("#inspector-modal");
+    if (!modal) return;
+
+    const titleEl = $("#inspector-title");
+    const capEl = $("#inspector-cap");
+    const badgeEl = $("#inspector-badge");
+    const canvasEl = $("#inspector-canvas");
+
+    if (titleEl) titleEl.textContent = title || (type === "drawing" ? "Vector Drawing" : "Image Capture");
     if (capEl) capEl.textContent = caption || "";
-    if (canvasEl) {
-      canvasEl.innerHTML = svgHtml || `<p class="soft">No drawing content.</p>`;
-      currentZoom = 1;
-      canvasEl.style.transform = `scale(${currentZoom})`;
+    if (badgeEl) {
+      badgeEl.textContent = type === "drawing" ? "Vector Drawing" : "Image Capture";
+      badgeEl.className = `attach-badge ${type === "drawing" ? "is-drawing" : "is-image"}`;
     }
 
-    drawingModalEl.hidden = false;
+    if (canvasEl) {
+      if (type === "drawing") {
+        canvasEl.innerHTML = content || `<p class="soft">No vector drawing content.</p>`;
+      } else {
+        canvasEl.innerHTML = `<img src="${esc(content)}" alt="${esc(title || 'Image')}">`;
+      }
+      updateZoom(1);
+    }
+
+    modal.hidden = false;
     document.body.style.overflow = "hidden";
   }
 
-  function closeDrawingModal() {
-    if (!drawingModalEl) return;
-    drawingModalEl.hidden = true;
+  function closeInspector() {
+    const modal = $("#inspector-modal");
+    if (!modal) return;
+    modal.hidden = true;
     document.body.style.overflow = "";
+    const canvasEl = $("#inspector-canvas");
+    if (canvasEl) canvasEl.innerHTML = "";
   }
 
   /* ----------------------------------------------------------------- init */
@@ -295,19 +316,9 @@
 
         const isDrawing = att.type === "drawing" || (att.file && att.file.endsWith(".excalidraw"));
         if (isDrawing) {
-          openDrawingModal(att.title, att.caption, att.svg_inline);
+          openInspector(att.title || "Vector Drawing", att.caption, "drawing", att.svg_inline);
         } else {
-          const lb = $("#lightbox");
-          if (lb) {
-            const img = $("img", lb);
-            const capEl = $("[data-lb-cap]", lb);
-            const titleEl = $("[data-lb-title]", lb);
-            if (img) img.src = att.file;
-            if (titleEl) titleEl.textContent = att.title || "";
-            if (capEl) capEl.textContent = att.caption || "";
-            lb.hidden = false;
-            document.body.style.overflow = "hidden";
-          }
+          openInspector(att.title || "Image Capture", att.caption, "image", att.file);
         }
       });
     }
@@ -325,42 +336,34 @@
       pagerEl.innerHTML = link(posts[at - 1], "Newer Dispatch") + link(posts[at + 1], "Older Dispatch");
     }
 
-    // Modal controls
-    $("#zoom-in")?.addEventListener("click", () => {
-      currentZoom = Math.min(currentZoom + 0.25, 3.5);
-      const c = $("#drawing-canvas");
-      if (c) c.style.transform = `scale(${currentZoom})`;
-    });
+    // Inspector controls
+    $("#inspector-zoom-in")?.addEventListener("click", () => updateZoom(currentZoom + 0.25));
+    $("#inspector-zoom-out")?.addEventListener("click", () => updateZoom(currentZoom - 0.25));
+    $("#inspector-zoom-reset")?.addEventListener("click", () => updateZoom(1));
+    $("#inspector-close")?.addEventListener("click", closeInspector);
 
-    $("#zoom-out")?.addEventListener("click", () => {
-      currentZoom = Math.max(currentZoom - 0.25, 0.5);
-      const c = $("#drawing-canvas");
-      if (c) c.style.transform = `scale(${currentZoom})`;
-    });
-
-    $("#zoom-reset")?.addEventListener("click", () => {
-      currentZoom = 1;
-      const c = $("#drawing-canvas");
-      if (c) c.style.transform = `scale(${currentZoom})`;
-    });
-
-    $("[data-close-drawing]")?.addEventListener("click", closeDrawingModal);
-    $("[data-lb-close]")?.addEventListener("click", () => {
-      const lb = $("#lightbox");
-      if (lb) {
-        lb.hidden = true;
-        document.body.style.overflow = "";
+    // Close on clicking backdrop
+    $("#inspector-modal")?.addEventListener("click", (e) => {
+      if (e.target.id === "inspector-body" || e.target.id === "inspector-modal") {
+        closeInspector();
       }
     });
 
+    // Mouse wheel zoom inside inspector
+    $("#inspector-body")?.addEventListener("wheel", (e) => {
+      e.preventDefault();
+      const delta = e.deltaY < 0 ? 0.15 : -0.15;
+      updateZoom(currentZoom + delta);
+    }, { passive: false });
+
+    // Keyboard controls
     document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") {
-        closeDrawingModal();
-        const lb = $("#lightbox");
-        if (lb && !lb.hidden) {
-          lb.hidden = true;
-          document.body.style.overflow = "";
-        }
+      const modal = $("#inspector-modal");
+      if (modal && !modal.hidden) {
+        if (e.key === "Escape") closeInspector();
+        if (e.key === "+" || e.key === "=") updateZoom(currentZoom + 0.25);
+        if (e.key === "-" || e.key === "_") updateZoom(currentZoom - 0.25);
+        if (e.key === "0") updateZoom(1);
       }
     });
   })();

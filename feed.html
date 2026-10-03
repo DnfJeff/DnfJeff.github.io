@@ -95,45 +95,24 @@
     </main>
 
     <!-- ==================================================== modals -->
-
-    <!-- Excalidraw Vector Viewer Modal -->
-    <div class="drawing-modal" id="drawing-modal" hidden role="dialog" aria-modal="true" aria-label="Drawing inspector">
-      <div class="drawing-modal-bar">
-        <div>
-          <strong id="drawing-modal-title" style="font-family:var(--display);font-size:1.15rem">Drawing</strong>
-          <span id="drawing-modal-cap" class="soft" style="font-size:0.85rem;margin-left:var(--s3)"></span>
+    <!-- Unified Media & Drawing Inspector Modal -->
+    <div class="inspector-modal" id="inspector-modal" hidden role="dialog" aria-modal="true" aria-label="Media & Drawing Inspector">
+      <div class="inspector-bar">
+        <div class="inspector-bar-left">
+          <span class="attach-badge" id="inspector-badge">Vector Drawing</span>
+          <strong id="inspector-title">Media Inspector</strong>
+          <span id="inspector-cap" class="inspector-cap soft"></span>
         </div>
-        <div style="display:flex;align-items:center;gap:var(--s2)">
-          <button type="button" class="btn btn-ghost" id="zoom-in" title="Zoom in">+</button>
-          <button type="button" class="btn btn-ghost" id="zoom-out" title="Zoom out">−</button>
-          <button type="button" class="btn btn-ghost" id="zoom-reset" title="Reset zoom">Reset</button>
-          <button type="button" class="btn btn-solid" data-close-drawing aria-label="Close drawing">Close ✕</button>
+        <div class="inspector-bar-actions">
+          <span class="inspector-zoom-level" id="inspector-zoom-level">100%</span>
+          <button type="button" class="btn btn-ghost" id="inspector-zoom-out" title="Zoom out">−</button>
+          <button type="button" class="btn btn-ghost" id="inspector-zoom-in" title="Zoom in">+</button>
+          <button type="button" class="btn btn-ghost" id="inspector-zoom-reset" title="Fit to view">Fit</button>
+          <button type="button" class="btn btn-solid" id="inspector-close" aria-label="Close inspector">Close ✕</button>
         </div>
       </div>
-      <div class="drawing-modal-body">
-        <div class="drawing-canvas" id="drawing-canvas"></div>
-      </div>
-    </div>
-
-    <!-- Full Post Reader Modal -->
-    <div class="post-reader-modal" id="post-reader-modal" hidden role="dialog" aria-modal="true" aria-label="Post reader">
-      <div class="post-reader-box">
-        <button type="button" class="iconbtn" data-close-reader aria-label="Close reader" style="position:absolute;top:var(--s4);right:var(--s4)">
-          ✕
-        </button>
-        <div id="post-reader-content"></div>
-      </div>
-    </div>
-
-    <!-- Lightbox for Photos / GIFs -->
-    <div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="Image zoom">
-      <button class="lightbox-close" data-lb-close type="button" aria-label="Close image">✕</button>
-      <div class="lightbox-in">
-        <img src="" alt="" />
-        <div class="lightbox-cap">
-          <strong data-lb-title></strong>
-          <p data-lb-cap></p>
-        </div>
+      <div class="inspector-body" id="inspector-body">
+        <div class="inspector-canvas" id="inspector-canvas"></div>
       </div>
     </div>
 

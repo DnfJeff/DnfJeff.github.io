@@ -391,12 +391,25 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
     <!-- TAB 0: DISPATCHES MANAGER -->
     <section id="tab-manage" class="studio-tab-content">
       <div class="card" style="padding:var(--s5)">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--s4);flex-wrap:wrap;gap:var(--s2)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--s4);flex-wrap:wrap;gap:var(--s3)">
           <div>
-            <h3 style="margin:0">All Published Dispatches</h3>
+            <h3 style="margin:0">Dispatches &amp; Timeline Feed</h3>
             <span class="stamp" id="manage-count">Loading dispatches...</span>
           </div>
-          <button type="button" class="btn btn-solid" onclick="switchTab('tab-composer'); resetForm();">+ New Dispatch</button>
+          <div style="display:flex;gap:var(--s2);align-items:center">
+            <input type="search" id="manage-search" placeholder="Search dispatches, project, tags..." style="padding:6px 12px;border:1px solid var(--line-strong);border-radius:6px;font-size:0.88rem;width:240px"/>
+            <button type="button" class="btn btn-solid" onclick="switchTab('tab-composer'); resetForm();">+ New Dispatch</button>
+          </div>
+        </div>
+
+        <!-- Prominently Surfaced Status Filter Chips -->
+        <div class="status-filter-bar" style="display:flex;gap:var(--s2);margin-bottom:var(--s4);flex-wrap:wrap;align-items:center">
+          <span class="eyebrow" style="margin:0">Status Filter:</span>
+          <button type="button" class="chip here" data-manage-filter="all" id="mf-all">All (<span id="count-all">0</span>)</button>
+          <button type="button" class="chip" data-manage-filter="in motion" id="mf-in-motion">In Motion (<span id="count-in-motion">0</span>)</button>
+          <button type="button" class="chip" data-manage-filter="done" id="mf-done">Done (<span id="count-done">0</span>)</button>
+          <button type="button" class="chip" data-manage-filter="ahead" id="mf-ahead">Ahead (<span id="count-ahead">0</span>)</button>
+          <button type="button" class="chip" data-manage-filter="shelf" id="mf-shelf">Shelved (<span id="count-shelf">0</span>)</button>
         </div>
 
         <div style="overflow-x:auto">
@@ -406,9 +419,9 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
                 <th>Date</th>
                 <th>Project</th>
                 <th>Title</th>
-                <th>Status (Click to toggle)</th>
-                <th>Media</th>
-                <th>Notes</th>
+                <th>Status (Instant Change)</th>
+                <th>Attachments</th>
+                <th>Field Updates</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -645,6 +658,18 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
         <input type="text" class="att-title" placeholder="Drawing Title" value="${title}" style="flex:1"/>
         <input type="text" class="att-caption" placeholder="Caption (optional)" value="${caption}" style="flex:1"/>
         <button type="button" class="btn btn-ghost" onclick="this.parentElement.remove()">✕</button>`;
+
+      const fInput = row.querySelector('.att-file');
+      const tSelect = row.querySelector('.att-type');
+      fInput.addEventListener('input', () => {
+        const val = fInput.value.trim().toLowerCase();
+        if (val.endsWith('.excalidraw') || val.endsWith('.svg')) {
+          tSelect.value = 'drawing';
+        } else if (val.endsWith('.png') || val.endsWith('.jpg') || val.endsWith('.jpeg') || val.endsWith('.webp') || val.endsWith('.gif')) {
+          tSelect.value = 'image';
+        }
+      });
+
       attList.appendChild(row);
     }
 
@@ -663,6 +688,9 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
       previewBox.innerHTML = '<p class="soft">Live preview will appear here...</p>';
       document.getElementById('save-msg').textContent = '';
     }
+
+    let activeManageFilter = 'all';
+    let manageSearchQuery = '';
 
     function editPost(id) {
       const p = globalPosts.find(x => x.id === id);
@@ -686,14 +714,23 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
       switchTab('tab-composer');
     }
 
-    async function toggleStatus(postId, current) {
-      const nextMap = { 'in motion': 'done', 'done': 'ahead', 'ahead': 'shelf', 'shelf': 'in motion' };
-      const nextStatus = nextMap[current] || 'in motion';
+    function quickAddAddendum(postId) {
+      switchTab('tab-addendums');
+      const sel = document.getElementById('a-post-select');
+      if (sel) {
+        sel.value = postId;
+        renderExistingAddendums();
+      }
+      const noteInput = document.getElementById('a-note');
+      if (noteInput) noteInput.focus();
+    }
+
+    async function changeStatus(postId, newStatus) {
       try {
         const res = await fetch('/api/update-status', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ post_id: postId, status: nextStatus })
+          body: JSON.stringify({ post_id: postId, status: newStatus })
         });
         const data = await res.json();
         if (data.success) {
@@ -706,41 +743,104 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
       }
     }
 
+    function renderDispatchesTable() {
+      const tbody = document.getElementById('dispatches-table-body');
+      if (!tbody) return;
+
+      const filtered = globalPosts.filter(p => {
+        if (activeManageFilter !== 'all' && (p.status || '').toLowerCase() !== activeManageFilter) {
+          return false;
+        }
+        if (manageSearchQuery) {
+          const haystack = `${p.title} ${p.project} ${p.summary} ${(p.tags||[]).join(' ')}`.toLowerCase();
+          if (!haystack.includes(manageSearchQuery)) return false;
+        }
+        return true;
+      });
+
+      if (!filtered.length) {
+        tbody.innerHTML = '<tr><td colspan="7" class="soft" style="text-align:center;padding:var(--s4)">No dispatches match the current filter.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(p => `
+        <tr>
+          <td class="mono" style="font-size:0.84rem;white-space:nowrap">${p.date}</td>
+          <td><b>${p.project}</b></td>
+          <td>
+            <a href="post.html?p=${encodeURIComponent(p.id)}" target="_blank" style="color:var(--ink);text-decoration:none;font-weight:600">${p.title}</a>
+            ${p.summary ? `<p class="soft" style="font-size:0.82rem;margin:2px 0 0">${p.summary}</p>` : ''}
+          </td>
+          <td>
+            <select class="pill ${p.status}" onchange="changeStatus('${p.id}', this.value)" style="cursor:pointer;border:none;outline:none" title="Change status instantly">
+              <option value="in motion" ${p.status === 'in motion' ? 'selected' : ''}>in motion</option>
+              <option value="done" ${p.status === 'done' ? 'selected' : ''}>done</option>
+              <option value="ahead" ${p.status === 'ahead' ? 'selected' : ''}>ahead</option>
+              <option value="shelf" ${p.status === 'shelf' ? 'selected' : ''}>shelved</option>
+            </select>
+          </td>
+          <td class="stamp">${(p.attachments||[]).length} atts</td>
+          <td class="stamp">${(p.addendums||[]).length} updates</td>
+          <td style="white-space:nowrap">
+            <button type="button" class="btn btn-ghost" style="padding:2px 8px;font-size:0.8rem" onclick="editPost('${p.id}')">Edit</button>
+            <button type="button" class="btn btn-ghost" style="padding:2px 8px;font-size:0.8rem" onclick="quickAddAddendum('${p.id}')">+ Note</button>
+            <a href="post.html?p=${encodeURIComponent(p.id)}" target="_blank" class="btn btn-ghost" style="padding:2px 8px;font-size:0.8rem;text-decoration:none">View ↗</a>
+          </td>
+        </tr>
+      `).join('');
+    }
+
     async function loadDispatchesTable() {
       try {
         const res = await fetch('/api/posts');
         const data = await res.json();
         globalPosts = data.posts || [];
-        document.getElementById('manage-count').textContent = `${globalPosts.length} dispatches found`;
 
-        const tbody = document.getElementById('dispatches-table-body');
-        if (!globalPosts.length) {
-          tbody.innerHTML = '<tr><td colspan="7" class="soft">No dispatches yet.</td></tr>';
-          return;
-        }
+        // Update counts
+        const countAll = globalPosts.length;
+        const countMotion = globalPosts.filter(p => p.status === 'in motion').length;
+        const countDone = globalPosts.filter(p => p.status === 'done').length;
+        const countAhead = globalPosts.filter(p => p.status === 'ahead').length;
+        const countShelf = globalPosts.filter(p => p.status === 'shelf').length;
 
-        tbody.innerHTML = globalPosts.map(p => `
-          <tr>
-            <td class="mono" style="font-size:0.84rem">${p.date}</td>
-            <td><b>${p.project}</b></td>
-            <td><a href="post.html?p=${encodeURIComponent(p.id)}" target="_blank" style="color:var(--ink);text-decoration:none">${p.title}</a></td>
-            <td>
-              <button type="button" class="pill ${p.status}" onclick="toggleStatus('${p.id}', '${p.status}')" title="Click to cycle status" style="cursor:pointer;border:none">
-                ${p.status} ↻
-              </button>
-            </td>
-            <td class="stamp">${(p.attachments||[]).length} atts</td>
-            <td class="stamp">${(p.addendums||[]).length} updates</td>
-            <td>
-              <button type="button" class="btn btn-ghost" style="padding:2px 8px;font-size:0.8rem" onclick="editPost('${p.id}')">Edit</button>
-              <a href="post.html?p=${encodeURIComponent(p.id)}" target="_blank" class="btn btn-ghost" style="padding:2px 8px;font-size:0.8rem;text-decoration:none">View</a>
-            </td>
-          </tr>
-        `).join('');
+        const countEl = document.getElementById('manage-count');
+        if (countEl) countEl.textContent = `${countAll} total dispatches`;
 
+        if (document.getElementById('count-all')) document.getElementById('count-all').textContent = countAll;
+        if (document.getElementById('count-in-motion')) document.getElementById('count-in-motion').textContent = countMotion;
+        if (document.getElementById('count-done')) document.getElementById('count-done').textContent = countDone;
+        if (document.getElementById('count-ahead')) document.getElementById('count-ahead').textContent = countAhead;
+        if (document.getElementById('count-shelf')) document.getElementById('count-shelf').textContent = countShelf;
+
+        renderDispatchesTable();
         loadPostsForAddendums();
       } catch(e){}
     }
+
+    document.querySelectorAll('[data-manage-filter]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('[data-manage-filter]').forEach(b => b.classList.remove('here'));
+        btn.classList.add('here');
+        activeManageFilter = btn.dataset.manageFilter;
+        renderDispatchesTable();
+      });
+    });
+
+    document.getElementById('manage-search')?.addEventListener('input', (e) => {
+      manageSearchQuery = e.target.value.toLowerCase().trim();
+      renderDispatchesTable();
+    });
+
+    // Keyboard shortcut Ctrl+S / Cmd+S in composer
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        const composerTab = document.getElementById('tab-composer');
+        if (composerTab && !composerTab.hidden) {
+          e.preventDefault();
+          document.getElementById('post-form').dispatchEvent(new Event('submit', { cancelable: true }));
+        }
+      }
+    });
 
     document.getElementById('btn-rebuild-all').addEventListener('click', async () => {
       const btn = document.getElementById('btn-rebuild-all');

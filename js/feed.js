@@ -376,14 +376,6 @@
     if (activeTag !== "all" && !(p.tags || []).some((t) => t.toLowerCase() === activeTag.toLowerCase())) {
       return false;
     }
-    if (activeMedia === "drawings") {
-      const hasD = (p.attachments || []).some((a) => a.type === "drawing" || (a.file && a.file.endsWith(".excalidraw")));
-      if (!hasD) return false;
-    } else if (activeMedia === "media") {
-      if (!p.attachments || !p.attachments.length) return false;
-    } else if (activeMedia === "library") {
-      if (!p.linked_notes || !p.linked_notes.length) return false;
-    }
 
     if (searchQuery) {
       const haystack = `${p.title} ${p.summary} ${p.body} ${(p.tags || []).join(" ")} ${p.project}`.toLowerCase();
@@ -428,7 +420,6 @@
     activeProject = "all";
     activeStatus = "all";
     activeTag = "all";
-    activeMedia = "all";
     searchQuery = "";
     const searchInput = $("#feed-search");
     if (searchInput) searchInput.value = "";
@@ -452,16 +443,17 @@
     const projectItems = projectsList
       .map(
         (proj) => `
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--s2);margin-bottom:var(--s2)">
-          <button type="button" class="chip${activeProject.toLowerCase() === proj.id.toLowerCase() ? " here" : ""}" data-feed-project="${esc(proj.id)}" style="flex:1;text-align:left">
-            ${esc(proj.name)}
+        <div class="project-nav-row">
+          <button type="button" class="project-nav-btn${activeProject.toLowerCase() === proj.id.toLowerCase() ? " here" : ""}" data-feed-project="${esc(proj.id)}">
+            <span class="project-nav-name">${esc(proj.name)}</span>
+            <span class="project-nav-count">${proj.count}</span>
           </button>
-          ${proj.panelUrl ? `<a href="${esc(proj.panelUrl)}" title="Visit dedicated project panel" class="tile-go" style="margin:0;padding:2px 6px;font-size:0.75rem">Panel ↗</a>` : ""}
+          ${proj.panelUrl ? `<a href="${esc(proj.panelUrl)}" title="Visit dedicated ${esc(proj.name)} panel" class="project-panel-link">Panel ↗</a>` : ""}
         </div>`
       )
       .join("");
 
-    // Status items
+    // Status items (instant 1-click filter)
     const statuses = ["all", "in motion", "done", "ahead"];
     const statusButtons = statuses
       .map(
@@ -472,7 +464,7 @@
       )
       .join("");
 
-    // Tags
+    // Tags (instant 1-click filter)
     const tags = feedData.tags || [];
     const tagChips = tags
       .map(
@@ -506,28 +498,6 @@
       </div>
 
       <div class="card" style="padding:var(--s4)">
-        <p class="eyebrow" style="margin:0 0 var(--s2)">Filter by Content</p>
-        <div class="stack" style="gap:var(--s2);font-size:0.88rem">
-          <label style="display:flex;align-items:center;gap:var(--s2);cursor:pointer">
-            <input type="radio" name="media-filter" value="all" ${activeMedia === "all" ? "checked" : ""}>
-            <span>All entries</span>
-          </label>
-          <label style="display:flex;align-items:center;gap:var(--s2);cursor:pointer">
-            <input type="radio" name="media-filter" value="drawings" ${activeMedia === "drawings" ? "checked" : ""}>
-            <span>Has Excalidraw Drawings</span>
-          </label>
-          <label style="display:flex;align-items:center;gap:var(--s2);cursor:pointer">
-            <input type="radio" name="media-filter" value="media" ${activeMedia === "media" ? "checked" : ""}>
-            <span>Has Bundled Media</span>
-          </label>
-          <label style="display:flex;align-items:center;gap:var(--s2);cursor:pointer">
-            <input type="radio" name="media-filter" value="library" ${activeMedia === "library" ? "checked" : ""}>
-            <span>Linked to Library Notes</span>
-          </label>
-        </div>
-      </div>
-
-      <div class="card" style="padding:var(--s4)">
         <p class="eyebrow" style="margin:0 0 var(--s2)">Topics &amp; Tags</p>
         <div class="chiprow" style="margin:0">
           <button type="button" class="tag${activeTag === "all" ? " here" : ""}" data-feed-tag="all">All</button>
@@ -536,32 +506,54 @@
       </div>`;
   }
 
-  /* ---------------------------------------------------- excalidraw modal */
+  /* ---------------------------------------------------- unified inspector modal */
 
   let currentZoom = 1;
 
-  function openDrawingModal(title, caption, svgHtml) {
-    if (!drawingModalEl) return;
-    const titleEl = $("#drawing-modal-title");
-    const capEl = $("#drawing-modal-cap");
-    const canvasEl = $("#drawing-canvas");
+  function updateZoom(newZoom) {
+    currentZoom = Math.min(Math.max(newZoom, 0.4), 4.0);
+    const canvasEl = $("#inspector-canvas");
+    const zoomLabel = $("#inspector-zoom-level");
+    if (canvasEl) canvasEl.style.transform = `scale(${currentZoom})`;
+    if (zoomLabel) zoomLabel.textContent = `${Math.round(currentZoom * 100)}%`;
+  }
 
-    if (titleEl) titleEl.textContent = title || "Excalidraw Vector Drawing";
+  function openInspector(title, caption, type, content) {
+    const modal = $("#inspector-modal");
+    if (!modal) return;
+
+    const titleEl = $("#inspector-title");
+    const capEl = $("#inspector-cap");
+    const badgeEl = $("#inspector-badge");
+    const canvasEl = $("#inspector-canvas");
+
+    if (titleEl) titleEl.textContent = title || (type === "drawing" ? "Vector Drawing" : "Image Capture");
     if (capEl) capEl.textContent = caption || "";
-    if (canvasEl) {
-      canvasEl.innerHTML = svgHtml || `<p class="soft">No drawing content.</p>`;
-      currentZoom = 1;
-      canvasEl.style.transform = `scale(${currentZoom})`;
+    if (badgeEl) {
+      badgeEl.textContent = type === "drawing" ? "Vector Drawing" : "Image Capture";
+      badgeEl.className = `attach-badge ${type === "drawing" ? "is-drawing" : "is-image"}`;
     }
 
-    drawingModalEl.hidden = false;
+    if (canvasEl) {
+      if (type === "drawing") {
+        canvasEl.innerHTML = content || `<p class="soft">No vector drawing content.</p>`;
+      } else {
+        canvasEl.innerHTML = `<img src="${esc(content)}" alt="${esc(title || 'Image')}">`;
+      }
+      updateZoom(1);
+    }
+
+    modal.hidden = false;
     document.body.style.overflow = "hidden";
   }
 
-  function closeDrawingModal() {
-    if (!drawingModalEl) return;
-    drawingModalEl.hidden = true;
+  function closeInspector() {
+    const modal = $("#inspector-modal");
+    if (!modal) return;
+    modal.hidden = true;
     document.body.style.overflow = "";
+    const canvasEl = $("#inspector-canvas");
+    if (canvasEl) canvasEl.innerHTML = "";
   }
 
   /* ---------------------------------------------------- event handling */
@@ -578,6 +570,9 @@
 
     // Left Rail clicks (delegated)
     leftRailEl?.addEventListener("click", (e) => {
+      // Don't intercept dedicated external panel links
+      if (e.target.closest(".project-panel-link")) return;
+
       const projBtn = e.target.closest("[data-feed-project]");
       if (projBtn) {
         activeProject = projBtn.dataset.feedProject;
@@ -603,53 +598,31 @@
       }
     });
 
-    // Content filter radio changes
-    leftRailEl?.addEventListener("change", (e) => {
-      if (e.target.name === "media-filter") {
-        activeMedia = e.target.value;
-        renderStream();
-      }
-    });
-
     // Stream clicks (delegated)
     streamEl.addEventListener("click", (e) => {
-      // 1. Drawing inspection click
-      const drawCard = e.target.closest(".attach-card.is-drawing");
-      if (drawCard) {
-        const postCard = drawCard.closest(".feed-post");
-        const post = (feedData.posts || []).find((p) => p.id === postCard?.id);
-        const idx = parseInt(drawCard.dataset.attIdx, 10);
-        const att = post && post.attachments ? post.attachments[idx] : null;
-        if (att) {
-          openDrawingModal(att.title, att.caption, att.svg_inline);
-          return;
-        }
-      }
+      // 1. Attachment inspection click (both drawings and images)
+      const attachCard = e.target.closest(".attach-card");
+      if (attachCard) {
+        e.preventDefault();
+        e.stopPropagation();
 
-      // 2. Image lightbox click
-      const imgCard = e.target.closest(".attach-card:not(.is-drawing)");
-      if (imgCard) {
-        const postCard = imgCard.closest(".feed-post");
+        const postCard = attachCard.closest(".feed-post");
         const post = (feedData.posts || []).find((p) => p.id === postCard?.id);
-        const idx = parseInt(imgCard.dataset.attIdx, 10);
+        const idx = parseInt(attachCard.dataset.attIdx, 10);
         const att = post && post.attachments ? post.attachments[idx] : null;
+
         if (att) {
-          const lb = $("#lightbox");
-          if (lb) {
-            const img = $("img", lb);
-            const capEl = $("[data-lb-cap]", lb);
-            const titleEl = $("[data-lb-title]", lb);
-            if (img) img.src = att.file;
-            if (titleEl) titleEl.textContent = att.title || "";
-            if (capEl) capEl.textContent = att.caption || "";
-            lb.hidden = false;
-            document.body.style.overflow = "hidden";
+          const isDrawing = att.type === "drawing" || (att.file && att.file.endsWith(".excalidraw"));
+          if (isDrawing) {
+            openInspector(att.title || "Vector Drawing", att.caption, "drawing", att.svg_inline);
+          } else {
+            openInspector(att.title || "Image Capture", att.caption, "image", att.file);
           }
-          return;
         }
+        return;
       }
 
-      // 3. Tag click inside post
+      // 2. Tag click inside post
       const tagBtn = e.target.closest("[data-feed-tag]");
       if (tagBtn) {
         activeTag = tagBtn.dataset.feedTag;
@@ -658,9 +631,9 @@
         return;
       }
 
-      // 4. Click post to activate it in right rail
+      // 3. Click post to activate it in right rail
       const postCard = e.target.closest(".feed-post");
-      if (postCard && !e.target.closest("a, button, input")) {
+      if (postCard && !e.target.closest("a, button, input, .attach-card")) {
         const id = postCard.id;
         if (id && id !== activePostId) {
           activePostId = id;
@@ -722,42 +695,34 @@
       }, 100);
     });
 
-    // Drawing modal zoom buttons
-    $("#zoom-in")?.addEventListener("click", () => {
-      currentZoom = Math.min(currentZoom + 0.25, 3.5);
-      const c = $("#drawing-canvas");
-      if (c) c.style.transform = `scale(${currentZoom})`;
-    });
+    // Inspector controls
+    $("#inspector-zoom-in")?.addEventListener("click", () => updateZoom(currentZoom + 0.25));
+    $("#inspector-zoom-out")?.addEventListener("click", () => updateZoom(currentZoom - 0.25));
+    $("#inspector-zoom-reset")?.addEventListener("click", () => updateZoom(1));
+    $("#inspector-close")?.addEventListener("click", closeInspector);
 
-    $("#zoom-out")?.addEventListener("click", () => {
-      currentZoom = Math.max(currentZoom - 0.25, 0.5);
-      const c = $("#drawing-canvas");
-      if (c) c.style.transform = `scale(${currentZoom})`;
-    });
-
-    $("#zoom-reset")?.addEventListener("click", () => {
-      currentZoom = 1;
-      const c = $("#drawing-canvas");
-      if (c) c.style.transform = `scale(${currentZoom})`;
-    });
-
-    $("[data-close-drawing]")?.addEventListener("click", closeDrawingModal);
-    $("[data-lb-close]")?.addEventListener("click", () => {
-      const lb = $("#lightbox");
-      if (lb) {
-        lb.hidden = true;
-        document.body.style.overflow = "";
+    // Close on clicking backdrop
+    $("#inspector-modal")?.addEventListener("click", (e) => {
+      if (e.target.id === "inspector-body" || e.target.id === "inspector-modal") {
+        closeInspector();
       }
     });
 
+    // Mouse wheel zoom inside inspector
+    $("#inspector-body")?.addEventListener("wheel", (e) => {
+      e.preventDefault();
+      const delta = e.deltaY < 0 ? 0.15 : -0.15;
+      updateZoom(currentZoom + delta);
+    }, { passive: false });
+
+    // Keyboard controls
     document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") {
-        closeDrawingModal();
-        const lb = $("#lightbox");
-        if (lb && !lb.hidden) {
-          lb.hidden = true;
-          document.body.style.overflow = "";
-        }
+      const modal = $("#inspector-modal");
+      if (modal && !modal.hidden) {
+        if (e.key === "Escape") closeInspector();
+        if (e.key === "+" || e.key === "=") updateZoom(currentZoom + 0.25);
+        if (e.key === "-" || e.key === "_") updateZoom(currentZoom - 0.25);
+        if (e.key === "0") updateZoom(1);
       }
     });
   }
