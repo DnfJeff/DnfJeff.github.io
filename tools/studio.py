@@ -122,6 +122,8 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
             self.send_json(self.add_feed_option(data))
         elif url.path == "/api/save-note":
             self.send_json(self.save_note(data))
+        elif url.path == "/api/import-notes":
+            self.send_json(self.import_notes(data))
         elif url.path == "/api/git-commit":
             msg = data.get("message") or "Update posts and library notes"
             cmd = f'git add . && git commit -m "{msg}"'
@@ -326,13 +328,18 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
 
         if not title:
             return {"success": False, "error": "Note title is required"}
+        if not re.fullmatch(r"[\w-]+", section):
+            return {"success": False, "error": "Invalid section"}
 
         slug = re.sub(r"[^\w]+", "-", title.lower()).strip("-")
         folder = NOTES / section
         folder.mkdir(parents=True, exist_ok=True)
-        file_path = folder / f"{slug}.md"
+        file_path = self.unique_note_path(folder, slug or "note")
 
         tag_str = ", ".join(tags) if isinstance(tags, list) else str(tags)
+        project = str(data.get("project") or "").strip()
+        if project:
+            tag_str = ", ".join(filter(None, [project, tag_str]))
         date_str = date.today().isoformat()
 
         content = f"<!-- summary: {summary} -->\n"
@@ -343,8 +350,48 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
 
         file_path.write_text(content, encoding="utf-8")
 
-        run_command(f'"{sys.executable}" tools/build-library.py')
-        return {"success": True, "path": file_path.as_posix()}
+        result = run_command(f'"{sys.executable}" tools/build-library.py')
+        return {"success": result["success"], "path": file_path.relative_to(ROOT).as_posix(), "error": result["stderr"]}
+
+    @staticmethod
+    def unique_note_path(folder, stem):
+        path = folder / f"{stem}.md"
+        suffix = 2
+        while path.exists():
+            path = folder / f"{stem}-{suffix}.md"
+            suffix += 1
+        return path
+
+    def import_notes(self, data):
+        section = str(data.get("section") or "projects")
+        files = data.get("files") or []
+        if not re.fullmatch(r"[\w-]+", section) or not isinstance(files, list) or not 1 <= len(files) <= 30:
+            return {"success": False, "error": "Choose a section and 1–30 Markdown files."}
+        for item in files:
+            if not isinstance(item, dict) or not str(item.get("name", "")).lower().endswith(".md") or not isinstance(item.get("content"), str) or len(item["content"].encode("utf-8")) > 2_000_000:
+                return {"success": False, "error": "Use .md files smaller than 2 MB each."}
+        folder = NOTES / section
+        folder.mkdir(parents=True, exist_ok=True)
+        project = str(data.get("project") or "").strip()
+        paths = []
+        for item in files:
+            stem = re.sub(r"[^\w-]+", "-", Path(item["name"]).stem).strip("-") or "note"
+            path = self.unique_note_path(folder, stem)
+            content = item["content"].lstrip("\ufeff")
+            if project:
+                match = re.search(r"<!--\s*tags:\s*(.*?)\s*-->", content, re.I)
+                tags = [project] + ([t.strip() for t in match.group(1).split(",") if t.strip() != project] if match else [])
+                comment = "<!-- tags: " + ", ".join(tags).replace("-->", "") + " -->"
+                if match:
+                    content = content[:match.start()] + comment + content[match.end():]
+                else:
+                    frontmatter = re.match(r"\A---\r?\n.*?\r?\n---(?:\r?\n|$)", content, re.S)
+                    position = frontmatter.end() if frontmatter else 0
+                    content = content[:position] + comment + "\n" + content[position:]
+            path.write_text(content, encoding="utf-8")
+            paths.append(path.relative_to(ROOT).as_posix())
+        result = run_command(f'"{sys.executable}" tools/build-library.py')
+        return {"success": result["success"], "paths": paths, "error": result["stderr"]}
 
     def render_dashboard(self):
         return """<!doctype html>
@@ -377,6 +424,7 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
     .post-table th, .post-table td { padding: var(--s3); border-bottom: 1px solid var(--line); text-align: left; }
     .post-table th { font-family: var(--mono); font-size: 0.76rem; text-transform: uppercase; color: var(--ink-faint); }
   </style>
+  <link rel="stylesheet" href="tools/studio.css"/>
 </head>
 <body>
   <div class="studio-container">
@@ -453,6 +501,7 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
 
     <!-- TAB 1: FEED COMPOSER -->
     <section id="tab-composer" class="studio-tab-content" hidden>
+      <div class="workspace-heading"><div><span class="eyebrow">From the workbench</span><h2>Post Composer</h2><p class="soft">Tell the story, then add the details.</p></div></div>
       <div class="card" style="padding:var(--s5)">
         <form id="post-form" class="studio-form">
           <input type="hidden" id="p-id"/>
@@ -462,17 +511,15 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
               <input type="text" id="p-title" placeholder="e.g. Save Editor: Parsing Sims 1 IFF Chunks" required/>
             </div>
             <div class="field">
-              <label>Project</label>
+              <div class="field-heading"><label for="p-project">Project</label><button type="button" class="text-action" data-add-option="project" data-option-target="p-project">+ New</button></div>
               <select id="p-project"></select>
-              <button type="button" class="btn btn-ghost" data-add-option="project">+ Add project</button>
             </div>
           </div>
 
           <div class="form-row">
             <div class="field">
-              <label>Status Pill</label>
+              <div class="field-heading"><label for="p-status">Status</label><button type="button" class="text-action" data-add-option="status" data-option-target="p-status">+ New</button></div>
               <select id="p-status"></select>
-              <button type="button" class="btn btn-ghost" data-add-option="status">+ Add status</button>
             </div>
             <div class="field">
               <label>Tags (comma separated)</label>
@@ -490,9 +537,11 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
           </div>
 
           <div class="field">
-            <label>Link to Library Notes</label>
-            <select id="p-related-notes" multiple style="min-height:90px"></select>
-            <span class="stamp">Hold Ctrl / Cmd to select multiple notes</span>
+            <details class="related-notes-picker"><summary>Related library notes <span id="related-note-count" class="stamp">None selected</span></summary>
+              <input type="search" id="related-note-search" placeholder="Find a note…" aria-label="Find a related library note">
+              <div id="related-note-choices"></div>
+            </details>
+            <select id="p-related-notes" multiple hidden aria-label="Selected library notes"></select>
           </div>
 
           <div class="field">
@@ -519,73 +568,60 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
       </div>
     </section>
 
-    <!-- TAB 2: ADDENDUMS -->
+    <!-- Comments workspace -->
     <section id="tab-addendums" class="studio-tab-content" hidden>
-      <div class="card" style="padding:var(--s5)">
-        <h3 style="margin-top:0">Post Comments</h3>
-        <p class="soft">Your comments appear with the selected post. Add, edit, or delete them here.</p>
-
-        <form id="addendum-form" class="studio-form">
-          <div class="field">
-            <label>Select Post</label>
-            <select id="a-post-select"></select>
-          </div>
-
-          <div id="a-existing-list" style="margin:var(--s3) 0"></div>
-
-          <div class="field">
-            <label>New Comment</label>
-            <textarea id="a-note" style="min-height:100px" placeholder="e.g. Tested on real save. Verified endianness difference in Mac PowerPC release." required></textarea>
-          </div>
-
-          <div class="action-bar">
-            <span id="addendum-msg" class="stamp"></span>
-            <button type="submit" class="btn btn-solid">Add Comment</button>
-          </div>
-        </form>
+      <div class="workspace-heading"><div><span class="eyebrow">The conversation</span><h2>Comments</h2><p class="soft">Follow up on your work, one post at a time.</p></div><span class="workspace-kicker">AUTHOR ONLY</span></div>
+      <div class="comments-workspace">
+        <aside class="thread-sidebar">
+          <label class="eyebrow" for="comment-search">Find a post</label>
+          <input id="comment-search" type="search" placeholder="Search posts…" class="studio-input">
+          <div id="comment-post-list" class="thread-list"></div>
+          <select id="a-post-select" hidden aria-label="Selected post"></select>
+        </aside>
+        <div class="thread-pane">
+          <header id="comment-thread-heading" class="thread-heading"></header>
+          <div id="a-existing-list" class="comment-timeline"></div>
+          <form id="addendum-form" class="comment-compose">
+            <span class="author-avatar" aria-hidden="true">JA</span>
+            <div class="comment-compose-body"><label for="a-note">Add to the conversation</label>
+              <textarea id="a-note" class="studio-input" placeholder="A follow-up, a discovery, a next step…" required></textarea>
+              <div class="comment-compose-footer"><span id="addendum-msg" role="status" class="soft"></span><button type="submit" class="btn btn-solid">Add comment →</button></div>
+            </div>
+          </form>
+        </div>
       </div>
     </section>
 
-    <!-- TAB 3: LIBRARY -->
+    <!-- Library workspace -->
     <section id="tab-library" class="studio-tab-content" hidden>
-      <div class="card" style="padding:var(--s5)">
-        <h3 style="margin-top:0">Add New Library Note</h3>
-        <p class="soft">Create a guide, checklist, or research document under <code>notes/</code>.</p>
-        <form id="note-form" class="studio-form">
-          <div class="form-row">
-            <div class="field" style="grid-column: span 2">
-              <label>Note Title</label>
-              <input type="text" id="n-title" placeholder="e.g. Sims 1 — Hex Offsets Reference" required/>
+      <div class="workspace-heading"><div><span class="eyebrow">Build your reference shelf</span><h2>Library Notes</h2><p class="soft">Write something new or bring in notes you already have.</p></div><a href="library.html" target="_blank" class="text-action">View library ↗</a></div>
+      <div class="library-workspace">
+        <div class="library-main">
+          <div class="workspace-mode" role="group" aria-label="Create a note"><button type="button" class="active" data-library-mode="write" aria-pressed="true">Write a note</button><button type="button" data-library-mode="import" aria-pressed="false">Import Markdown</button></div>
+          <form id="note-form" class="note-writing-pane">
+            <label class="sr-only" for="n-title">Note title</label><input id="n-title" class="note-title-input" placeholder="Give your note a title" required>
+            <label for="n-summary" class="eyebrow">A short introduction</label><input id="n-summary" class="studio-input" placeholder="What will someone find in this note?">
+            <div class="editor-label"><label for="n-body" class="eyebrow">Your note</label><span class="stamp">MARKDOWN</span></div>
+            <textarea id="n-body" class="studio-input note-body-input" placeholder="Start writing…" required></textarea>
+            <div class="workspace-footer"><span id="note-msg" role="status" class="soft"></span><button type="submit" class="btn btn-solid">Save to library →</button></div>
+          </form>
+          <div id="library-import-pane" class="note-import-pane" hidden>
+            <div id="note-dropzone" class="note-dropzone">
+              <span class="drop-symbol" aria-hidden="true">↓</span><h3>Bring your notes with you</h3><p>Drop Markdown files here, or choose them from your computer.</p>
+              <button type="button" id="choose-note-files" class="btn btn-ghost">Choose .md files</button><input type="file" id="note-files" accept=".md,text/markdown" multiple hidden>
+              <span class="stamp">UP TO 30 FILES · 2 MB EACH</span>
             </div>
-            <div class="field">
-              <label>Section</label>
-              <select id="n-section">
-                <option value="projects">Projects</option>
-                <option value="sims-guides">Sims Guides</option>
-                <option value="tools">Tools</option>
-                <option value="writing">Writing</option>
-              </select>
-            </div>
+            <div id="note-import-queue" class="import-queue" aria-live="polite"></div>
+            <div class="workspace-footer"><span id="import-msg" role="status" class="soft">Choose a section and project before importing.</span><button type="button" id="import-notes" class="btn btn-solid" disabled>Import notes →</button></div>
           </div>
-          <div class="form-row">
-            <div class="field" style="grid-column: span 2">
-              <label>Tags</label>
-              <input type="text" id="n-tags" placeholder="Sims 1, Reverse engineering, Reference"/>
-            </div>
-            <div class="field">
-              <label>Summary</label>
-              <input type="text" id="n-summary" placeholder="One or two sentences for the library card"/>
-            </div>
-          </div>
-          <div class="field">
-            <label>Markdown Content</label>
-            <textarea id="n-body" placeholder="Note content in Markdown..."></textarea>
-          </div>
-          <div class="action-bar">
-            <span id="note-msg" class="stamp"></span>
-            <button type="submit" class="btn btn-solid">Save Note to Library</button>
-          </div>
-        </form>
+        </div>
+        <aside class="library-details">
+          <h3>File it where it belongs</h3><p class="soft">These details apply to your note or the whole import.</p>
+          <div class="field"><label for="n-section">Library section</label><select id="n-section"><option value="projects">Projects</option><option value="sims-guides">Sims Guides</option><option value="tools">Tools</option><option value="writing">Writing</option></select></div>
+          <div class="field"><div class="field-heading"><label for="n-project">Project</label><button type="button" class="text-action" data-add-option="project" data-option-target="n-project">+ New</button></div><select id="n-project"><option value="">No project</option></select><span class="field-help">Shared with the feed. Find these notes by project in the library tags.</span></div>
+          <div class="field" id="note-tags-field"><label for="n-tags">Tags</label><input id="n-tags" placeholder="Research, Reference…"><span class="field-help">Separate with commas.</span></div>
+          <div class="filing-note"><span class="eyebrow">Ready when you are</span><p>Saving updates your local library. Use Git &amp; Sync to publish it to the site.</p></div>
+        </aside>
       </div>
     </section>
 
@@ -621,462 +657,7 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
     </section>
   </div>
 
-  <script>
-    let globalPosts = [];
-    let feedOptions = { projects: [], statuses: [] };
-    const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-
-    async function loadFeedOptions() {
-      const response = await fetch('/api/feed-options');
-      feedOptions = await response.json();
-      [['p-project', 'projects'], ['p-status', 'statuses']].forEach(([id, key]) => {
-        const select = document.getElementById(id);
-        const previous = select.value;
-        select.innerHTML = feedOptions[key].map(value => `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`).join('');
-        const preferred = key === 'projects' ? 'Hod' : 'in motion';
-        select.value = feedOptions[key].includes(previous) ? previous : (feedOptions[key].includes(preferred) ? preferred : (feedOptions[key][0] || ''));
-      });
-    }
-
-    const optionDialog = document.getElementById('feed-option-dialog');
-    let optionKind = 'project';
-    document.querySelectorAll('[data-add-option]').forEach(button => button.addEventListener('click', () => {
-      optionKind = button.dataset.addOption;
-      document.getElementById('feed-option-heading').textContent = `Add ${optionKind}`;
-      document.getElementById('feed-option-name').value = '';
-      document.getElementById('feed-option-error').textContent = '';
-      optionDialog.showModal();
-      document.getElementById('feed-option-name').focus();
-    }));
-    document.getElementById('feed-option-cancel').addEventListener('click', () => optionDialog.close());
-    document.getElementById('feed-option-form').addEventListener('submit', async (event) => {
-      event.preventDefault();
-      const kind = optionKind;
-      const value = document.getElementById('feed-option-name').value.trim();
-      if (!value) return;
-      const response = await fetch('/api/add-feed-option', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({kind, value}) });
-      const result = await response.json();
-      if (!result.success) { document.getElementById('feed-option-error').textContent = result.error; return; }
-      await loadFeedOptions();
-      document.getElementById(kind === 'project' ? 'p-project' : 'p-status').value = result.value;
-      await loadDispatchesTable();
-      optionDialog.close();
-    });
-
-    function switchTab(tabId) {
-      document.querySelectorAll('.tab-btn').forEach(b => {
-        b.classList.toggle('active', b.dataset.tab === tabId);
-      });
-      document.querySelectorAll('.studio-tab-content').forEach(c => c.hidden = true);
-      const target = document.getElementById(tabId);
-      if (target) target.hidden = false;
-    }
-
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', () => switchTab(btn.dataset.tab));
-    });
-
-    document.getElementById('p-date').value = new Date().toISOString().split('T')[0];
-
-    const bodyInput = document.getElementById('p-body');
-    const previewBox = document.getElementById('p-preview');
-    bodyInput.addEventListener('input', () => {
-      previewBox.innerHTML = bodyInput.value
-        .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-        .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-        .replace(/^# (.*$)/gim, '<h1>$1</h1>')
-        .replace(/\\*\\*(.*?)\\*\\*/gim, '<strong>$1</strong>')
-        .replace(/`([^`]+)`/gim, '<code>$1</code>')
-        .replace(/\\n\\n/gim, '<p></p>')
-        .replace(/\\n/gim, '<br>');
-    });
-
-    function addAttachmentRow(type = 'drawing', file = '', title = '', caption = '') {
-      const attList = document.getElementById('attachments-list');
-      const row = document.createElement('div');
-      row.className = 'attach-row';
-      row.innerHTML = `
-        <select class="att-type" style="width:130px">
-          <option value="drawing" ${type === 'drawing' ? 'selected' : ''}>.excalidraw</option>
-          <option value="image" ${type === 'image' ? 'selected' : ''}>Image/GIF</option>
-        </select>
-        <input type="text" class="att-file" placeholder="posts/assets/drawing.excalidraw" value="${file}" style="flex:1"/>
-        <input type="text" class="att-title" placeholder="Drawing Title" value="${title}" style="flex:1"/>
-        <input type="text" class="att-caption" placeholder="Caption (optional)" value="${caption}" style="flex:1"/>
-        <button type="button" class="btn btn-ghost" onclick="this.parentElement.remove()">✕</button>`;
-
-      const fInput = row.querySelector('.att-file');
-      const tSelect = row.querySelector('.att-type');
-      fInput.addEventListener('input', () => {
-        const val = fInput.value.trim().toLowerCase();
-        if (val.endsWith('.excalidraw') || val.endsWith('.svg')) {
-          tSelect.value = 'drawing';
-        } else if (val.endsWith('.png') || val.endsWith('.jpg') || val.endsWith('.jpeg') || val.endsWith('.webp') || val.endsWith('.gif')) {
-          tSelect.value = 'image';
-        }
-      });
-
-      attList.appendChild(row);
-    }
-
-    document.getElementById('btn-add-att').addEventListener('click', () => addAttachmentRow());
-
-    function resetForm() {
-      document.getElementById('p-id').value = '';
-      document.getElementById('p-title').value = '';
-      document.getElementById('p-project').value = feedOptions.projects.includes('Hod') ? 'Hod' : feedOptions.projects[0];
-      document.getElementById('p-status').value = feedOptions.statuses.includes('in motion') ? 'in motion' : feedOptions.statuses[0];
-      document.getElementById('p-tags').value = '';
-      document.getElementById('p-date').value = new Date().toISOString().split('T')[0];
-      document.getElementById('p-summary').value = '';
-      document.getElementById('p-body').value = '';
-      document.getElementById('attachments-list').innerHTML = '';
-      previewBox.innerHTML = '<p class="soft">Live preview will appear here...</p>';
-      document.getElementById('save-msg').textContent = '';
-    }
-
-    let activeManageFilter = 'all';
-    let manageSearchQuery = '';
-
-    function editPost(id) {
-      const p = globalPosts.find(x => x.id === id);
-      if (!p) return;
-      document.getElementById('p-id').value = p.id;
-      document.getElementById('p-title').value = p.title || '';
-      document.getElementById('p-project').value = p.project || 'General';
-      document.getElementById('p-status').value = p.status || 'in motion';
-      document.getElementById('p-tags').value = (p.tags || []).join(', ');
-      document.getElementById('p-date').value = p.date || '';
-      document.getElementById('p-summary').value = p.summary || '';
-      document.getElementById('p-body').value = p.body || '';
-      Array.from(document.getElementById('p-related-notes').options).forEach(option => {
-        option.selected = (p.linked_notes || []).some(note => note.path === option.value);
-      });
-
-      const attList = document.getElementById('attachments-list');
-      attList.innerHTML = '';
-      (p.attachments || []).forEach(a => {
-        addAttachmentRow(a.type, a.file, a.title, a.caption);
-      });
-
-      bodyInput.dispatchEvent(new Event('input'));
-      switchTab('tab-composer');
-    }
-
-    function quickAddAddendum(postId) {
-      switchTab('tab-addendums');
-      const sel = document.getElementById('a-post-select');
-      if (sel) {
-        sel.value = postId;
-        renderExistingComments();
-      }
-      const noteInput = document.getElementById('a-note');
-      if (noteInput) noteInput.focus();
-    }
-
-    async function changeStatus(postId, newStatus) {
-      try {
-        const res = await fetch('/api/update-status', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ post_id: postId, status: newStatus })
-        });
-        const data = await res.json();
-        if (data.success) {
-          loadDispatchesTable();
-        } else {
-          alert('Error updating status: ' + data.error);
-        }
-      } catch(e) {
-        alert('Error: ' + e);
-      }
-    }
-
-    function renderDispatchesTable() {
-      const tbody = document.getElementById('dispatches-table-body');
-      if (!tbody) return;
-
-      const filtered = globalPosts.filter(p => {
-        if (activeManageFilter !== 'all' && (p.status || '').toLowerCase() !== activeManageFilter) {
-          return false;
-        }
-        if (manageSearchQuery) {
-          const haystack = `${p.title} ${p.project} ${p.summary} ${(p.tags||[]).join(' ')}`.toLowerCase();
-          if (!haystack.includes(manageSearchQuery)) return false;
-        }
-        return true;
-      });
-
-      if (!filtered.length) {
-        tbody.innerHTML = '<tr><td colspan="7" class="soft" style="text-align:center;padding:var(--s4)">No posts match the current filter.</td></tr>';
-        return;
-      }
-
-      tbody.innerHTML = filtered.map(p => `
-        <tr>
-          <td class="mono" style="font-size:0.84rem;white-space:nowrap">${escapeHtml(p.date)}</td>
-          <td><b>${escapeHtml(p.project)}</b></td>
-          <td>
-            <a href="post.html?p=${encodeURIComponent(p.id)}" target="_blank" style="color:var(--ink);text-decoration:none;font-weight:600">${escapeHtml(p.title)}</a>
-            ${p.summary ? `<p class="soft" style="font-size:0.82rem;margin:2px 0 0">${escapeHtml(p.summary)}</p>` : ''}
-          </td>
-          <td>
-            <select class="pill" onchange="changeStatus('${p.id}', this.value)" style="cursor:pointer;border:none;outline:none" title="Change status instantly">
-              ${feedOptions.statuses.map(status => `<option value="${escapeHtml(status)}" ${p.status === status ? 'selected' : ''}>${escapeHtml(status)}</option>`).join('')}
-            </select>
-          </td>
-          <td class="stamp">${(p.attachments||[]).length} atts</td>
-          <td class="stamp">${(p.comments||[]).length}</td>
-          <td style="white-space:nowrap">
-            <button type="button" class="btn btn-ghost" style="padding:2px 8px;font-size:0.8rem" onclick="editPost('${p.id}')">Edit</button>
-            <button type="button" class="btn btn-ghost" style="padding:2px 8px;font-size:0.8rem" onclick="quickAddAddendum('${p.id}')">Comments</button>
-            <a href="post.html?p=${encodeURIComponent(p.id)}" target="_blank" class="btn btn-ghost" style="padding:2px 8px;font-size:0.8rem;text-decoration:none">View ↗</a>
-          </td>
-        </tr>
-      `).join('');
-    }
-
-    async function loadDispatchesTable() {
-      try {
-        const res = await fetch('/api/posts');
-        const data = await res.json();
-        globalPosts = data.posts || [];
-
-        // Update counts
-        const countAll = globalPosts.length;
-        const countEl = document.getElementById('manage-count');
-        if (countEl) countEl.textContent = `${countAll} total posts`;
-
-        if (document.getElementById('count-all')) document.getElementById('count-all').textContent = countAll;
-        document.getElementById('manage-status-filters').innerHTML = feedOptions.statuses.map(status =>
-          `<button type="button" class="chip ${activeManageFilter === status ? 'here' : ''}" data-manage-filter="${escapeHtml(status)}">${escapeHtml(status)} (${globalPosts.filter(p => p.status === status).length})</button>`).join(' ');
-
-        renderDispatchesTable();
-        loadPostsForAddendums();
-      } catch(e){}
-    }
-
-    document.querySelector('.status-filter-bar').addEventListener('click', (event) => {
-      const btn = event.target.closest('[data-manage-filter]');
-      if (!btn) return;
-        document.querySelectorAll('[data-manage-filter]').forEach(b => b.classList.remove('here'));
-        btn.classList.add('here');
-        activeManageFilter = btn.dataset.manageFilter;
-        renderDispatchesTable();
-    });
-
-    document.getElementById('manage-search')?.addEventListener('input', (e) => {
-      manageSearchQuery = e.target.value.toLowerCase().trim();
-      renderDispatchesTable();
-    });
-
-    // Keyboard shortcut Ctrl+S / Cmd+S in composer
-    document.addEventListener('keydown', (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-        const composerTab = document.getElementById('tab-composer');
-        if (composerTab && !composerTab.hidden) {
-          e.preventDefault();
-          document.getElementById('post-form').dispatchEvent(new Event('submit', { cancelable: true }));
-        }
-      }
-    });
-
-    document.getElementById('btn-rebuild-all').addEventListener('click', async () => {
-      const btn = document.getElementById('btn-rebuild-all');
-      btn.disabled = true;
-      btn.textContent = 'Rebuilding...';
-      try {
-        const res = await fetch('/api/rebuild', { method: 'POST' });
-        const data = await res.json();
-        alert(data.message);
-        loadStatus();
-        loadDispatchesTable();
-      } catch(e) {
-        alert('Rebuild error: ' + e);
-      } finally {
-        btn.disabled = false;
-        btn.textContent = '⚡ Rebuild All';
-      }
-    });
-
-    document.getElementById('post-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const saveMsg = document.getElementById('save-msg');
-      saveMsg.textContent = 'Saving post...';
-
-      const attRows = Array.from(document.querySelectorAll('.attach-row'));
-      const attachments = attRows.map(r => ({
-        type: r.querySelector('.att-type').value,
-        file: r.querySelector('.att-file').value.trim(),
-        title: r.querySelector('.att-title').value.trim(),
-        caption: r.querySelector('.att-caption').value.trim(),
-      })).filter(a => a.file);
-
-      const selNotes = Array.from(document.getElementById('p-related-notes').selectedOptions).map(o => o.value);
-
-      const payload = {
-        id: document.getElementById('p-id').value.trim() || undefined,
-        title: document.getElementById('p-title').value.trim(),
-        project: document.getElementById('p-project').value,
-        status: document.getElementById('p-status').value,
-        tags: document.getElementById('p-tags').value.split(',').map(t => t.trim()).filter(Boolean),
-        date: document.getElementById('p-date').value,
-        summary: document.getElementById('p-summary').value.trim(),
-        related_notes: selNotes,
-        attachments: attachments,
-        body: document.getElementById('p-body').value.trim()
-      };
-
-      try {
-        const res = await fetch('/api/save-post', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        const data = await res.json();
-        if (data.success) {
-          saveMsg.textContent = '✓ Post saved & published!';
-          loadDispatchesTable();
-          setTimeout(() => switchTab('tab-manage'), 1200);
-        } else {
-          saveMsg.textContent = 'Error: ' + data.error;
-        }
-      } catch(e) {
-        saveMsg.textContent = 'Error: ' + e;
-      }
-    });
-
-    async function loadLibraryOptions() {
-      try {
-        const res = await fetch('/api/library');
-        const data = await res.json();
-        const sel = document.getElementById('p-related-notes');
-        sel.innerHTML = (data.entries || []).map(n => `
-          <option value="${n.path}">${n.section}: ${n.title}</option>
-        `).join('');
-      } catch(e){}
-    }
-
-    async function loadPostsForAddendums() {
-      const sel = document.getElementById('a-post-select');
-      const previous = sel.value;
-      sel.innerHTML = globalPosts.map(p => `
-        <option value="${escapeHtml(p.id)}">${escapeHtml(p.date)} — [${escapeHtml(p.project)}] ${escapeHtml(p.title)} (${(p.comments||[]).length} ${(p.comments||[]).length === 1 ? 'comment' : 'comments'})</option>
-      `).join('');
-      if (globalPosts.some(p => p.id === previous)) sel.value = previous;
-      renderExistingComments();
-    }
-
-    function renderExistingComments() {
-      const selId = document.getElementById('a-post-select').value;
-      const listEl = document.getElementById('a-existing-list');
-      const post = globalPosts.find(p => p.id === selId);
-      if (!post || !post.comments || !post.comments.length) {
-        listEl.innerHTML = '<span class="stamp">No comments on this post yet.</span>';
-        return;
-      }
-      listEl.innerHTML = '<span class="eyebrow">Comments</span>' + post.comments.map(c => `
-        <div class="card" style="padding:var(--s3);margin:var(--s2) 0" data-comment-id="${escapeHtml(c.id)}">
-          <span class="stamp">${escapeHtml(c.date)}</span>
-          <textarea style="min-height:80px;margin:var(--s2) 0">${escapeHtml(c.body)}</textarea>
-          <div style="display:flex;gap:var(--s2)"><button type="button" class="btn btn-ghost" data-comment-action="save">Save edit</button>
-          <button type="button" class="btn btn-ghost" data-comment-action="delete">Delete</button></div>
-        </div>`).join('');
-    }
-
-    document.getElementById('a-post-select').addEventListener('change', renderExistingComments);
-    document.getElementById('a-existing-list').addEventListener('click', async (event) => {
-      const button = event.target.closest('[data-comment-action]');
-      if (!button) return;
-      const item = button.closest('[data-comment-id]');
-      const deleting = button.dataset.commentAction === 'delete';
-      if (deleting && !confirm('Delete this comment?')) return;
-      const response = await fetch(deleting ? '/api/delete-comment' : '/api/save-comment', {
-        method: 'POST', headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ post_id: document.getElementById('a-post-select').value, id: item.dataset.commentId, body: item.querySelector('textarea').value })
-      });
-      const result = await response.json();
-      document.getElementById('addendum-msg').textContent = result.success ? (deleting ? 'Comment deleted.' : 'Comment updated.') : result.error;
-      if (result.success) await loadDispatchesTable();
-    });
-
-    document.getElementById('addendum-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const msg = document.getElementById('addendum-msg');
-      msg.textContent = 'Adding comment...';
-      const payload = {
-        post_id: document.getElementById('a-post-select').value,
-        body: document.getElementById('a-note').value.trim()
-      };
-      try {
-        const res = await fetch('/api/save-comment', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        const data = await res.json();
-        if (data.success) {
-          msg.textContent = '✓ Comment added.';
-          document.getElementById('a-note').value = '';
-          loadDispatchesTable();
-        } else {
-          msg.textContent = 'Error: ' + data.error;
-        }
-      } catch(e) {
-        msg.textContent = 'Error: ' + e;
-      }
-    });
-
-    async function loadStatus() {
-      try {
-        const res = await fetch('/api/status');
-        const d = await res.json();
-        const ind = document.getElementById('git-indicator');
-        if (d.git_changed) {
-          ind.className = 'status-badge dirty';
-          ind.textContent = 'Git: Changes Pending';
-        } else {
-          ind.className = 'status-badge clean';
-          ind.textContent = 'Git: Clean';
-        }
-        document.getElementById('git-output').textContent = d.git_status || 'Working tree clean. All files committed.';
-      } catch(e){}
-    }
-
-    document.getElementById('btn-git-commit').addEventListener('click', async () => {
-      const msg = prompt('Commit message:', 'Update posts and site');
-      if (!msg) return;
-      const res = await fetch('/api/git-commit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: msg })
-      });
-      const data = await res.json();
-      alert(data.stdout || data.stderr || 'Committed.');
-      loadStatus();
-    });
-
-    document.getElementById('btn-git-push').addEventListener('click', async () => {
-      const btn = document.getElementById('btn-git-push');
-      btn.disabled = true;
-      btn.textContent = 'Pushing...';
-      try {
-        const res = await fetch('/api/git-push', { method: 'POST' });
-        const data = await res.json();
-        alert(data.stdout || data.stderr || 'Pushed to GitHub Pages.');
-        loadStatus();
-      } catch(e) {
-        alert('Push failed: ' + e);
-      } finally {
-        btn.disabled = false;
-        btn.textContent = 'Push to GitHub';
-      }
-    });
-
-    loadStatus();
-    loadLibraryOptions();
-    loadFeedOptions().then(loadDispatchesTable);
-  </script>
+  <script src="tools/studio.js"></script>
 </body>
 </html>"""
 
