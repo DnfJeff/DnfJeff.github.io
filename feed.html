@@ -11,7 +11,7 @@
     <meta name="theme-color" content="#e8551d" />
     <link rel="icon" href="favicon.ico" sizes="32x32" />
     <link rel="icon" href="assets/web/icon.png" type="image/png" />
-    <link rel="stylesheet" href="css/site.css?v=4" />
+    <link rel="stylesheet" href="css/site.css?v=5" />
     <script>
       document.documentElement.classList.add("js");
       try {
@@ -21,7 +21,7 @@
     </script>
   </head>
 
-  <body>
+  <body class="feed-page">
     <a class="skip" href="#main">Skip to content</a>
 
     <header class="topbar">
@@ -53,27 +53,31 @@
 
     <main id="main">
       <!-- ===================================================== header -->
-      <section class="wrap" style="padding-block: var(--s8) var(--s5)">
+      <section class="feed-wrap feed-heading">
         <p class="eyebrow">Timeline &amp; field dispatches</p>
-        <h1 style="font-size: clamp(2.2rem, 5.4vw, 3.4rem); margin-bottom: var(--s3)">
+        <h1>
           The Feed
         </h1>
-        <p style="max-width: 62ch; font-size: 1.08rem" class="soft">
-          Handcrafted dispatches, reverse engineering breakthroughs, archival finds,
-          and vector diagrams. Updates and field notes are appended chronologically.
+        <p class="soft">
+          Work in progress, archival finds, and notes from the bench.
+          Browse by project or follow a thread through the tags.
         </p>
       </section>
 
       <!-- ================================================= search / status -->
-      <section class="wrap" style="padding-bottom: var(--s4)">
-        <div class="lede" style="margin-bottom: var(--s3); align-items: center">
-          <label class="searchbox" style="max-width: 32rem; flex: 1">
+      <section class="feed-wrap feed-toolbar" aria-label="Search and active filters">
+        <div class="feed-search-row">
+          <label class="searchbox">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <circle cx="11" cy="11" r="6.4" /><path d="m16 16 4.2 4.2" />
             </svg>
             <input id="feed-search" type="search" placeholder="Search dispatches, tags, notes…" aria-label="Search feed" />
           </label>
-          <p class="stamp" id="feed-count"></p>
+          <p class="stamp" id="feed-count" role="status" aria-live="polite" aria-atomic="true"></p>
+        </div>
+        <div class="feed-selection-row">
+          <div class="chiprow" id="feed-active-filters" aria-label="Active filters"></div>
+          <button type="button" class="btn btn-ghost" id="feed-clear" data-clear hidden>Clear all</button>
         </div>
       </section>
 
@@ -81,10 +85,10 @@
       <div class="feed-wrap" style="padding-bottom: var(--s9)">
         <div class="feed-layout">
           <!-- Left Rail: Filters, Bio & Categories -->
-          <aside class="feed-rail-left" id="feed-rail-left"></aside>
+          <aside class="feed-rail-left" id="feed-rail-left" aria-label="Feed filters"></aside>
 
           <!-- Center Stream: Connected Timeline -->
-          <section class="feed-stream" id="feed-stream">
+          <section class="feed-stream" id="feed-stream" aria-label="Posts, newest first">
             <div class="empty"><p>Loading the feed…</p></div>
           </section>
 
@@ -96,7 +100,7 @@
 
     <!-- ==================================================== modals -->
     <!-- Unified Media & Drawing Inspector Modal -->
-    <div class="inspector-modal" id="inspector-modal" hidden role="dialog" aria-modal="true" aria-label="Media & Drawing Inspector">
+    <dialog class="inspector-modal feed-inspector" id="inspector-modal" aria-labelledby="inspector-title" aria-describedby="inspector-help">
       <div class="inspector-bar">
         <div class="inspector-bar-left">
           <span class="attach-badge" id="inspector-badge">Vector Drawing</span>
@@ -105,8 +109,8 @@
         </div>
         <div class="inspector-bar-actions">
           <span class="inspector-zoom-level" id="inspector-zoom-level">100%</span>
-          <button type="button" class="btn btn-ghost" id="inspector-zoom-out" title="Zoom out">−</button>
-          <button type="button" class="btn btn-ghost" id="inspector-zoom-in" title="Zoom in">+</button>
+          <button type="button" class="btn btn-ghost" id="inspector-zoom-out" aria-label="Zoom out">−</button>
+          <button type="button" class="btn btn-ghost" id="inspector-zoom-in" aria-label="Zoom in">+</button>
           <button type="button" class="btn btn-ghost" id="inspector-zoom-reset" title="Fit to view">Fit</button>
           <button type="button" class="btn btn-solid" id="inspector-close" aria-label="Close inspector">Close ✕</button>
         </div>
@@ -114,7 +118,8 @@
       <div class="inspector-body" id="inspector-body">
         <div class="inspector-canvas" id="inspector-canvas"></div>
       </div>
-    </div>
+      <p class="inspector-help stamp" id="inspector-help">Drag to pan · + / − to zoom · Arrow keys to pan · 0 to fit · Esc to close</p>
+    </dialog>
 
     <footer class="foot">
       <div class="wrap foot-in">
@@ -163,7 +168,7 @@
     </div>
 
     <script src="js/site.js?v=4"></script>
-    <script src="js/feed.js?v=4"></script>
+    <script src="js/feed.js?v=5"></script>
     <script>
       document.getElementById("year").textContent = new Date().getFullYear();
     </script>
