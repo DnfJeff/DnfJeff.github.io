@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Attack of the Show — episode notes — DNF</title>
+    <title>Feed &amp; Dispatches — DNF</title>
     <meta
       name="description"
-      content="Episode-by-episode notes on G4's Attack of the Show (2005–2013): who turned up, what they talked about, and when."
+      content="Handcrafted dispatches, reverse engineering progress, archival finds, drawings and field notes by Jeff Adkins."
     />
     <meta name="theme-color" content="#e8551d" />
     <link rel="icon" href="favicon.ico" sizes="32x32" />
@@ -33,8 +33,8 @@
         <nav class="nav" id="nav" aria-label="Primary">
           <a href="index.html">Home</a>
           <a href="hod.html">Hod</a>
-          <a href="aots.html" aria-current="page">Attack of the Show</a>
-          <a href="feed.html">Feed</a>
+          <a href="aots.html">Attack of the Show</a>
+          <a href="feed.html" aria-current="page">Feed</a>
           <a href="library.html">Writing</a>
           <a href="about.html">About</a>
         </nav>
@@ -55,70 +55,89 @@
 
     <main id="main">
       <!-- ===================================================== header -->
-      <section class="wrap" style="padding-block: var(--s8) var(--s6)">
-        <p class="eyebrow">Project · television archival</p>
-        <h1 style="font-size: clamp(2.2rem, 5.4vw, 3.4rem); margin-bottom: var(--s4)">
-          Attack of the Show
+      <section class="wrap" style="padding-block: var(--s8) var(--s5)">
+        <p class="eyebrow">Timeline &amp; field dispatches</p>
+        <h1 style="font-size: clamp(2.2rem, 5.4vw, 3.4rem); margin-bottom: var(--s3)">
+          The Feed
         </h1>
         <p style="max-width: 62ch; font-size: 1.08rem" class="soft">
-          G4's daily show ran from March 2005 to January 2013 and was never
-          properly indexed. Most of it isn't streaming anywhere. I'm working
-          through what survives and writing down what actually happened in each
-          episode — who turned up, what they were there for, and where in the
-          runtime to find it.
+          Handcrafted dispatches, reverse engineering breakthroughs, archival finds,
+          and vector diagrams. Updates and field notes are appended chronologically.
         </p>
-        <p class="stamp" id="aots-stamp">Loading…</p>
       </section>
 
-      <section class="wrap band-sm" style="padding-top: 0">
-        <div class="stats" id="aots-summary" data-rise></div>
-      </section>
-
-      <!-- ====================================================== years -->
-      <section class="wrap band-sm" id="years-section">
-        <div class="lede" data-rise>
-          <div>
-            <p class="eyebrow">The run</p>
-            <h2>Nine years, one at a time</h2>
-          </div>
-          <p>
-            Each bar is episodes written up against the reconstructed broadcast
-            schedule for that year. Greyed-out years haven't been started.
-          </p>
-        </div>
-        <div class="years" id="years"></div>
-      </section>
-
-      <!-- =================================================== episodes -->
-      <section class="wrap band-sm">
-        <div class="lede" data-rise>
-          <div>
-            <p class="eyebrow">Notes</p>
-            <h2>Episodes</h2>
-            <p class="stamp" id="year-context" style="margin-top: var(--s2); display: block"></p>
-          </div>
-          <label class="searchbox" style="min-width: min(100%, 20rem)">
+      <!-- ================================================= search / status -->
+      <section class="wrap" style="padding-bottom: var(--s4)">
+        <div class="lede" style="margin-bottom: var(--s3); align-items: center">
+          <label class="searchbox" style="max-width: 32rem; flex: 1">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <circle cx="11" cy="11" r="6.4" /><path d="m16 16 4.2 4.2" />
             </svg>
-            <input id="ep-search" type="search" placeholder="A guest, a topic, a segment…" aria-label="Search episodes" />
+            <input id="feed-search" type="search" placeholder="Search dispatches, tags, notes…" aria-label="Search feed" />
           </label>
+          <p class="stamp" id="feed-count"></p>
         </div>
-        <div id="episodes"></div>
       </section>
 
-      <section class="wrap band-sm">
-        <div class="card" data-rise style="max-width: 62ch">
-          <p class="eyebrow">How these are made</p>
-          <p class="soft" style="margin: 0">
-            Each episode gets transcribed, then read through and broken down into
-            hosts, appearances, segments and topics. Only the finished notes end
-            up on this site — no transcripts, no video, nothing that isn't mine
-            to publish. Timestamps point into the episode, not to a copy of it.
-          </p>
+      <!-- ================================================ 3-column layout -->
+      <div class="feed-wrap" style="padding-bottom: var(--s9)">
+        <div class="feed-layout">
+          <!-- Left Rail: Filters, Bio & Categories -->
+          <aside class="feed-rail-left" id="feed-rail-left"></aside>
+
+          <!-- Center Stream: Connected Timeline -->
+          <section class="feed-stream" id="feed-stream">
+            <div class="empty"><p>Loading the feed…</p></div>
+          </section>
+
+          <!-- Right Rail: Dedicated Author Addendums & Logs -->
+          <aside class="feed-rail-right" id="feed-rail-right"></aside>
         </div>
-      </section>
+      </div>
     </main>
+
+    <!-- ==================================================== modals -->
+
+    <!-- Excalidraw Vector Viewer Modal -->
+    <div class="drawing-modal" id="drawing-modal" hidden role="dialog" aria-modal="true" aria-label="Drawing inspector">
+      <div class="drawing-modal-bar">
+        <div>
+          <strong id="drawing-modal-title" style="font-family:var(--display);font-size:1.15rem">Drawing</strong>
+          <span id="drawing-modal-cap" class="soft" style="font-size:0.85rem;margin-left:var(--s3)"></span>
+        </div>
+        <div style="display:flex;align-items:center;gap:var(--s2)">
+          <button type="button" class="btn btn-ghost" id="zoom-in" title="Zoom in">+</button>
+          <button type="button" class="btn btn-ghost" id="zoom-out" title="Zoom out">−</button>
+          <button type="button" class="btn btn-ghost" id="zoom-reset" title="Reset zoom">Reset</button>
+          <button type="button" class="btn btn-solid" data-close-drawing aria-label="Close drawing">Close ✕</button>
+        </div>
+      </div>
+      <div class="drawing-modal-body">
+        <div class="drawing-canvas" id="drawing-canvas"></div>
+      </div>
+    </div>
+
+    <!-- Full Post Reader Modal -->
+    <div class="post-reader-modal" id="post-reader-modal" hidden role="dialog" aria-modal="true" aria-label="Post reader">
+      <div class="post-reader-box">
+        <button type="button" class="iconbtn" data-close-reader aria-label="Close reader" style="position:absolute;top:var(--s4);right:var(--s4)">
+          ✕
+        </button>
+        <div id="post-reader-content"></div>
+      </div>
+    </div>
+
+    <!-- Lightbox for Photos / GIFs -->
+    <div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="Image zoom">
+      <button class="lightbox-close" data-lb-close type="button" aria-label="Close image">✕</button>
+      <div class="lightbox-in">
+        <img src="" alt="" />
+        <div class="lightbox-cap">
+          <strong data-lb-title></strong>
+          <p data-lb-cap></p>
+        </div>
+      </div>
+    </div>
 
     <footer class="foot">
       <div class="wrap foot-in">
@@ -160,14 +179,14 @@
 
     <div class="palette" id="palette" hidden role="dialog" aria-modal="true" aria-label="Jump to">
       <div class="palette-box">
-        <input type="text" placeholder="Jump to a page, a note, an episode…" aria-label="Search" autocomplete="off" />
+        <input type="text" placeholder="Jump to a page, a note, an episode, a dispatch…" aria-label="Search" autocomplete="off" />
         <ul role="listbox"></ul>
         <p class="palette-none" hidden>Nothing matches that.</p>
       </div>
     </div>
 
     <script src="js/site.js?v=1"></script>
-    <script src="js/aots.js?v=1"></script>
+    <script src="js/feed.js?v=1"></script>
     <script>
       document.getElementById("year").textContent = new Date().getFullYear();
     </script>

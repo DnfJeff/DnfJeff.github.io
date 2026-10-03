@@ -208,6 +208,7 @@
       { label: "Home", href: "index.html", kind: "page" },
       { label: "Hod — Sims 1 tools", href: "hod.html", kind: "page" },
       { label: "Attack of the Show — episode notes", href: "aots.html", kind: "page" },
+      { label: "The Feed — Timeline & field notes", href: "feed.html", kind: "page" },
       { label: "Writing & notes", href: "library.html", kind: "page" },
       { label: "About", href: "about.html", kind: "page" },
       { label: "GitHub — DnfJeff", href: "https://github.com/DnfJeff", kind: "link" },
@@ -231,6 +232,13 @@
             label: e.title,
             href: `note.html?n=${encodeURIComponent(e.path)}`,
             kind: e.section.toLowerCase(),
+          }))
+        ),
+        grab("data/feed.json", (d) =>
+          (d.posts || []).map((p) => ({
+            label: `${p.date} — ${p.title}`,
+            href: `feed.html?post=${encodeURIComponent(p.id)}`,
+            kind: "dispatch",
           }))
         ),
         grab("data/aots.json", (d) =>

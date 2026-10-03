@@ -1,0 +1,11 @@
+<svg viewBox="28.0 28.0 756.0 406.0" xmlns="http://www.w3.org/2000/svg" class="excalidraw-svg">
+<defs><marker id="excal-arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="currentColor" /></marker></defs>
+<rect x="60" y="60" width="260" height="90" rx="8" fill="#f7e7d8" stroke="#c75c26" stroke-width="2" />
+<text x="80" y="98" font-size="18" font-family="system-ui, sans-serif" fill="#241d18"><tspan x="80" dy="0">IFF 64-Byte Header</tspan><tspan x="80" dy="23.400000000000002">[Magic &#x27;IFF FILE 2.0&#x27;]</tspan></text>
+<path d="M 320.0 105.0 L 410.0 105.0" fill="none" stroke="#e8551d" stroke-width="2" marker-end="url(#excal-arrow)" style="color: #e8551d" />
+<rect x="420" y="60" width="300" height="90" rx="8" fill="#e9ecd9" stroke="#4f6b35" stroke-width="2" />
+<text x="440" y="98" font-size="18" font-family="system-ui, sans-serif" fill="#241d18"><tspan x="440" dy="0">RSMP Resource Map</tspan><tspan x="440" dy="23.400000000000002">[Offset Table + Chunk Ptrs]</tspan></text>
+<path d="M 570.0 150.0 L 570.0 230.0" fill="none" stroke="#e8551d" stroke-width="2" marker-end="url(#excal-arrow)" style="color: #e8551d" />
+<rect x="200" y="240" width="520" height="130" rx="8" fill="#fffdf8" stroke="#241d18" stroke-width="2" />
+<text x="230" y="281" font-size="16" font-family="ui-monospace, monospace" fill="#241d18"><tspan x="230" dy="0">Chunk Payloads (OBJD, SPR#, DGRP, BHAV)</tspan><tspan x="230" dy="20.8">4-Byte Type Tag + 4-Byte Size</tspan><tspan x="230" dy="20.8">Payload Body (Decompressed / Indexed)</tspan></text>
+</svg>

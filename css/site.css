@@ -1819,6 +1819,525 @@ hr {
   transform: translateY(14px);
 }
 
+/* ----------------------------------------------------------------- feed */
+
+.feed-wrap {
+  width: 100%;
+  max-width: 1260px;
+  margin-inline: auto;
+  padding-inline: var(--s5);
+}
+
+.feed-layout {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr) 290px;
+  gap: var(--s6);
+  align-items: start;
+  margin-top: var(--s4);
+}
+
+.feed-rail-left {
+  position: sticky;
+  top: calc(var(--bar-h) + var(--s4));
+  display: grid;
+  gap: var(--s4);
+}
+
+.feed-rail-right {
+  position: sticky;
+  top: calc(var(--bar-h) + var(--s4));
+  display: grid;
+  gap: var(--s4);
+}
+
+.feed-stream {
+  min-width: 0;
+}
+
+/* The Feed Timeline Track (Hod-inspired continuous vertical progression) */
+.feed-track {
+  border-left: 2px solid var(--line);
+  margin-left: 10px;
+  padding-left: var(--s5);
+  display: grid;
+  gap: var(--s6);
+  position: relative;
+}
+
+.feed-post {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  padding: var(--s5);
+  box-shadow: var(--shadow-soft);
+  transition: border-color var(--t-fast) var(--ease),
+    box-shadow var(--t-fast) var(--ease);
+}
+
+.feed-post:hover {
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow-lift);
+}
+
+.feed-post.is-active {
+  border-color: var(--accent);
+}
+
+/* Timeline node bullet */
+.feed-post::before {
+  content: "";
+  position: absolute;
+  left: calc(-1 * var(--s5) - 17px);
+  top: 24px;
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  background: var(--paper);
+  border: 3px solid var(--ahead);
+  transition: background var(--t-fast) var(--ease),
+    border-color var(--t-fast) var(--ease);
+}
+
+.feed-post[data-status="done"]::before {
+  background: var(--done);
+  border-color: var(--done);
+}
+
+.feed-post[data-status="in motion"]::before,
+.feed-post.is-active::before {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 25%, transparent);
+}
+
+/* Header */
+.feed-post-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s3);
+  margin-bottom: var(--s3);
+  flex-wrap: wrap;
+}
+
+.feed-meta-row {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  flex-wrap: wrap;
+}
+
+.feed-post-title {
+  font-family: var(--display);
+  font-size: 1.35rem;
+  margin: 0 0 var(--s3);
+  line-height: 1.25;
+}
+
+.feed-post-title a {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.feed-post-title a:hover {
+  color: var(--accent);
+}
+
+.feed-prose {
+  color: var(--ink);
+  font-size: 0.98rem;
+  line-height: 1.62;
+}
+
+.feed-prose > * + * {
+  margin-top: var(--s3);
+}
+
+.feed-prose p {
+  margin: 0 0 var(--s3);
+}
+
+.feed-prose code {
+  background: var(--code-bg);
+  padding: 0.15em 0.35em;
+  border-radius: 4px;
+  font-size: 0.88em;
+}
+
+.feed-prose pre {
+  background: var(--code-bg);
+  padding: var(--s3);
+  border-radius: var(--r-card);
+  overflow-x: auto;
+  border: 1px solid var(--line);
+}
+
+.feed-prose ul,
+.feed-prose ol {
+  padding-left: 1.3rem;
+  margin: 0 0 var(--s3);
+}
+
+.feed-prose li + li {
+  margin-top: var(--s1);
+}
+
+/* Interplay: Linked Library Note Tile inside a Post */
+.feed-library-interplay {
+  margin-top: var(--s4);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  padding: var(--s3) var(--s4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s1);
+}
+
+.feed-library-interplay .interplay-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s2);
+}
+
+.feed-library-interplay h4 {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.feed-library-interplay p {
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+/* Bundled Attachments Tray (Facebook style) */
+.feed-attachments {
+  margin-top: var(--s4);
+  padding-top: var(--s4);
+  border-top: 1px solid var(--line);
+}
+
+.feed-attachments-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--s2);
+}
+
+.attach-grid {
+  display: grid;
+  gap: var(--s3);
+  border-radius: var(--r-card);
+  overflow: hidden;
+}
+
+.attach-grid.grid-1 {
+  grid-template-columns: 1fr;
+}
+
+.attach-grid.grid-2 {
+  grid-template-columns: 1fr 1fr;
+}
+
+.attach-grid.grid-3 {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.attach-card {
+  position: relative;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  cursor: zoom-in;
+  transition: transform var(--t-fast) var(--ease),
+    border-color var(--t-fast) var(--ease);
+}
+
+.attach-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--line-strong);
+}
+
+.attach-preview {
+  aspect-ratio: 16 / 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--paper-deep);
+  position: relative;
+}
+
+.attach-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.attach-cap {
+  padding: var(--s2) var(--s3);
+  font-size: 0.8rem;
+  line-height: 1.35;
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+}
+
+.attach-cap strong {
+  display: block;
+  color: var(--ink);
+}
+
+.attach-cap span {
+  color: var(--ink-soft);
+}
+
+/* Excalidraw Drawing Preview Tile */
+.attach-card.is-drawing .attach-preview {
+  background: var(--paper);
+  padding: var(--s2);
+}
+
+.attach-card.is-drawing svg {
+  width: 100%;
+  height: 100%;
+  max-height: 220px;
+}
+
+.attach-badge {
+  position: absolute;
+  top: var(--s2);
+  right: var(--s2);
+  background: color-mix(in srgb, var(--paper) 90%, transparent);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-pill);
+  padding: 2px 8px;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--ink);
+  backdrop-filter: blur(4px);
+}
+
+/* Post Footer / Actions */
+.feed-post-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--s4);
+  padding-top: var(--s3);
+  border-top: 1px dashed var(--line);
+  font-size: 0.85rem;
+}
+
+/* Right Rail: Author Addendums & Errata Panel */
+.addendum-panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  padding: var(--s4);
+  box-shadow: var(--shadow-soft);
+}
+
+.addendum-header {
+  border-bottom: 1px solid var(--line);
+  padding-bottom: var(--s2);
+  margin-bottom: var(--s3);
+}
+
+.addendum-header h3 {
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+.addendum-track {
+  border-left: 2px solid var(--line);
+  margin-left: 6px;
+  padding-left: var(--s4);
+  display: grid;
+  gap: var(--s4);
+}
+
+.addendum-item {
+  position: relative;
+}
+
+.addendum-item::before {
+  content: "";
+  position: absolute;
+  left: calc(-1 * var(--s4) - 7px);
+  top: 4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  background: var(--brand);
+  border: 2px solid var(--paper);
+}
+
+.addendum-date {
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  color: var(--ink-faint);
+  margin-bottom: var(--s1);
+  display: block;
+}
+
+.addendum-note {
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--ink);
+  margin: 0;
+}
+
+/* Inline Addendums (folded for mobile/tablet) */
+.feed-inline-addendums {
+  margin-top: var(--s4);
+  padding: var(--s3) var(--s4);
+  background: var(--surface-2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--r-card) var(--r-card) 0;
+}
+
+.feed-inline-addendums summary {
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--accent-ink);
+  outline: none;
+}
+
+.feed-inline-addendums .addendum-track {
+  margin-top: var(--s3);
+}
+
+/* Excalidraw Drawing Pan/Zoom Modal */
+.drawing-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  background: color-mix(in srgb, var(--paper-deep) 85%, transparent);
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+}
+
+.drawing-modal[hidden] {
+  display: none;
+}
+
+.drawing-modal-bar {
+  height: var(--bar-h);
+  padding: 0 var(--s5);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.drawing-modal-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  padding: var(--s5);
+  cursor: grab;
+}
+
+.drawing-modal-body:active {
+  cursor: grabbing;
+}
+
+.drawing-canvas {
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-card);
+  box-shadow: var(--shadow-lift);
+  padding: var(--s5);
+  max-width: 90vw;
+  max-height: 80vh;
+  transition: transform 120ms var(--ease);
+}
+
+.drawing-canvas svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 75vh;
+}
+
+/* Full Post Reader Modal */
+.post-reader-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 140;
+  background: color-mix(in srgb, var(--paper-deep) 80%, transparent);
+  backdrop-filter: blur(6px);
+  overflow-y: auto;
+  padding: var(--s6) var(--s4);
+  display: flex;
+  justify-content: center;
+}
+
+.post-reader-modal[hidden] {
+  display: none;
+}
+
+.post-reader-box {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  box-shadow: var(--shadow-lift);
+  max-width: 820px;
+  width: 100%;
+  padding: var(--s6);
+  position: relative;
+}
+
+/* Responsive Feed Rules */
+@media (max-width: 1160px) {
+  .feed-layout {
+    grid-template-columns: 220px minmax(0, 1fr);
+  }
+  .feed-rail-right {
+    display: none;
+  }
+  .feed-inline-addendums {
+    display: block !important;
+  }
+}
+
+@media (min-width: 1161px) {
+  .feed-inline-addendums {
+    display: none !important;
+  }
+}
+
+@media (max-width: 840px) {
+  .feed-layout {
+    grid-template-columns: 1fr;
+  }
+  .feed-rail-left {
+    position: static;
+  }
+  .feed-track {
+    margin-left: 4px;
+    padding-left: var(--s4);
+  }
+  .feed-post::before {
+    left: calc(-1 * var(--s4) - 13px);
+  }
+}
+
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

@@ -1,5 +1,5 @@
 {
- "generated": "2026-08-16",
+ "generated": "2026-10-02",
  "count": 8,
  "words": 4839,
  "sections": [
@@ -33,7 +33,7 @@
    ],
    "summary": "Base-game-only completion for The Sims 4 — no packs, no shortcuts. Aspirations, careers, skills and collectibles as the vanilla game ships them.",
    "words": 478,
-   "updated": "2026-02-22"
+   "updated": "2026-08-16"
   },
   {
    "id": "notes__sims-guides__Sims2CastawayPS2FullChecklist",
@@ -49,7 +49,7 @@
    ],
    "summary": "The console cousin, tracked properly: resources, recipes, resort building and the story beats that gate the island",
    "words": 505,
-   "updated": "2026-02-22"
+   "updated": "2026-08-16"
   },
   {
    "id": "notes__sims-guides__Sims2FullChecklist",
@@ -64,7 +64,7 @@
    ],
    "summary": "A full-series run sheet for The Sims 2 — aspirations, career tracks, collections, university, hobbies and the odd corners the game never tells you about.",
    "words": 1003,
-   "updated": "2026-02-22"
+   "updated": "2026-08-16"
   },
   {
    "id": "notes__sims-guides__Sims1-install guide",
@@ -80,7 +80,7 @@
    ],
    "summary": "The order to install The Sims 1 and every expansion so the game actually runs on modern Windows, plus the patches and fixes that have to follow.",
    "words": 587,
-   "updated": "2026-02-22"
+   "updated": "2026-08-16"
   },
   {
    "id": "notes__sims-guides__Sims1FullChecklist",
@@ -95,7 +95,7 @@
    ],
    "summary": "Everything The Sims 1 and its seven expansions can ask of you: careers topped out, skills maxed, every rare event and secret lot ticked off.",
    "words": 709,
-   "updated": "2026-02-22"
+   "updated": "2026-08-16"
   },
   {
    "id": "notes__projects__SaveEditorPlans",
@@ -111,7 +111,7 @@
    ],
    "summary": "The research plan behind a save editor that works on both the 2000-era files and the Legacy Collection re-release — sampling, diffing structures, and proving where the two builds diverge byte for byte.",
    "words": 600,
-   "updated": "2026-02-22"
+   "updated": "2026-08-16"
   },
   {
    "id": "notes__projects__Career Creator 3 DOC",
@@ -127,7 +127,7 @@
    ],
    "summary": "How Career Creator 3 builds and edits Sims 1 careers: the file it writes, the fields that matter, and the traps that quietly corrupt a career track.",
    "words": 798,
-   "updated": "2026-02-22"
+   "updated": "2026-08-16"
   },
   {
    "id": "notes__tools__CSVmakerReadMe",
@@ -142,7 +142,7 @@
    ],
    "summary": "Point it at a folder and it walks every sub-directory, writing full file paths into a clean CSV. Built for wrangling large collections — media, game assets, archives.",
    "words": 159,
-   "updated": "2026-02-22"
+   "updated": "2026-08-16"
   }
  ]
 }
