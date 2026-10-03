@@ -9,7 +9,6 @@ Run:
     python tools/studio.py
 """
 
-import cgi
 import http.server
 import json
 import os
@@ -18,6 +17,7 @@ import socketserver
 import subprocess
 import sys
 import urllib.parse
+import urllib.request
 import webbrowser
 from datetime import date, datetime
 from pathlib import Path
@@ -31,8 +31,15 @@ PORT = 4040
 
 def run_command(cmd, cwd=ROOT):
     try:
+        env = os.environ.copy()
+        env.update({
+            "GIT_CONFIG_COUNT": "1",
+            "GIT_CONFIG_KEY_0": "safe.directory",
+            "GIT_CONFIG_VALUE_0": ROOT.as_posix(),
+        })
         res = subprocess.run(
-            cmd, cwd=cwd, capture_output=True, text=True, timeout=45, shell=True
+            cmd, cwd=cwd, capture_output=True, text=True, timeout=45, shell=True,
+            env=env,
         )
         return {
             "success": res.returncode == 0,
@@ -1021,14 +1028,31 @@ class StudioHandler(http.server.SimpleHTTPRequestHandler):
 </html>"""
 
 
+class StudioServer(socketserver.TCPServer):
+    allow_reuse_address = True
+
+
 def main():
-    print(f"Starting DNF Content Studio at http://localhost:{PORT}")
-    server = socketserver.TCPServer(("", PORT), StudioHandler)
-    server.allow_reuse_address = True
+    url = f"http://127.0.0.1:{PORT}"
+    print(f"Starting DNF Content Studio at {url}")
+    try:
+        server = StudioServer(("127.0.0.1", PORT), StudioHandler)
+    except OSError as exc:
+        # Reopening the desktop shortcut should bring back an existing Studio.
+        try:
+            with urllib.request.urlopen(f"{url}/api/status", timeout=2) as response:
+                status = json.load(response)
+            if "feed_count" in status and "library_count" in status:
+                if "--no-browser" not in sys.argv:
+                    webbrowser.open(url)
+                return
+        except (OSError, ValueError, KeyError):
+            pass
+        raise RuntimeError(f"Cannot start Studio on port {PORT}: {exc}") from exc
 
     if "--no-browser" not in sys.argv:
         try:
-            webbrowser.open(f"http://localhost:{PORT}")
+            webbrowser.open(url)
         except Exception:
             pass
 
