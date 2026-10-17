@@ -244,7 +244,7 @@
         grab("data/aots.json", (d) =>
           (d.notes || []).map((n) => ({
             label: `${n.date} — ${n.title}`,
-            href: `aots.html?ep=${n.date}`,
+            href: `aots.html?ep=${encodeURIComponent(n.id || n.date)}`,
             kind: "episode",
           }))
         ),

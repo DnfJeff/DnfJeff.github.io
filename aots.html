@@ -11,7 +11,7 @@
     <meta name="theme-color" content="#e8551d" />
     <link rel="icon" href="favicon.ico" sizes="32x32" />
     <link rel="icon" href="assets/web/icon.png" type="image/png" />
-    <link rel="stylesheet" href="css/site.css?v=5" />
+    <link rel="stylesheet" href="css/site.css?v=6" />
     <script>
       document.documentElement.classList.add("js");
       try {
@@ -53,7 +53,7 @@
 
     <main id="main">
       <!-- ===================================================== header -->
-      <section class="wrap" style="padding-block: var(--s8) var(--s6)">
+      <section class="wrap aots-intro" style="padding-block: var(--s8) var(--s6)">
         <p class="eyebrow">Project · television archival</p>
         <h1 style="font-size: clamp(2.2rem, 5.4vw, 3.4rem); margin-bottom: var(--s4)">
           Attack of the Show
@@ -68,44 +68,80 @@
         <p class="stamp" id="aots-stamp">Loading…</p>
       </section>
 
-      <section class="wrap band-sm" style="padding-top: 0">
-        <div class="stats" id="aots-summary" data-rise></div>
+      <section class="wrap band-sm" style="padding-top: 0" aria-label="Archive coverage">
+        <div class="stats aots-summary" id="aots-summary" data-rise></div>
       </section>
 
-      <!-- ====================================================== years -->
-      <section class="wrap band-sm" id="years-section">
+      <!-- ================================ browse by year and segment -->
+      <section class="wrap band-sm" id="browse-section">
         <div class="lede" data-rise>
           <div>
-            <p class="eyebrow">The run</p>
-            <h2>Nine years, one at a time</h2>
+            <p class="eyebrow">Browse the archive</p>
+            <h2>Pick a path in</h2>
           </div>
-          <p>
-            Each bar is episodes written up against the reconstructed broadcast
-            schedule for that year. Greyed-out years haven't been started.
-          </p>
+          <button class="textbtn" id="clear-filters" type="button" hidden>Clear filters</button>
         </div>
-        <div class="years" id="years"></div>
+        <div class="aots-bento">
+          <section class="aots-panel aots-years-panel" aria-labelledby="years-heading">
+            <div class="aots-panel-head">
+              <div><p class="eyebrow">The timeline</p><h3 id="years-heading">By year</h3></div>
+              <span class="aots-panel-hint">Notes / schedule</span>
+            </div>
+            <div class="years" id="years" aria-label="Filter episodes by year"></div>
+          </section>
+          <section class="aots-panel aots-segments-panel" aria-labelledby="segments-heading">
+            <div class="aots-panel-head">
+              <div><p class="eyebrow">Recurring shows-within-the-show</p><h3 id="segments-heading">By segment</h3></div>
+              <span class="aots-panel-hint" id="segment-count"></span>
+            </div>
+            <div class="aots-segments" id="segments" aria-label="Filter episodes by recurring segment"></div>
+            <button class="textbtn aots-more-segments" id="more-segments" type="button" hidden>Show all segments</button>
+          </section>
+          <section class="aots-panel aots-people-panel" aria-labelledby="people-heading">
+            <div class="aots-panel-head">
+              <div><p class="eyebrow">Hosts, correspondents &amp; guests</p><h3 id="people-heading">By person</h3></div>
+              <span class="aots-panel-hint" id="people-count"></span>
+            </div>
+            <div class="aots-people-chips" id="people-facets" aria-label="Filter episodes by person"></div>
+            <button class="textbtn aots-more-segments" id="more-people" type="button" hidden>Show more people</button>
+          </section>
+        </div>
       </section>
 
-      <!-- =================================================== episodes -->
-      <section class="wrap band-sm">
-        <div class="lede" data-rise>
+      <!-- ================================ scrollable episode browser -->
+      <section class="wrap band-sm aots-archive" id="episodes-section">
+        <div class="lede aots-archive-head" data-rise>
           <div>
-            <p class="eyebrow">Notes</p>
-            <h2>Episodes</h2>
-            <p class="stamp" id="year-context" style="margin-top: var(--s2); display: block"></p>
+            <p class="eyebrow">The catalogue</p>
+            <h2>Find an episode</h2>
+            <p class="stamp" id="year-context" style="margin-top: var(--s2); display: block" aria-live="polite"></p>
           </div>
-          <label class="searchbox" style="min-width: min(100%, 20rem)">
+          <label class="searchbox aots-search">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <circle cx="11" cy="11" r="6.4" /><path d="m16 16 4.2 4.2" />
             </svg>
-            <input id="ep-search" type="search" placeholder="A guest, a topic, a segment…" aria-label="Search episodes" />
+            <input id="ep-search" type="search" placeholder="Search people, topics, shows…" aria-label="Search episodes, people, topics, and segments" />
           </label>
         </div>
-        <div id="episodes"></div>
+        <div class="aots-active-filters" id="active-filters" aria-label="Active filters"></div>
+        <div class="aots-explorer" id="aots-explorer">
+          <div class="aots-catalogue-column">
+            <div class="aots-catalogue" id="episodes" role="list" aria-label="Episode catalogue" tabindex="0"></div>
+            <button class="btn btn-quiet aots-load-more" id="load-more" type="button" hidden>Show more episodes</button>
+          </div>
+          <aside class="aots-preview" id="episode-preview" aria-live="polite" aria-label="Episode preview">
+            <div class="aots-preview-empty">
+              <span class="aots-preview-mark" aria-hidden="true">↗</span>
+              <p class="eyebrow">Episode preview</p>
+              <h3>Choose a story</h3>
+              <p>Select an episode from the catalogue to see its people, segments, and timestamps.</p>
+            </div>
+          </aside>
+        </div>
+        <section class="aots-full-view" id="episode-full-view" aria-label="Full episode notes" hidden></section>
       </section>
 
-      <section class="wrap band-sm">
+      <section class="wrap band-sm aots-method">
         <div class="card" data-rise style="max-width: 62ch">
           <p class="eyebrow">How these are made</p>
           <p class="soft" style="margin: 0">
@@ -165,7 +201,7 @@
     </div>
 
     <script src="js/site.js?v=2"></script>
-    <script src="js/aots.js?v=5"></script>
+    <script src="js/aots.js?v=6"></script>
     <script>
       document.getElementById("year").textContent = new Date().getFullYear();
     </script>
