@@ -11,7 +11,7 @@
     <meta name="theme-color" content="#e8551d" />
     <link rel="icon" href="favicon.ico" sizes="32x32" />
     <link rel="icon" href="assets/web/icon.png" type="image/png" />
-    <link rel="stylesheet" href="css/site.css?v=6" />
+    <link rel="stylesheet" href="css/site.css?v=7" />
     <script>
       document.documentElement.classList.add("js");
       try {
@@ -89,21 +89,30 @@
             </div>
             <div class="years" id="years" aria-label="Filter episodes by year"></div>
           </section>
-          <section class="aots-panel aots-segments-panel" aria-labelledby="segments-heading">
-            <div class="aots-panel-head">
-              <div><p class="eyebrow">Recurring shows-within-the-show</p><h3 id="segments-heading">By segment</h3></div>
-              <span class="aots-panel-hint" id="segment-count"></span>
+          <section class="aots-panel aots-facets-panel" data-active-tab="segments" aria-labelledby="facets-heading">
+            <div class="aots-panel-head aots-facets-head">
+              <div>
+                <p class="eyebrow" id="facets-eyebrow">Recurring shows-within-the-show</p>
+                <h3 id="facets-heading">By segment</h3>
+              </div>
+              <div class="aots-facets-controls">
+                <span class="aots-panel-hint" id="facet-count"></span>
+                <div class="aots-tabs" role="tablist" aria-label="Browse facets">
+                  <button class="aots-tab is-active" id="tab-segments" type="button" role="tab" aria-selected="true" aria-controls="panel-segments" data-facet-tab="segments">
+                    Segments
+                  </button>
+                  <button class="aots-tab" id="tab-people" type="button" role="tab" aria-selected="false" aria-controls="panel-people" data-facet-tab="people">
+                    People
+                  </button>
+                </div>
+              </div>
             </div>
-            <div class="aots-segments" id="segments" aria-label="Filter episodes by recurring segment"></div>
-            <button class="textbtn aots-more-segments" id="more-segments" type="button" hidden>Show all segments</button>
-          </section>
-          <section class="aots-panel aots-people-panel" aria-labelledby="people-heading">
-            <div class="aots-panel-head">
-              <div><p class="eyebrow">Hosts, correspondents &amp; guests</p><h3 id="people-heading">By person</h3></div>
-              <span class="aots-panel-hint" id="people-count"></span>
+            <div class="aots-facet-scroll" id="panel-segments" role="tabpanel" aria-labelledby="tab-segments" data-domain="segment">
+              <div class="aots-segments" id="segments" aria-label="Filter episodes by recurring segment"></div>
             </div>
-            <div class="aots-people-chips" id="people-facets" aria-label="Filter episodes by person"></div>
-            <button class="textbtn aots-more-segments" id="more-people" type="button" hidden>Show more people</button>
+            <div class="aots-facet-scroll" id="panel-people" role="tabpanel" aria-labelledby="tab-people" data-domain="person" hidden>
+              <div class="aots-people-chips" id="people-facets" aria-label="Filter episodes by person"></div>
+            </div>
           </section>
         </div>
       </section>
@@ -201,7 +210,7 @@
     </div>
 
     <script src="js/site.js?v=2"></script>
-    <script src="js/aots.js?v=6"></script>
+    <script src="js/aots.js?v=7"></script>
     <script>
       document.getElementById("year").textContent = new Date().getFullYear();
     </script>

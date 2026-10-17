@@ -2694,11 +2694,25 @@ hr {
 .aots-stat[data-domain="schedule"] { border-top: 2px solid var(--electric); }
 .aots-bento { display: grid; grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr); gap: var(--s4); align-items: stretch; }
 .aots-panel { min-width: 0; border: 1px solid var(--line); border-radius: var(--r-card); background: var(--surface); padding: clamp(var(--s4), 2.2vw, var(--s6)); box-shadow: var(--shadow-soft); }
-.aots-years-panel { grid-row: span 2; }
+.aots-facets-panel { display: flex; flex-direction: column; }
 .aots-panel-head { display: flex; justify-content: space-between; align-items: flex-end; gap: var(--s3); margin-bottom: var(--s4); }
+.aots-facets-head { flex-wrap: wrap; align-items: center; }
+.aots-facets-controls { display: flex; align-items: center; gap: var(--s3); margin-left: auto; flex-wrap: wrap; }
 .aots-panel-head .eyebrow { margin-bottom: var(--s1); }
 .aots-panel-head h3 { margin: 0; font-size: 1.35rem; }
-.aots-panel-hint { color: var(--ink-faint); font-family: var(--mono); font-size: .68rem; white-space: nowrap; }
+.aots-panel-hint { color: var(--ink-faint); font-family: var(--mono); font-size: .68rem; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.aots-tabs { display: inline-flex; align-items: center; gap: 3px; padding: 3px; border: 1px solid var(--line); border-radius: var(--r-pill); background: var(--paper-deep); }
+.aots-tab { appearance: none; border: 1px solid transparent; border-radius: var(--r-pill); padding: .28rem .78rem; background: transparent; color: var(--ink-soft); font: 600 .74rem var(--mono); letter-spacing: .04em; cursor: pointer; transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease); }
+.aots-tab:hover:not(.is-active) { color: var(--ink); }
+.aots-tab[data-facet-tab="segments"].is-active { background: var(--done-wash); border-color: var(--done); color: var(--done); }
+.aots-tab[data-facet-tab="people"].is-active { background: var(--accent-wash); border-color: var(--accent); color: var(--accent-ink); }
+.aots-facet-scroll { --scroll-thumb: var(--done); --scroll-track: color-mix(in srgb, var(--paper-deep) 85%, var(--line)); flex: 1 1 0; height: 0; min-height: 18rem; overflow-y: auto; overscroll-behavior: contain; padding: var(--s3); border: 1px solid var(--line); border-radius: calc(var(--r-card) * .82); background: color-mix(in srgb, var(--paper-deep) 72%, var(--paper)); box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.14); scrollbar-width: thin; scrollbar-color: var(--scroll-thumb) var(--scroll-track); }
+.aots-facet-scroll[hidden] { display: none; }
+.aots-facet-scroll[data-domain="person"] { --scroll-thumb: var(--accent); }
+.aots-facet-scroll::-webkit-scrollbar { width: 10px; }
+.aots-facet-scroll::-webkit-scrollbar-track { background: var(--scroll-track); border-radius: var(--r-pill); margin-block: 6px; }
+.aots-facet-scroll::-webkit-scrollbar-thumb { background: var(--scroll-thumb); border: 2px solid var(--scroll-track); border-radius: var(--r-pill); }
+.aots-facet-scroll::-webkit-scrollbar-thumb:hover { filter: brightness(1.12); }
 .aots-year { min-width: 0; flex: 1 1 8.1rem; padding: var(--s3); border-radius: calc(var(--r-card) * .72); background: var(--paper); }
 .aots-year[disabled] { opacity: .56; }
 .aots-year[aria-pressed="true"] { background: var(--accent-wash); }
@@ -2710,22 +2724,22 @@ hr {
 .aots-year.is-unknown .aots-year-meter i { background: repeating-linear-gradient(135deg, var(--ink-faint) 0 3px, transparent 3px 6px); }
 .aots-year small { margin: 0; font-size: .62rem; color: var(--ink-faint); }
 .aots-segments { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s2); }
-.aots-segment-card { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: var(--s2); min-height: 48px; border: 1px solid var(--line); border-radius: calc(var(--r-card) * .72); padding: var(--s2) var(--s3); text-align: left; color: var(--ink); background: var(--paper); cursor: pointer; transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease); }
+.aots-segment-card { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: var(--s2); min-height: 46px; border: 1px solid var(--line); border-radius: calc(var(--r-card) * .72); padding: var(--s2) var(--s3); text-align: left; color: var(--ink); background: var(--surface); cursor: pointer; transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease); }
 .aots-segment-card:hover { border-color: var(--done); transform: translateY(-1px); }
 .aots-segment-card.is-selected { border-color: var(--done); background: var(--done-wash); }
 .aots-segment-count { color: var(--done); font: 700 .72rem var(--mono); font-variant-numeric: tabular-nums; }
 .aots-segment-name { overflow: hidden; font-size: .82rem; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
 .aots-segment-arrow { color: var(--ink-faint); font-size: .84rem; }
-.aots-people-chips { display: flex; flex-wrap: wrap; gap: var(--s2); }
-.aots-person-chip { display: inline-flex; align-items: center; gap: var(--s2); border: 1px solid var(--line); border-radius: var(--r-pill); padding: .28rem .66rem; background: var(--paper); color: var(--ink); font: 500 .78rem var(--body); cursor: pointer; transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease); }
+.aots-people-chips { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s2); }
+.aots-person-chip { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: var(--s2); min-height: 46px; border: 1px solid var(--line); border-radius: calc(var(--r-card) * .72); padding: var(--s2) var(--s3); text-align: left; background: var(--surface); color: var(--ink); font: 500 .82rem var(--body); cursor: pointer; transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease); }
 .aots-person-chip:hover { border-color: var(--accent); transform: translateY(-1px); }
 .aots-person-chip.is-selected { border-color: var(--accent); background: var(--accent-wash); color: var(--accent-ink); }
-.aots-person-chip b { color: var(--accent-ink); font: 700 .66rem var(--mono); font-variant-numeric: tabular-nums; }
-.aots-more-segments { margin-top: var(--s3); }
+.aots-person-count { color: var(--accent-ink); font: 700 .72rem var(--mono); font-variant-numeric: tabular-nums; }
+.aots-person-name { overflow: hidden; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
 .textbtn { appearance: none; border: 0; padding: .35rem 0; color: var(--accent-ink); background: none; font: 600 .83rem var(--body); cursor: pointer; }
 .textbtn:hover:not(:disabled) { text-decoration: underline; }
 .textbtn:disabled { opacity: .42; cursor: not-allowed; }
-.textbtn:focus-visible,.aots-year:focus-visible,.aots-segment-card:focus-visible,.aots-person-chip:focus-visible,.aots-token:focus-visible,.aots-episode-select:focus-visible,.aots-back-button:focus-visible { outline: 2px solid var(--electric); outline-offset: 3px; }
+.textbtn:focus-visible,.aots-tab:focus-visible,.aots-year:focus-visible,.aots-segment-card:focus-visible,.aots-person-chip:focus-visible,.aots-token:focus-visible,.aots-episode-select:focus-visible,.aots-back-button:focus-visible { outline: 2px solid var(--electric); outline-offset: 3px; }
 .aots-facet-empty { grid-column: 1 / -1; margin: 0; padding: var(--s4); color: var(--ink-faint); font-size: .86rem; }
 .aots-archive { scroll-margin-top: var(--s5); }
 .aots-archive-head { align-items: center; }
@@ -2819,7 +2833,7 @@ body.aots-full-open #episodes-section { padding-top: var(--s5); }
 @media (max-width: 920px) {
   .aots-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .aots-bento { grid-template-columns: minmax(0, 1fr); }
-  .aots-years-panel { grid-row: auto; }
+  .aots-facet-scroll { flex: none; height: auto; max-height: 22rem; }
 }
 @media (max-width: 760px) {
   .aots-explorer { grid-template-columns: minmax(0, 1fr); }
@@ -2837,7 +2851,7 @@ body.aots-full-open #episodes-section { padding-top: var(--s5); }
   .aots-panel { padding: var(--s4); }
   .aots-years-panel .years { gap: var(--s2); }
   .aots-year { flex-basis: calc(50% - var(--s2)); }
-  .aots-segments { grid-template-columns: minmax(0, 1fr); }
+  .aots-segments, .aots-people-chips { grid-template-columns: minmax(0, 1fr); }
   .aots-archive-head { align-items: stretch; }
   .aots-search { min-width: 100%; }
   .aots-full-toolbar { padding-inline: var(--s3); }

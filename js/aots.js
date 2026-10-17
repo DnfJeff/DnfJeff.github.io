@@ -15,16 +15,13 @@
   if (!yearsEl || !listEl) return;
 
   const PAGE_SIZE = 24;
-  const SEGMENT_PREVIEW_SIZE = 8;
-  const PEOPLE_PREVIEW_SIZE = 14;
   const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const TYPE_LABELS = { person: "Person", segment: "Segment", topic: "Topic", media: "Media" };
 
   let data = null;
   let state = { query: "", year: "", segment: "", tags: [], selected: "", full: false };
+  let activeFacetTab = "segments";
   let visibleCount = PAGE_SIZE;
-  let showAllSegments = false;
-  let showAllPeople = false;
   let catalogueScrollTop = 0;
 
   const clean = (value) => String(value || "").trim();
@@ -139,18 +136,16 @@
   function renderYears() {
     const notes = filteredNotes("year");
     const counts = facetCounts(notes, (note) => note.year);
-    const hasNarrowing = !!(state.query || state.segment || state.tags.length);
-    const rows = data.years.filter((year) => !hasNarrowing || counts.has(key(year.year)) || state.year === year.year);
-    yearsEl.innerHTML = rows.map((year) => {
+    yearsEl.innerHTML = data.years.map((year) => {
       const noted = counts.get(key(year.year))?.count || 0;
       const unknown = year.total === 0 && noted > 0;
       const selected = state.year === year.year;
-      return `<button class="year aots-year${selected ? " is-selected" : ""}${unknown ? " is-unknown" : ""}" type="button" data-year="${esc(year.year)}" aria-pressed="${selected}" ${noted ? "" : "disabled"}>
+      return `<button class="year aots-year${selected ? " is-selected" : ""}${unknown ? " is-unknown" : ""}" type="button" data-year="${esc(year.year)}" aria-pressed="${selected}" ${noted || selected ? "" : "disabled"}>
         <span class="aots-year-top"><b>${esc(year.year)}</b><span>${noted} ${noted === 1 ? "note" : "notes"}</span></span>
         <span class="aots-year-meter" aria-hidden="true"><i style="--meter:${unknown ? 100 : pct(noted, year.total)}%"></i></span>
         <small>${year.total ? `${noted} / ${year.total} scheduled` : `${noted} indexed · schedule unknown`}</small>
       </button>`;
-    }).join("") || `<p class="aots-facet-empty">No years match these filters.</p>`;
+    }).join("");
   }
 
   function segmentMap(notes) {
@@ -172,10 +167,7 @@
 
   function renderSegments() {
     const rows = segmentMap(filteredNotes("segment"));
-    const total = segmentMap(data.notes).length;
-    $("#segment-count").textContent = `${rows.length} of ${total}`;
-    const limit = showAllSegments ? rows.length : SEGMENT_PREVIEW_SIZE;
-    segmentsEl.innerHTML = rows.slice(0, limit).map((segment) => {
+    segmentsEl.innerHTML = rows.map((segment) => {
       const selected = same(segment.value, state.segment);
       return `<button class="aots-segment-card${selected ? " is-selected" : ""}" type="button" data-segment="${esc(segment.value)}" aria-pressed="${selected}">
         <span class="aots-segment-count">${segment.count}</span>
@@ -183,9 +175,6 @@
         <span class="aots-segment-arrow" aria-hidden="true">↗</span>
       </button>`;
     }).join("") || `<p class="aots-facet-empty">No recurring segments match these filters.</p>`;
-    const more = $("#more-segments");
-    more.hidden = rows.length <= SEGMENT_PREVIEW_SIZE;
-    more.textContent = showAllSegments ? "Show featured segments" : `Show all ${rows.length} segments`;
   }
 
   function peopleMap(notes) {
@@ -213,22 +202,52 @@
     const peopleEl = $("#people-facets");
     if (!peopleEl) return;
     const rows = peopleMap(filteredNotes());
-    const total = peopleMap(data.notes).length;
-    const countEl = $("#people-count");
-    if (countEl) countEl.textContent = `${rows.length.toLocaleString()} of ${total.toLocaleString()}`;
-    const limit = showAllPeople ? Math.min(rows.length, 48) : PEOPLE_PREVIEW_SIZE;
-    peopleEl.innerHTML = rows.slice(0, limit).map((person) => {
+    peopleEl.innerHTML = rows.map((person) => {
       const selected = state.tags.some((tag) => tag.type === "person" && same(tag.value, person.value));
       return `<button class="aots-person-chip${selected ? " is-selected" : ""}" type="button" data-tag-type="person" data-tag-value="${esc(person.value)}" aria-pressed="${selected}">
-        <span>${esc(person.value)}</span>
-        <b>${person.count}</b>
+        <span class="aots-person-count">${person.count}</span>
+        <span class="aots-person-name">${esc(person.value)}</span>
+        <span class="aots-segment-arrow" aria-hidden="true">↗</span>
       </button>`;
     }).join("") || `<p class="aots-facet-empty">No people match these filters.</p>`;
-    const more = $("#more-people");
-    if (more) {
-      more.hidden = rows.length <= PEOPLE_PREVIEW_SIZE;
-      more.textContent = showAllPeople ? "Show top people" : `Show top ${Math.min(rows.length, 48)} people`;
+  }
+
+  function renderFacetTabs() {
+    const panel = $(".aots-facets-panel");
+    const eyebrow = $("#facets-eyebrow");
+    const heading = $("#facets-heading");
+    const countEl = $("#facet-count");
+    const segPanel = $("#panel-segments");
+    const peoplePanel = $("#panel-people");
+    const isPeople = activeFacetTab === "people";
+
+    if (panel) panel.dataset.activeTab = activeFacetTab;
+    if (eyebrow) {
+      eyebrow.textContent = isPeople
+        ? "Hosts, correspondents & guests"
+        : "Recurring shows-within-the-show";
     }
+    if (heading) {
+      heading.textContent = isPeople ? "By person" : "By segment";
+    }
+    if (countEl) {
+      if (isPeople) {
+        const current = peopleMap(filteredNotes()).length;
+        const total = peopleMap(data.notes).length;
+        countEl.textContent = `${current.toLocaleString()} of ${total.toLocaleString()}`;
+      } else {
+        const current = segmentMap(filteredNotes("segment")).length;
+        const total = segmentMap(data.notes).length;
+        countEl.textContent = `${current.toLocaleString()} of ${total.toLocaleString()}`;
+      }
+    }
+    if (segPanel) segPanel.hidden = isPeople;
+    if (peoplePanel) peoplePanel.hidden = !isPeople;
+    $$("[data-facet-tab]").forEach((btn) => {
+      const active = btn.dataset.facetTab === activeFacetTab;
+      btn.classList.toggle("is-active", active);
+      btn.setAttribute("aria-selected", String(active));
+    });
   }
 
   function token(type, value, label) {
@@ -385,6 +404,7 @@
     renderYears();
     renderSegments();
     renderPeopleFacets();
+    renderFacetTabs();
     renderActiveFilters();
     renderList();
     renderPreview();
@@ -426,6 +446,11 @@
     const target = event.target.closest("button");
     if (!target || target.disabled) return;
 
+    if (target.dataset.facetTab) {
+      activeFacetTab = target.dataset.facetTab;
+      renderFacetTabs();
+      return;
+    }
     if (target.matches(".aots-year")) {
       state.year = state.year === target.dataset.year ? "" : target.dataset.year;
       state.selected = "";
@@ -462,16 +487,6 @@
     if (target.id === "load-more") {
       visibleCount += PAGE_SIZE;
       renderList();
-      return;
-    }
-    if (target.id === "more-segments") {
-      showAllSegments = !showAllSegments;
-      renderSegments();
-      return;
-    }
-    if (target.id === "more-people") {
-      showAllPeople = !showAllPeople;
-      renderPeopleFacets();
       return;
     }
     if (target.id === "clear-filters" || target.dataset.action === "clear-filters") {
