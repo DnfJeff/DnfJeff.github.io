@@ -992,6 +992,90 @@ hr {
   color: var(--ink-soft);
 }
 
+/* A finished project runs the full width of the grid: no progress bar, links
+   out instead of into a panel. */
+.project-wide {
+  grid-column: 1 / -1;
+}
+.project-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s3) var(--s6);
+  align-items: center;
+}
+.project-links .tile-go {
+  margin-top: 0;
+}
+.tile-go.out::after {
+  content: "↗";
+}
+
+/* Wide card split into copy and a video still. */
+.project-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: var(--s5);
+  align-items: start;
+}
+@media (max-width: 760px) {
+  .project-split {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* A linked video still: thumbnail, play badge, caption underneath. */
+.video-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+}
+.video-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--r-card);
+  border: 1px solid var(--line);
+  transition: border-color var(--t-slow) var(--ease),
+    transform var(--t-slow) var(--ease);
+}
+.video-card:hover img {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+.video-card .video-play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  width: 3.2rem;
+  height: 3.2rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--paper) 72%, transparent);
+  border: 1px solid var(--line-strong);
+  display: grid;
+  place-items: center;
+  transition: background var(--t-fast) var(--ease);
+}
+.video-card .video-play::after {
+  content: "";
+  width: 0;
+  height: 0;
+  margin-left: 3px;
+  border-left: 0.85rem solid var(--accent);
+  border-top: 0.52rem solid transparent;
+  border-bottom: 0.52rem solid transparent;
+}
+.video-card:hover .video-play {
+  background: color-mix(in srgb, var(--paper) 48%, transparent);
+}
+.video-card .stamp {
+  display: block;
+  margin-top: var(--s3);
+}
+
 /* ------------------------------------------------------------- timeline */
 
 .track {

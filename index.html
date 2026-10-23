@@ -141,13 +141,136 @@
       <section class="band wrap" style="padding-top: var(--s8)" id="projects">
         <div class="lede" data-rise>
           <div>
-            <p class="eyebrow">Currently</p>
-            <h2>Two things, in the open</h2>
+            <p class="eyebrow">Projects</p>
+            <h2>What I'm building</h2>
           </div>
-
+          <p>
+            Tools and archives I keep working on. Each one has its own page or
+            download with the details.
+          </p>
         </div>
 
         <div class="grid grid-2">
+          <article class="card project project-wide" data-rise id="panel-daggerfall">
+            <div class="project-head">
+              <div>
+                <p class="eyebrow">Daggerfall · map &amp; tools</p>
+                <h3>Daggerfall Interactive Map</h3>
+              </div>
+              <span class="pill done">out now</span>
+            </div>
+            <p class="soft" style="margin: 0">
+              The whole Iliac Bay on the game's own map art. Zoom from the
+              overview down to a town's streets, find any shop, guild or temple
+              by name, follow the roads, and keep notes and a journal for a
+              playthrough. Nothing is uploaded and there is nothing to install
+              — it runs in the browser, and saves to a file you keep. There
+              is also a portable Windows build: one .exe with the map data
+              inside it, which can read your own install and saves so the map
+              follows your character.
+            </p>
+            <!-- Hand-kept figures from the map's baked data (public/data in the
+                 Daggerfall_InteractiveMap repo). Re-check when it is re-baked. -->
+            <div class="project-facts">
+              <div><b>15,251</b><span>locations across the Iliac Bay</span></div>
+              <div><b>4,243</b><span>dungeons, keeps and ruins</span></div>
+              <div><b>5,786</b><span>roads and tracks drawn</span></div>
+              <div><b>962</b><span>guild halls, by order</span></div>
+            </div>
+            <div class="project-links">
+              <a
+                class="tile-go out"
+                href="https://dnfjeff.github.io/Daggerfall_InteractiveMap/"
+                target="_blank"
+                rel="noopener"
+              >
+                Open the map
+              </a>
+              <a
+                class="tile-go out"
+                href="https://github.com/DnfJeff/Daggerfall_InteractiveMap/releases/latest"
+                target="_blank"
+                rel="noopener"
+              >
+                Download for Windows
+              </a>
+              <a
+                class="tile-go out"
+                href="https://github.com/DnfJeff/Daggerfall_InteractiveMap"
+                target="_blank"
+                rel="noopener"
+              >
+                Source
+              </a>
+            </div>
+          </article>
+
+          <article class="card project project-wide" data-rise id="panel-voicebox">
+            <div class="project-head">
+              <div>
+                <p class="eyebrow">Daggerfall · mod</p>
+                <h3>Daggerfall VoiceBox</h3>
+              </div>
+              <span class="pill">early · v0.4.0</span>
+            </div>
+            <div class="project-split">
+              <div>
+                <p class="soft" style="margin: 0 0 var(--s4)">
+                  Spoken dialogue for Daggerfall Unity. NPC greetings, answers,
+                  quest cards and notices are read out as they appear on screen,
+                  by a text-to-speech engine running on your own PC — no
+                  internet, no recorded voice packs, and it works with any quest
+                  or mod that puts text on screen. The mod picks a voice for
+                  whoever is speaking; the engine streams the speech back
+                  sentence by sentence, so the first line lands in a fraction of
+                  a second.
+                </p>
+                <div class="chiprow" style="margin-bottom: var(--s4)">
+                  <span class="tag">Daggerfall Unity</span>
+                  <span class="tag">Kokoro TTS</span>
+                  <span class="tag">Runs offline</span>
+                  <span class="tag">Windows · Python</span>
+                  <span class="tag">MIT</span>
+                </div>
+                <div class="project-links">
+                  <a
+                    class="tile-go out"
+                    href="https://github.com/DnfJeff/Daggerfall_Voicebox"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    Code &amp; setup
+                  </a>
+                  <a
+                    class="tile-go out"
+                    href="https://github.com/DnfJeff/Daggerfall_Voicebox/releases?q=unity"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    Get the mod
+                  </a>
+                </div>
+              </div>
+              <a
+                class="video-card"
+                href="https://youtu.be/tdCYBv3bJEs"
+                target="_blank"
+                rel="noopener"
+                aria-label="Watch the VoiceBox showcase video on YouTube"
+              >
+                <img
+                  src="https://img.youtube.com/vi/tdCYBv3bJEs/maxresdefault.jpg"
+                  alt=""
+                  width="1280"
+                  height="720"
+                  loading="lazy"
+                />
+                <span class="video-play" aria-hidden="true"></span>
+                <span class="stamp">Early showcase — watch on YouTube ↗</span>
+              </a>
+            </div>
+          </article>
+
           <article class="card project" data-rise id="panel-hod">
             <div class="project-head">
               <div>
@@ -272,6 +395,16 @@
           <ul>
             <li><a href="hod.html">Hod — Sims 1 tools</a></li>
             <li><a href="aots.html">Attack of the Show notes</a></li>
+            <li>
+              <a href="https://dnfjeff.github.io/Daggerfall_InteractiveMap/" target="_blank" rel="noopener">
+                Daggerfall Interactive Map
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/DnfJeff/Daggerfall_Voicebox" target="_blank" rel="noopener">
+                Daggerfall VoiceBox
+              </a>
+            </li>
             <li><a href="feed.html">The Feed — Timeline</a></li>
             <li><a href="library.html">Writing &amp; notes</a></li>
           </ul>
